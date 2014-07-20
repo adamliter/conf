@@ -29,6 +29,9 @@ FILES=$(find ~/dotfiles -name '.*[!~]')
 # of these worked
 FILES=$(echo $FILES | awk '{ gsub(/\/Users\/adamliter\/dotfiles\/.git.* /, "") ; print }')
 
+# But we want to keep .gitconfig, so we can append it
+FILES="${FILES} /Users/adamliter/dotfiles/.gitconfig"
+
 # Next, get rid of .DS_Store
 FILES=${FILES/\/Users\/adamliter\/dotfiles\/.DS_Store/}
 
