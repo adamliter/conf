@@ -26,6 +26,9 @@ source /usr/local/etc/bash_completion.d/password-store
 # For opening anything with TextWrangler
 alias openTW='open -a "TextWrangler"'
 
+# For opening any with Emacs
+alias openE='open -a "Emacs"'
+
 # Alias for CorpusSearch
 alias CS='java -classpath ~/Applications/CS_2.003.04.jar csearch/CorpusSearch'
 
@@ -33,5 +36,3 @@ alias CS='java -classpath ~/Applications/CS_2.003.04.jar csearch/CorpusSearch'
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-
-# For opening any
