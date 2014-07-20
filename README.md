@@ -1,7 +1,7 @@
 dotfiles
 ========
 
-This repo contains dot files for some common utilities that I use, like `git`, `bash`, etc..
+This repo contains dot files for some common utilities that I use, like `git`, `bash`, *etc.*.
 
 Usage
 =====
