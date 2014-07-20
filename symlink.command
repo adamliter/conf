@@ -7,8 +7,6 @@
 # Written by Adam Liter
 # Last updated on 2014-07-19
 
-# First, 
-
 # Get a list of the files to be looped over
 # This gets all dot files
 # Except for the auto-save files from Emacs
@@ -16,15 +14,10 @@
 FILES=$(find ~/dotfiles -name '.*[!~]')
 
 # Now, we still want to get rid of 
-# the `/Users/adamliter/dotfiles/` prefixation
 # the .git directory
-# the .DS_Store file from Mac
-# and the symlink.command file itself
+# and the .DS_Store file from Mac
 
-# Get rid of `./` prefixation
-# FILES=${FILES//\/Users\/adamliter\/dotfiles\//}
-
-# Next, get rid of the .git directory
+# First, get rid of the .git directory
 # Note that if there are no more files
 # after all of the .git.* files
 # then the last one will not be removed from $FILES
@@ -39,6 +32,7 @@ FILES=$(echo $FILES | awk '{ gsub(/\/Users\/adamliter\/dotfiles\/.git.* /, "") ;
 # Next, get rid of .DS_Store
 FILES=${FILES/\/Users\/adamliter\/dotfiles\/.DS_Store/}
 
+# Finally, symlink all of the files
 for i in $FILES; do
     ln -s "$i" $HOME ;
 done
