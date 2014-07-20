@@ -1,11 +1,7 @@
 #!/bin/bash
 #
-# This is a bash file for symlinking
-# all of the dotfiles in my GitHub repo
-# called `dotfiles` into `~/`
-#
-# Written by Adam Liter
-# Last updated on 2014-07-19
+# This is a bash file for symlinking all of the dot files
+# in my GitHub repo `dotfiles` into their proper place
 
 # Define a list of the files to be looped over
 FILES=".bash_profile .bashrc .gitconfig .profile .zlogin .zshrc gpg.conf"
