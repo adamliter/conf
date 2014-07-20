@@ -8,3 +8,5 @@
 	pushall = push --recurse-submodule=on-demand
 [push]
 	default = simple
+[core]
+	editor = emacs
