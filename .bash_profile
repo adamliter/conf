@@ -23,6 +23,9 @@ source /usr/local/etc/bash_completion.d/password-store
 # aliases
 # ------------------------------------
 
+#GPG USB
+alias gpgusb='gpg2 --home/Volumes/adamliter1/.gnupg'
+
 # For opening anything with TextWrangler
 alias openTW='open -a "TextWrangler"'
 
