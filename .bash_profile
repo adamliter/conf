@@ -23,6 +23,9 @@ source /usr/local/etc/bash_completion.d/password-store
 # aliases
 # ------------------------------------
 
+# Alias for `pass` to copy a password to clipboard
+alias passcopy='pass show -c'
+
 #GPG USB
 alias gpgusb='gpg2 --home=/Volumes/adamliter1/.gnupg'
 
