@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/local/bin/bash
+#
+# This will run Bash version 4.x (the one installed by Homebrew)
+# The Bash version installed on Mac OS by default is version 3.x
+# And it is located in /bin/bash, not /usr/local
 #
 # This is a bash script for symlinking all of my configuration files
 # in my GitHub repo `config-files` into their proper place
