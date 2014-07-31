@@ -1,0 +1,12 @@
+{
+	map = (
+		{
+			address = "adam.liter@gmail.com";
+			userID = "0x98723A2089026CD6";
+		},
+		{
+			address = "literada@msu.edu";
+			userID = "0x98723A2089026CD6";
+		},
+	);
+}

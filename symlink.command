@@ -8,13 +8,17 @@
 # command line, too, by invoking `./symlink.command`
 
 # Define a list of the files to be looped over
-FILES=".bash_profile .bashrc .emacs.d .gitconfig .profile .zlogin .zshrc gpg.conf"
+FILES=".bash_profile .bashrc .emacs.d .gitconfig .profile .zlogin .zshrc OpenPGP/gpg.conf MailMate/Security.plist"
 
 # Symlink all of the files
 for i in $FILES; do
-    if [ "$i" == "gpg.conf" ] ; then
-	ln -s "/Users/adamliter/dotfiles/$i" "$HOME/.gnupg"
+    if [ "$i" == ".emacs.d" ] ; then
+    	ln -sf "/Users/adamliter/config-files/$i" "$HOME"
+    elif [ "$i" == "OpenPGP/gpg.conf" ] ; then
+		ln -sf "/Users/adamliter/config-files/$i" "$HOME/.gnupg"
+    elif [ "$i" == "MailMate/Security.plist" ] ; then
+    	ln -sf "/Users/adamliter/config-files/$i" "$HOME/Library/Application Support/MailMate"
     else
-	ln -s "/Users/adamliter/dotfiles/$i" "$HOME"
+		ln -sf "/Users/adamliter/config-files/dotfiles/$i" "$HOME"
     fi
 done
