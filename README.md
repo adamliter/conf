@@ -1,9 +1,9 @@
-dotfiles
-========
+config-files
+============
 
-This repo contains dot files for some common utilities that I use, like `git`, `bash`, *etc.*.
+This repo contains configuration files for some common applications and utilities that I use; it mostly consists of dot files for utilities like `git`, `bash`, *etc.*.
 
 Usage
 =====
 
-The `symlink.command` file is a bash script that symlinks all of the dot files in this repository into the `$HOME` directory. If on a Mac, one can just double click the file from inside a Finder window. Otherwise, it can be run from the command line, too, with `cd dotfiles && ./symlink.command`.
+The `symlink.command` file is a bash script that symlinks all of the configuration files in this repository into their proper location. If on a Mac, one can just double click the file from inside a Finder window. Otherwise, it can be run from the command line, too, with `cd config-files && ./symlink.command`.
