@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# This is a bash script for symlinking all of the dot files
-# in my GitHub repo `dotfiles` into their proper place
+# This is a bash script for symlinking all of my configuration files
+# in my GitHub repo `config-files` into their proper place
 #
 # On a Mac, you can run it by double clicking `symlink.command`
 # in an open Finder window, otherwise you can run it from the
