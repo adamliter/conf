@@ -23,6 +23,9 @@ source /usr/local/etc/bash_completion.d/password-store
 # aliases
 # ------------------------------------
 
+# Alias for `ssh-add` to add id_rsa
+alias sshid='ssh-add ~/.ssh/id_rsa'
+
 # Alias for `pass` to copy a password to clipboard
 alias passcopy='pass show -c'
 
