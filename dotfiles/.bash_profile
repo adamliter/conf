@@ -23,6 +23,15 @@ source /usr/local/etc/bash_completion.d/password-store
 # aliases
 # ------------------------------------
 
+# Alias for verbose brew update
+alias bud='brew update -v'
+
+# Alias for verbose brew upgrade
+alias bug='brew upgrade -v'
+
+# Alias for verbose brew cleanup
+alias buc='brew cleanup -v'
+
 # Alias for `ssh-add` to add id_rsa
 alias sshid='ssh-add ~/.ssh/id_rsa'
 
