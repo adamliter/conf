@@ -23,6 +23,35 @@ source /usr/local/etc/bash_completion.d/password-store
 # aliases
 # ------------------------------------
 
+## Aliases for `cd`-ing into git repos
+
+# Alias for personal website
+alias cdpsite='cd ~/Documents/PersonalWebsite'
+
+# Alias for TeXnology folder
+alias cdtex='cd ~/Dropbox/TeXnology'
+
+# Alias for `lingsem` folder
+alias cdling='cd ~/Dropbox/TeXnology/lingsem'
+
+# Alias for config-files
+alias cdconfig='cd ~/config-files'
+
+# Alias for CV
+alias cdcv='cd ~/Dropbox/Silly Career Stuff/adamlitercv'
+
+# Alias for linguistics stuff
+alias cdling='cd ~/Dropbox/linguistics'
+
+# Alias for undergrad thesis
+alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
+
+# Alias for masters-thesis
+alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
+
+# Alias for Emacs stuff
+alias cdemacs='cd ~/config-files/.emacs.d'
+
 # Alias for verbose brew update
 alias bud='brew update -v'
 
