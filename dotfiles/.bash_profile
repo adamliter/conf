@@ -59,13 +59,19 @@ alias bud='brew update -v'
 alias bug='brew upgrade -v'
 
 # Alias for verbose brew cleanup
-alias bc='brew cleanup -v'
+alias brc='brew cleanup -v'
+
+# Alias for verbose brew prune
+alias brp='brew prune -v'
 
 # Alias for `ssh-add` to add id_rsa
 alias sshid='ssh-add ~/.ssh/id_rsa'
 
 # Alias for `pass` to copy a password to clipboard
 alias passcopy='pass show -c'
+
+# Alias for `pass` to copy chess password to clipboard
+alias chess='passcopy internet/chess'
 
 #GPG USB
 alias gpgusb='gpg2 --home=/Volumes/adamliter1/.gnupg'
