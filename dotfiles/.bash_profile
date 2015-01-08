@@ -76,7 +76,7 @@ alias sshid='ssh-add ~/.ssh/id_rsa'
 alias passcopy='pass show -c'
 
 # Alias for `pass` to copy chess password to clipboard
-alias chess='passcopy internet/chess'
+alias chess='passcopy misc/chess'
 
 #GPG USB
 alias gpgusb='gpg2 --home=/Volumes/adamliter1/.gnupg'
