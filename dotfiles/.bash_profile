@@ -64,6 +64,11 @@ alias brc='brew cleanup -v'
 # Alias for verbose brew prune
 alias brp='brew prune -v'
 
+# Alias for verbose brew update,
+# verbose brew upgrade, verbose brew
+# cleanup, and verbose brew prune
+alias bra='bud && bug && brc && brp'
+
 # Alias for `ssh-add` to add id_rsa
 alias sshid='ssh-add ~/.ssh/id_rsa'
 
