@@ -38,7 +38,7 @@ alias cdling='cd ~/Dropbox/TeXnology/lingsem'
 alias cdconfig='cd ~/config-files'
 
 # Alias for CV
-alias cdcv='cd ~/Dropbox/Silly Career Stuff/adamlitercv'
+alias cdcv='cd ~/Dropbox/Silly\ Career\ Stuff/adamlitercv'
 
 # Alias for linguistics stuff
 alias cdling='cd ~/Dropbox/linguistics'
