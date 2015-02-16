@@ -91,6 +91,6 @@ alias openE='open -a "Emacs"'
 alias CS='java -classpath ~/Applications/CS_2.003.04.jar csearch/CorpusSearch'
 
 # Aliases for showing/revealing hidden files in Finder
-alias showFiles='defaults write -g AppleShowAllFiles -bool true; killall Finder /System/Library/CoreServices/Finder.app'
+alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder'
 
-alias hideFiles='defaults write -g AppleShowAllFiles -bool false; killall Finder /System/Library/CoreServices/Finder.app'
+alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
