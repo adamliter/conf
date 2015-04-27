@@ -56,7 +56,7 @@ alias cdemacs='cd ~/config-files/.emacs.d'
 alias bud='brew update -v'
 
 # Alias for verbose brew upgrade
-alias bug='brew upgrade -v'
+alias bug='brew upgrade --all -v'
 
 # Alias for verbose brew cleanup
 alias brc='brew cleanup -v'
