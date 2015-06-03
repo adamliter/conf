@@ -78,7 +78,10 @@ alias passcopy='pass show -c'
 # Alias for `pass` to copy chess password to clipboard
 alias chess='passcopy misc/chess'
 
-#GPG USB
+# GPG alias
+alias gpg='gpg2'
+
+# GPG USB
 alias gpgusb='gpg2 --home=/Volumes/adamliter1/.gnupg'
 
 # For opening anything with TextWrangler
