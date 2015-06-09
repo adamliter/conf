@@ -30,6 +30,24 @@ source /usr/local/etc/bash_completion.d/password-store
 # aliases
 # ------------------------------------
 
+## Aliases for `git`
+alias git='hub'
+alias g='git status -sb'
+alias gp='git pull'
+alias gpr='git pull --rebase'
+alias gpp='git pull --rebase && git push'
+alias ga='git add'
+alias gc='git commit'
+alias gca='git commit --amend'
+alias gcv='git commit --no-verify'
+alias gdv='git diff'
+alias gdc='git diff --cached'
+alias gl='git log --oneline --decorate'
+alias gt='git tag'
+alias grc='git rebase --continue'
+alias gsl='git stash list'
+alias gss='git stash save'
+
 ## Aliases for `cd`-ing into git repos
 
 # Alias for personal website
