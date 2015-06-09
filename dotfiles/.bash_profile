@@ -11,6 +11,13 @@ pdflatex "$@".tex
 pdflatex "$@".tex
 }
 
+# For adding git info to prompt
+function parse_git_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
+}
+PS1="\[\e[32m\]\$(parse_git_branch)\[\e[34m\]\h:\W \$ \[\e[m\]"
+export PS1
+
 # For color output with `ls`
 # See http://apple.stackexchange.com/questions/33677/how-can-i-configure-mac-terminal-to-have-color-ls-output
 export CLICOLOR=1
