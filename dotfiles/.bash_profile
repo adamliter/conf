@@ -58,7 +58,7 @@ alias cdpsite='cd ~/Documents/PersonalWebsite'
 alias cdtex='cd ~/Dropbox/TeXnology'
 
 # Alias for `lingsem` folder
-alias cdling='cd ~/Dropbox/TeXnology/lingsem'
+alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
 
 # Alias for config-files
 alias cdconfig='cd ~/config-files'
