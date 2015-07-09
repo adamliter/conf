@@ -98,6 +98,9 @@ alias bra='bud && bug && brc && brp'
 # Alias for `ssh-add` to add id_rsa
 alias sshid='ssh-add ~/.ssh/id_rsa'
 
+# Alias for koding
+alias koding='ssh adamliter@uakk4b2c2319.adamliter.koding.io'
+
 # Alias for `pass` to copy a password to clipboard
 alias passcopy='pass show -c'
 
