@@ -2,6 +2,11 @@ export PATH=/usr/local/bin:$PATH
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ]; then
+  PATH="$HOME/bin:$PATH"
+fi
+
 # Command for knitr + pdflatex + bibtex + pdflatex + pdflatex from a shell
 knitretal () {
 Rscript -e "library(knitr); knit('"$@".Rnw')"
