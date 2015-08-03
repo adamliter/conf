@@ -1,3 +1,6 @@
+# ------------------------------------
+# PATH stuff
+# ------------------------------------
 export PATH=/usr/local/bin:$PATH
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
@@ -7,14 +10,14 @@ if [ -d "$HOME/bin" ]; then
   PATH="$HOME/bin:$PATH"
 fi
 
-# Command for knitr + pdflatex + bibtex + pdflatex + pdflatex from a shell
-knitretal () {
-Rscript -e "library(knitr); knit('"$@".Rnw')"
-pdflatex "$@".tex
-bibtex "$@".aux
-pdflatex "$@".tex
-pdflatex "$@".tex
-}
+# ------------------------------------
+# EDITOR
+# ------------------------------------
+export EDITOR=emacs
+
+# ------------------------------------
+# terminal config stuff
+# ------------------------------------
 
 # For adding git info to prompt
 function parse_git_branch {
@@ -30,6 +33,19 @@ export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
 # For auto-completion with `pass`
 source /usr/local/etc/bash_completion.d/password-store
+
+# ------------------------------------
+# custom commands
+# ------------------------------------
+
+# Command for knitr + pdflatex + bibtex + pdflatex + pdflatex from a shell
+knitretal () {
+Rscript -e "library(knitr); knit('"$@".Rnw')"
+pdflatex "$@".tex
+bibtex "$@".aux
+pdflatex "$@".tex
+pdflatex "$@".tex
+}
 
 # ------------------------------------
 # aliases
