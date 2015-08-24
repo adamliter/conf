@@ -77,6 +77,16 @@ BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "gettext")
 BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "gnu-getopt")
 
 ########################################################################
+## Dependencies for tesseract                                         ##
+##                                                                    ##     
+## Last updated on 2015-08-24                                         ##
+########################################################################
+#BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "autoconf")
+#BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "automake")
+#BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "libtool")
+#BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "pkg-config")
+
+########################################################################
 ## Dependencies for bib-tool                                          ##
 ##                                                                    ##     
 ## Last updated on 2015-08-23                                         ##
@@ -89,6 +99,23 @@ BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "gnu-getopt")
 ## Last updated on 2015-08-23                                         ##
 ########################################################################
 BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "gmp")
+
+########################################################################
+## Dependencies for tor                                               ##
+##                                                                    ##     
+## Last updated on 2015-08-24                                         ##
+########################################################################
+BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "libevent")
+BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "openssl")
+
+########################################################################
+## Dependencies for torsocks                                          ##
+##                                                                    ##     
+## Last updated on 2015-08-24                                         ##
+########################################################################
+BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "autoconf")
+BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "automake")
+BREW_DEPS=("${BREW_DEPS[@]:+${BREW_DEPS[@]}}" "libtool")
 
 ########################################################################
 ## Dependencies for python                                            ##

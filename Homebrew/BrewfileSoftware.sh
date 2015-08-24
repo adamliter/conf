@@ -36,8 +36,8 @@ BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "emacs")
 ########################################################################
 ## Encryption stuff                                                   ##
 ########################################################################
-BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "gnupg")
-BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "gnupg2")
+BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "gpg")
+BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "gpg2")
 BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "openssl")
 
 ########################################################################
@@ -46,10 +46,22 @@ BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "openssl")
 BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "pass")
 
 ########################################################################
+## PDF stuff                                                          ##
+########################################################################
+### For OCR
+#BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "tesseract")
+
+########################################################################
 ## TeX related stuff                                                  ##
 ########################################################################
 BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "bib-tool")
 BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "pandoc")
+
+########################################################################
+## Tor                                                                ##
+########################################################################
+BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "tor")
+BREW_SFTWR=("${BREW_SFTWR[@]:+${BREW_SFTWR[@]}}" "torsocks")
 
 ########################################################################
 ## Programming                                                        ##
