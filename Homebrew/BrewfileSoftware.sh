@@ -3,7 +3,7 @@
 #
 #
 ########################################################################
-## This is a shell script for getting an array of the software that   ##
+## This is a bash script for getting an array of the software that    ##
 ## I use and install via Homebrew|Linuxbrew.                          ##
 ##                                                                    ##
 ##                                                                    ##

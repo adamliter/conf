@@ -3,7 +3,7 @@
 #
 #
 ########################################################################
-## This is a shell script for installing Homebrew|Linuxbrew and the   ##
+## This is a bash script for installing Homebrew|Linuxbrew and the    ##
 ## software that I use.                                               ##
 ##                                                                    ##
 ##                                                                    ##

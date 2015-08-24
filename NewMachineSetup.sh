@@ -3,7 +3,7 @@
 #
 #
 ########################################################################
-## This is a shell script for setting up a new machine with the stuff ##
+## This is a bash script for setting up a new machine with the stuff  ##
 ## that I normally use.                                               ##
 ##                                                                    ##
 ##                                                                    ##

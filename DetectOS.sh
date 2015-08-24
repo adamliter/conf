@@ -3,7 +3,7 @@
 #
 #
 ########################################################################
-## This is a shell script for detecting the operating system. It is   ##
+## This is a bash script for detecting the operating system. It is    ##
 ## taken from Franci Penov. The original can be found at              ##
 ## https://github.com/francip/bashrc/blob/master/configure_os         ##
 ## This version was taken from commit                                 ##

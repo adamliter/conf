@@ -3,7 +3,7 @@
 #
 #
 ########################################################################
-## This is a shell script for generating a Brewfile for use with      ##
+## This is a bash script for generating a Brewfile for use with       ##
 ## Homebrew bundle. Rather than writing a single Brewfile, I chose    ##
 ## to generate it with a shell script from a list of software that I  ##
 ## use and a list of the dependencies for that software. This allows  ##
