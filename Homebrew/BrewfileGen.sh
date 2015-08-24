@@ -1,4 +1,4 @@
-n#!/usr/bin/env bash
+#!/usr/bin/env bash
 # -*- mode: sh; fill-column: 72 -*-
 #
 #
