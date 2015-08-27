@@ -38,4 +38,5 @@ else
 	echo "Homebrew is not installed..."
     elif [ "${BASH_OS_TYPE}" = "Linux" ]; then
 	echo "Linuxbrew is not installed..."
+    fi
 fi
