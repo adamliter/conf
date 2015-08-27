@@ -20,6 +20,18 @@
 
 
 ########################################################################
+## Exiting and debugging                                              ##
+########################################################################
+### Exit when a command fails
+set -o errexit
+### Exit when a command in a series of pipes fails
+set -o pipefail
+### Exit when there is an undeclared variable
+set -o nounset
+### Trace what gets executed (for debugging)
+#set -o xtrace
+
+########################################################################
 ## Define a list of the files to be looped over                       ##
 ########################################################################
 FILES=".bash_profile .bashrc .emacs.d .gitconfig .profile .zlogin \
@@ -28,6 +40,7 @@ FILES=".bash_profile .bashrc .emacs.d .gitconfig .profile .zlogin \
 ########################################################################
 ## Symlink all of the files                                           ##
 ########################################################################
+echo "Symlinking configuration files and dotfiles based on the OS..."
 for i in $FILES; do
     if [[ "${i}" == ".emacs.d" ]] ; then
 	## Put Emacs directory in the right place

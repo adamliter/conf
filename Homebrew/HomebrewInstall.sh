@@ -24,6 +24,15 @@
 
 
 ########################################################################
+## This file is not intended for direct execution                     ##
+########################################################################
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+    echo "This file is not intended for direct execution..."
+    echo "Exiting..."
+    exit
+fi
+
+########################################################################
 ## Install Homebrew|Linuxbrew                                         ##
 ########################################################################
 ### Check if Homebrew|Linuxbrew is already installed
@@ -77,7 +86,7 @@ fi
 ## Install stuff from Homebrew|Linuxbrew that I use                   ##
 ########################################################################
 echo "Installing software specified in ${BREWFILE_LOC}..."
-brew bundle --verbose
+brew bundle --verbose --file="${BREWFILE_LOC}"
 
 ########################################################################
 ## Link applications                                                  ##

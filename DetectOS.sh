@@ -22,6 +22,19 @@
 #
 
 
+########################################################################
+## This file is not intended for direct execution                     ##
+########################################################################
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+    echo "This file is not intended for direct execution..."
+    echo "Exiting..."
+    exit
+fi
+
+########################################################################
+## Detect the OS                                                      ##
+########################################################################
+echo "Detecting the operating system..."
 if [[ $OSTYPE == darwin* ]]; then
     # Mac OS X
     BASH_OS_TYPE=MacOSX

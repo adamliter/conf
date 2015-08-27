@@ -34,6 +34,16 @@
 #
 #
 
+
+########################################################################
+## This file is not intended for direct execution                     ##
+########################################################################
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+    echo "This file is not intended for direct execution..."
+    echo "Exiting..."
+    exit
+fi
+
 ########################################################################
 ## .Brewfile location                                                 ##
 ########################################################################
@@ -49,6 +59,7 @@ s=$(printf "%-${SIXTY_SEVEN_LESS_DATE_CHARS}s" " ")
 ########################################################################
 ## Initialize the .Brewfile                                           ##
 ########################################################################
+echo "Generating a .Brewfile appropriate for the OS..."
 cat << EOF > "${BREWFILE_LOC}"
 # -*- mode: sh; fill-column: 72 -*-
 #

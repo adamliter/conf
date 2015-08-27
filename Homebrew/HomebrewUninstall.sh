@@ -14,10 +14,13 @@
 
 
 ########################################################################
-## Detect the operating system                                        ##
+## This file is not intended for direct execution                     ##
 ########################################################################
-echo "Detecting the operating system..."
-source ${HOME}/config-files/DetectOS.sh
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+    echo "This file is not intended for direct execution..."
+    echo "Exiting..."
+    exit
+fi
 
 ########################################################################
 ## Uninstall Homebrew|Linuxbrew                                       ##
