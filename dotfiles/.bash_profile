@@ -73,7 +73,7 @@ alias gss='git stash save'
 ## Aliases for `cd`-ing into git repos
 
 # Alias for personal website
-alias cdpsite='cd ~/Documents/PersonalWebsite'
+alias cdpsite='cd ~/projects/website/src'
 
 # Alias for TeXnology folder
 alias cdtex='cd ~/Dropbox/TeXnology'
@@ -86,6 +86,9 @@ alias cdconfig='cd ~/config-files'
 
 # Alias for CV
 alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
+
+# Alias for resume
+alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
 
 # Alias for linguistics stuff
 alias cdling='cd ~/Dropbox/linguistics'
