@@ -129,7 +129,7 @@ alias koding='ssh adamliter@uakk4b2c2319.adamliter.koding.io'
 alias passcopy='pass show -c'
 
 # Alias for `pass` to copy chess password to clipboard
-alias chess='passcopy misc/chess'
+alias chess='passcopy personal/misc/chess'
 
 # GPG alias
 alias gpg='gpg2'
