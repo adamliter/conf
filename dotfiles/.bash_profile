@@ -88,7 +88,7 @@ alias cdconfig='cd ~/config-files'
 alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
 
 # Alias for resume
-alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
+alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
 
 # Alias for linguistics stuff
 alias cdling='cd ~/Dropbox/linguistics'
