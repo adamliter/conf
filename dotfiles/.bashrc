@@ -18,6 +18,11 @@ export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 source /usr/local/etc/bash_completion.d/password-store
 
 # ------------------------------------
+# Virtualenvwrapper for Python/pip
+# ------------------------------------
+source /usr/local/bin/virtualenvwrapper.sh
+
+# ------------------------------------
 # custom commands
 # ------------------------------------
 

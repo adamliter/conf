@@ -19,3 +19,4 @@ export EDITOR=emacs
 # Python
 # ------------------------------------
 export PIP_REQUIRE_VIRTUALENV=true
+export WORKON_HOME=$HOME/Virtualenvs
