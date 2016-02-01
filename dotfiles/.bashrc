@@ -21,6 +21,11 @@ source /usr/local/etc/bash_completion.d/password-store
 # custom commands
 # ------------------------------------
 
+# For overriding the requirement of being in pip virtualenv
+gpip(){
+   PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}
+
 # Command for knitr + pdflatex + bibtex + pdflatex + pdflatex from a shell
 knitretal () {
 Rscript -e "library(knitr); knit('"$@".Rnw')"
