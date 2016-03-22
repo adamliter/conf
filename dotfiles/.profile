@@ -19,7 +19,7 @@ export EDITOR=emacs
 # Python stuff
 # ------------------------------------
 export PIP_REQUIRE_VIRTUALENV=true
-export PROJECT_HOME=$HOME/projects/Python
+export PROJECT_HOME=$HOME/projects
 export WORKON_HOME=$HOME/.virtualenvs
 
 
