@@ -66,7 +66,7 @@ alias gss='git stash save'
 ## Aliases for `cd`-ing into git repos
 
 # Alias for personal website
-alias cdpsite='cd ~/projects/website/src'
+alias cdpsite='cd ~/projects/website-src'
 
 # Alias for TeXnology folder
 alias cdtex='cd ~/Dropbox/TeXnology'
