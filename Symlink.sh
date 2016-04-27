@@ -39,14 +39,20 @@ FILES=".bash_profile .bashrc .emacs.d .gitconfig .profile .zlogin \
 MailMate/Layouts/verticalThreadCorr.plist \
 MailMate/Layouts/verticalThreadTag.plist \
 MailMate/Layouts/widescreenThreadCorr.plist \
-MailMate/Layouts/widescreenThreadTag.plist"
+MailMate/Layouts/widescreenThreadTag.plist \
+KeyBindings/DefaultKeyBinding.dict"
 
 ########################################################################
 ## Create directory for MailMate layouts                              ##
 ########################################################################
-
 echo "Creating directory for MailMate layouts"
 mkdir -p "${HOME}/Library/Application Support/MailMate/Resources/Layouts/Mailboxes"
+
+########################################################################
+## Create directory for keybindings                                   ##
+########################################################################
+echo "Creating directory for key bindings"
+mkdir -p "${HOME}/Library/KeyBindings"
 
 ########################################################################
 ## Symlink all of the files                                           ##
@@ -63,10 +69,13 @@ for i in $FILES; do
 	## Put security config for MailMate in the right place
 	ln -sf "${HOME}/config-files/${i}" \
 	   "${HOME}/Library/Application Support/MailMate"
-    elif echo "${i}" | grep -q "MailMate/Layouts/"; then
+    elif echo "${i}" | grep -q "MailMate/Layouts/" ; then
 	## Put Layout stuff in the right place
-	ln -sf "$HOME/config-files/${i}" \
+	ln -sf "${HOME}/config-files/${i}" \
 	   "${HOME}/Library/Application Support/MailMate/Resources/Layouts/Mailboxes"
+    elif [[ "${i}" == "KeyBindings/DefaultKeyBinding.dict" ]] ; then
+	ln -sf "${HOME}/config-files/${i}" \
+	   "${HOME}/Library/KeyBindings"
     else
 	## All other dotfiles
 	ln -sf "${HOME}/config-files/dotfiles/${i}" "${HOME}"
