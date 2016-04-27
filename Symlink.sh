@@ -35,7 +35,18 @@ set -o nounset
 ## Define a list of the files to be looped over                       ##
 ########################################################################
 FILES=".bash_profile .bashrc .emacs.d .gitconfig .profile .zlogin \
-.zshrc OpenPGP/gpg.conf MailMate/Security.plist"
+.zshrc OpenPGP/gpg.conf MailMate/Security.plist \
+MailMate/Layouts/verticalThreadCorr.plist \
+MailMate/Layouts/verticalThreadTag.plist \
+MailMate/Layouts/widescreenThreadCorr.plist \
+MailMate/Layouts/widescreenThreadTag.plist"
+
+########################################################################
+## Create directory for MailMate layouts                              ##
+########################################################################
+
+echo "Creating directory for MailMate layouts"
+mkdir -p "${HOME}/Library/Application Support/MailMate/Resources/Layouts/Mailboxes"
 
 ########################################################################
 ## Symlink all of the files                                           ##
@@ -52,6 +63,10 @@ for i in $FILES; do
 	## Put security config for MailMate in the right place
 	ln -sf "${HOME}/config-files/${i}" \
 	   "${HOME}/Library/Application Support/MailMate"
+    elif echo "${i}" | grep -q "MailMate/Layouts/"; then
+	## Put Layout stuff in the right place
+	ln -sf "$HOME/config-files/${i}" \
+	   "${HOME}/Library/Application Support/MailMate/Resources/Layouts/Mailboxes"
     else
 	## All other dotfiles
 	ln -sf "${HOME}/config-files/dotfiles/${i}" "${HOME}"
