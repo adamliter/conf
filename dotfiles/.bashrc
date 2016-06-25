@@ -65,6 +65,9 @@ alias gss='git stash save'
 
 ## Aliases for `cd`-ing into git repos
 
+# Alias for core Homebrew repo
+alias cdcbrew='cd $(brew --repository homebrew/core)'
+
 # Alias for personal website
 alias cdpsite='cd ~/projects/website-src'
 
