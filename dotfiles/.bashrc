@@ -17,6 +17,24 @@ export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 # For auto-completion with `pass`
 source /usr/local/etc/bash_completion.d/password-store
 
+_ppass(){
+    PASSWORD_STORE_DIR=~/.password-store/personal/ _pass
+}
+
+complete -o filenames -o nospace -F _ppass ppass
+
+_pp(){
+    _ppass
+}
+
+complete -o filenames -o nospace -F _pp pp
+
+_lb-pass(){
+    PASSWORD_STORE_DIR=~/.password-store/shared-projects/lingbib/ _pass
+}
+
+complete -o filenames -o nospace -F _lb-pass lb-pass
+
 # ------------------------------------
 # Virtualenvwrapper for Python/pip
 # ------------------------------------
@@ -32,7 +50,7 @@ gpip(){
 }
 
 # Command for knitr + pdflatex + bibtex + pdflatex + pdflatex from a shell
-knitretal () {
+knitretal(){
 Rscript -e "library(knitr); knit('"$@".Rnw')"
 pdflatex "$@".tex
 bibtex "$@".aux
@@ -127,11 +145,22 @@ alias sshmm='ssh adamliter@dynamic.adamliter.org -p 2223'
 # Alias for sshing into home macbook pro (when on ethernet)
 alias sshmbp='ssh adamliter@dynamic.adamliter.org -p 2224'
 
-# Alias for `pass` to copy a password to clipboard
-alias passcopy='pass show -c'
+# Alias for `pass` and personal tree
+alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
+alias pp='ppass'
 
-# Alias for `pass` to copy chess password to clipboard
-alias chess='passcopy personal/misc/chess'
+# Alias for `pass` and lingbib tree
+alias lb-pass='PASSWORD_STORE_DIR=~/.password-store/shared-projects/lingbib/ pass'
+
+# Common logins
+alias amazon='pp -c misc/amazon'
+alias amex='pp -c finances/amex'
+alias bb='pp -c misc/bitbucket'
+alias ccu='pp -c finances/ccu'
+alias chess='pp -c misc/chess'
+alias fmail='pp -c email/fastmail'
+alias kb='pp -c keybase/passphrase'
+alias msufcu='pp -c finances/msufcu'
 
 # GPG alias
 alias gpg='gpg2'
