@@ -134,7 +134,7 @@ alias chess='passcopy personal/misc/chess'
 alias gpg='gpg2'
 
 # GPG USB
-alias gpgusb='gpg2 --home=/Volumes/adamliter1/.gnupg'
+alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
 
 # For opening anything with TextWrangler
 alias openTW='open -a "TextWrangler"'
