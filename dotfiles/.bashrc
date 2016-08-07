@@ -121,8 +121,11 @@ alias sshid='ssh-add ~/.ssh/id_rsa'
 # Alias for koding
 alias koding='ssh adamliter@uakk4b2c2319.adamliter.koding.io'
 
-# Alias for sshing into home mac mini
+# Alias for sshing into home mac mini (when on ethernet)
 alias sshmm='ssh adamliter@dynamic.adamliter.org -p 2223'
+
+# Alias for sshing into home macbook pro (when on ethernet)
+alias sshmbp='ssh adamliter@dynamic.adamliter.org -p 2224'
 
 # Alias for `pass` to copy a password to clipboard
 alias passcopy='pass show -c'
