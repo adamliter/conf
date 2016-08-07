@@ -1,7 +1,23 @@
 {
 	map = (
 		{
+			address = "io@adamliter.org";
+			userID = "0x98723A2089026CD6";
+		},
+		{
+			address = "io@adamliter.com";
+			userID = "0x98723A2089026CD6";
+		},
+		{
 			address = "adam.liter@gmail.com";
+			userID = "0x98723A2089026CD6";
+		},
+		{
+			address = "adamliter@fastmail.com";
+			userID = "0x98723A2089026CD6";
+		},
+		{
+			address = "liter@umd.edu";
 			userID = "0x98723A2089026CD6";
 		},
 		{
