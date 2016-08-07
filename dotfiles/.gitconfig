@@ -1,6 +1,6 @@
 [user]
 	name = Adam Liter
-	email = adam.liter@gmail.com
+	email = io@adamliter.org
 	signkey = 0x98723A2089026CD6
 [filter "media"]
 	required = true
