@@ -15,6 +15,8 @@ fi
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
 # ------------------------------------
 # EDITOR
 # ------------------------------------
@@ -26,5 +28,4 @@ export EDITOR=emacs
 export PIP_REQUIRE_VIRTUALENV=true
 export PROJECT_HOME=$HOME/projects
 export WORKON_HOME=$HOME/.virtualenvs
-
 
