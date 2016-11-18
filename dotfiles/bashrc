@@ -81,6 +81,10 @@ alias grc='git rebase --continue'
 alias gsl='git stash list'
 alias gss='git stash save'
 
+## Emacs
+alias xemacs='/usr/local/bin/emacs'
+alias emacs='emacsclient -nw'
+
 ## Aliases for `cd`-ing into git repos
 
 # Alias for core Homebrew repo

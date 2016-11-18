@@ -20,7 +20,7 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 # ------------------------------------
 # EDITOR
 # ------------------------------------
-export EDITOR=emacs
+export EDITOR="emacsclient -nw"
 
 # ------------------------------------
 # Python stuff

@@ -11,7 +11,7 @@
 [push]
 	default = simple
 [core]
-	editor = /usr/local/bin/emacs
+	editor = "emacsclient -nw"
 	excludesfile = /Users/adamliter/.gitignore_global
 [pull]
 	rebase = true
