@@ -1,3 +1,4 @@
+# -*- mode: sh; fill-column: 72 -*-
 # ------------------------------------
 # terminal config stuff
 # ------------------------------------
@@ -82,8 +83,7 @@ alias gsl='git stash list'
 alias gss='git stash save'
 
 ## Emacs
-alias xemacs='/usr/local/bin/emacs'
-alias emacs='emacsclient -nw'
+alias e='emacsclient -t -a=""'
 
 ## Aliases for `cd`-ing into git repos
 

@@ -1,3 +1,4 @@
+# -*- mode: sh; fill-column: 72 -*-
 # ------------------------------------
 # PATH stuff
 # ------------------------------------
@@ -20,7 +21,8 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 # ------------------------------------
 # EDITOR
 # ------------------------------------
-export EDITOR="emacsclient -nw"
+export EDITOR=/usr/local/bin/ec
+export ALTERNATE_EDITOR=""
 
 # ------------------------------------
 # Python stuff
