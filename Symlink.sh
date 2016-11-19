@@ -34,8 +34,8 @@ set -o nounset
 ########################################################################
 ## Define a list of the files to be looped over                       ##
 ########################################################################
-FILES="bash_profile bashrc .emacs.d gitconfig profile tmux.conf zlogin \
-zshrc OpenPGP/gpg.conf MailMate/Security.plist \
+FILES="bash_aliases bash_profile bashrc .emacs.d gitconfig profile \
+tmux.conf zlogin zshrc OpenPGP/gpg.conf MailMate/Security.plist \
 MailMate/Layouts/verticalThreadCorr.plist \
 MailMate/Layouts/verticalThreadTag.plist \
 MailMate/Layouts/widescreenThreadCorr.plist \

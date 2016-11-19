@@ -1,0 +1,114 @@
+# -*- mode: sh; fill-column: 72 -*-
+
+# -----------------------------------------------------------------------
+# basic terminal stuff
+# -----------------------------------------------------------------------
+alias ..='cd ..'
+alias ....='cd ../..'
+alias ......='cd ../../..'
+
+alias l='ls -a'
+alias ll='ls -al'
+
+# list only hidden directories and files
+alias l.='ls -d .*'
+alias ll.'=ls -ld .*'
+
+# gpg
+alias gpg='gpg2'
+alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
+
+# macOS specific stuff
+alias TW='open -a "TextWrangler"'
+alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; \
+killall Finder'
+alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
+killall Finder'
+
+# -----------------------------------------------------------------------
+# homebrew
+# -----------------------------------------------------------------------
+alias bud='brew update -v'
+alias bug='brew upgrade  -v'
+alias brc='brew cleanup -v'
+alias brp='brew prune -v'
+alias bra='bud && bug && brc && brp'
+
+# -----------------------------------------------------------------------
+# ssh
+# -----------------------------------------------------------------------
+alias sshid='ssh-add ~/.ssh/id_rsa'
+alias l1node='ssh adamliter@l1node.adamliter.org'
+alias sshmm='ssh adamliter@dynamic.adamliter.org -p 2223'
+alias sshmbp='ssh adamliter@dynamic.adamliter.org -p 2224'
+alias koding='ssh adamliter@uakk4b2c2319.adamliter.koding.io'
+
+# -----------------------------------------------------------------------
+# pass
+# -----------------------------------------------------------------------
+# personal password store
+alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
+alias pp='ppass'
+
+# lingbib password store
+alias lb-pass='PASSWORD_STORE_DIR=~/.password-store/shared-projects\
+/lingbib/ pass'
+
+# common logins
+alias amazon='pp -c misc/amazon'
+alias amex='pp -c finances/amex'
+alias bb='pp -c misc/bitbucket'
+alias ccu='pp -c finances/ccu'
+alias chess='pp -c misc/chess'
+alias delta='pp -c travel/delta'
+alias fmail='pp -c email/fastmail'
+alias kb='pp -c keybase/passphrase'
+alias msufcu='pp -c finances/msufcu'
+
+# -----------------------------------------------------------------------
+# emacs
+# -----------------------------------------------------------------------
+alias e='emacsclient -t -a=""'
+
+# -----------------------------------------------------------------------
+# git
+# -----------------------------------------------------------------------
+alias git='hub'
+alias g='git status -sb'
+alias gp='git pull'
+alias gpr='git pull --rebase'
+alias gpp='git pull --rebase && git push'
+alias ga='git add'
+alias gc='git commit'
+alias gces='git commit -eS'
+alias gca='git commit --amend'
+alias gcv='git commit --no-verify'
+alias gdv='git diff'
+alias gdc='git diff --cached'
+alias gl='git log --oneline --decorate'
+alias gt='git tag'
+alias grc='git rebase --continue'
+alias gsl='git stash list'
+alias gss='git stash save'
+
+# -----------------------------------------------------------------------
+# common directories
+# -----------------------------------------------------------------------
+alias cdcbrew='cd $(brew --repository homebrew/core)'
+alias cdpsite='cd ~/projects/website-src'
+alias cdtex='cd ~/Dropbox/TeXnology'
+alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
+alias cdconfig='cd ~/config-files'
+alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
+alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
+alias cdling='cd ~/Dropbox/linguistics'
+alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
+alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
+alias cdemacs='cd ~/config-files/.emacs.d'
+
+# -----------------------------------------------------------------------
+# CorpuseSearch
+# -----------------------------------------------------------------------
+alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
+csearch/CorpusSearch'
+
