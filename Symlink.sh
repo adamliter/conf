@@ -34,13 +34,25 @@ set -o nounset
 ########################################################################
 ## Define a list of the files to be looped over                       ##
 ########################################################################
-FILES="bash_aliases bash_completion bash_profile bashrc .emacs.d \
-gitconfig profile tmux.conf zlogin zshrc OpenPGP/gpg.conf \
-MailMate/Security.plist MailMate/Layouts/verticalThreadCorr.plist \
+FILES="bash_aliases \
+bash_completion \
+bash_profile \
+bashrc \
+.emacs.d \
+gitconfig \
+gitignore_global \
+profile \
+tmux.conf \
+zlogin \
+zshrc \
+KeyBindings/DefaultKeyBinding.dict \
+MailMate/Security.plist \
+MailMate/Layouts/verticalThreadCorr.plist \
 MailMate/Layouts/verticalThreadTag.plist \
 MailMate/Layouts/widescreenThreadCorr.plist \
 MailMate/Layouts/widescreenThreadTag.plist \
-KeyBindings/DefaultKeyBinding.dict ssh"
+OpenPGP/gpg.conf \
+ssh"
 
 ########################################################################
 ## Create directory for MailMate layouts                              ##
