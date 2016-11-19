@@ -1,27 +1,9 @@
 #!/usr/bin/env bash
 # -*- mode: sh; fill-column: 72 -*-
 #
-#
-########################################################################
-## (c) Adam Liter 2015 under Creative Commons                         ##
-## Attribution-NonCommercial-ShareAlike 4.0 International License     ##
-########################################################################
-#
-#
-########################################################################
-## TODO                                                               ##
-##                                                                    ##
-##   - At some point, it would be nice to turn this into a portable   ##
-##     shell script so that it can be executed with /bin/sh           ##
-##                                                                    ##
-########################################################################
-#
-#
-
-
-########################################################################
-## Exiting and debugging                                              ##
-########################################################################
+# -----------------------------------------------------------------------
+# Exiting and debugging
+# -----------------------------------------------------------------------
 ### Exit when a command fails
 set -o errexit
 ### Exit when a command in a series of pipes fails
@@ -31,9 +13,9 @@ set -o nounset
 ### Trace what gets executed (for debugging)
 #set -o xtrace
 
-########################################################################
-## Define a list of the files to be looped over                       ##
-########################################################################
+# -----------------------------------------------------------------------
+# Define a list of the files to be looped over
+# -----------------------------------------------------------------------
 FILES="bash_aliases \
 bash_completion \
 bash_profile \
@@ -54,22 +36,22 @@ MailMate/Layouts/widescreenThreadTag.plist \
 OpenPGP/gpg.conf \
 ssh"
 
-########################################################################
-## Create directory for MailMate layouts                              ##
-########################################################################
+# -----------------------------------------------------------------------
+# Create directory for MailMate layouts
+# -----------------------------------------------------------------------
 echo "Creating directory for MailMate layouts"
 mkdir -p "${HOME}/Library/Application Support/MailMate/Resources/\
 Layouts/Mailboxes"
 
-########################################################################
-## Create directory for keybindings                                   ##
-########################################################################
+# -----------------------------------------------------------------------
+# Create directory for keybindings
+# -----------------------------------------------------------------------
 echo "Creating directory for key bindings"
 mkdir -p "${HOME}/Library/KeyBindings"
 
-########################################################################
-## Symlink all of the files                                           ##
-########################################################################
+# -----------------------------------------------------------------------
+# Symlink all of the files
+# -----------------------------------------------------------------------
 echo "Symlinking configuration files and dotfiles based on the OS..."
 for i in $FILES; do
     if [[ "${i}" == ".emacs.d" ]] ; then
