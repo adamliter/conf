@@ -4,7 +4,7 @@
 *.DS_Store
 
 # Ignore auto-save files from Emacs
-*.*~
+*~
 \#*.*\#
 
 # ssh
