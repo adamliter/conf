@@ -38,10 +38,6 @@ alias bra='bud && bug && brc && brp'
 # ssh
 # -----------------------------------------------------------------------
 alias sshid='ssh-add ~/.ssh/id_rsa'
-alias l1node='ssh adamliter@l1node.adamliter.org'
-alias sshmm='ssh adamliter@dynamic.adamliter.org -p 2223'
-alias sshmbp='ssh adamliter@dynamic.adamliter.org -p 2224'
-alias koding='ssh adamliter@uakk4b2c2319.adamliter.koding.io'
 
 # -----------------------------------------------------------------------
 # pass

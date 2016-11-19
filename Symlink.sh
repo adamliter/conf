@@ -40,7 +40,7 @@ MailMate/Security.plist MailMate/Layouts/verticalThreadCorr.plist \
 MailMate/Layouts/verticalThreadTag.plist \
 MailMate/Layouts/widescreenThreadCorr.plist \
 MailMate/Layouts/widescreenThreadTag.plist \
-KeyBindings/DefaultKeyBinding.dict"
+KeyBindings/DefaultKeyBinding.dict ssh"
 
 ########################################################################
 ## Create directory for MailMate layouts                              ##
@@ -63,6 +63,8 @@ for i in $FILES; do
     if [[ "${i}" == ".emacs.d" ]] ; then
 	## Put Emacs directory in the right place
 	ln -sf "${HOME}/config-files/${i}" "${HOME}"
+    elif [[ "${i}" == "ssh" ]]; then
+	ln -sf "${HOME}/config-files/${i}" "${HOME}/.${i}"
     elif [[ "${i}" == "OpenPGP/gpg.conf" ]] ; then
 	## Put gpg.conf in the right place
 	ln -sf "${HOME}/config-files/${i}" "${HOME}/.gnupg"

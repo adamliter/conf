@@ -1,6 +1,12 @@
+# -*- mode: gitignore; fill-column: 72 -*-
+
 # Ignore .DS_Store from Mac OS
 *.DS_Store
 
 # Ignore auto-save files from Emacs
 *.*~
 \#*.*\#
+
+# ssh
+ssh/*
+!ssh/config
