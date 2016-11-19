@@ -19,7 +19,7 @@ PS1="\[\e[92m\]\$(parse_git_branch)\[\e[97m\]\u\[\e[92m\]@\[\e[95m\]\h:\W \$ \[\
 export PS1
 
 # For color output with `ls`
-# See http://apple.stackexchange.com/questions/33677/how-can-i-configure-mac-terminal-to-have-color-ls-output
+# See http://apple.stackexchange.com/q/33677/85567
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
