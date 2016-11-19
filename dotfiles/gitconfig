@@ -1,3 +1,5 @@
+# -*- mode: gitconfig; fill-column: 72 -*-
+
 [user]
 	name = Adam Liter
 	email = io@adamliter.org
