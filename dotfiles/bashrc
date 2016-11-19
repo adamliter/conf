@@ -1,8 +1,24 @@
 # -*- mode: sh; fill-column: 72 -*-
 
-# Source .profile if it exists
+# -----------------------------------------------------------------------
+# environment variables and stuff
+# -----------------------------------------------------------------------
 if [ -f "${HOME}/.profile" ]; then
     source "${HOME}/.profile"
+fi
+
+# -----------------------------------------------------------------------
+# aliases
+# -----------------------------------------------------------------------
+if [ -f "${HOME}/.bash_aliases" ]; then
+    source "${HOME}/.bash_aliases"
+fi
+
+# -----------------------------------------------------------------------
+# auto completion
+# -----------------------------------------------------------------------
+if [ -f "${HOME}/.bash_completion" ]; then
+    source "${HOME}/.bash_completion"
 fi
 
 # -----------------------------------------------------------------------
@@ -21,43 +37,13 @@ export PS1
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
-# For auto-completion with `pass`
-source /usr/local/etc/bash_completion.d/password-store
-
-_ppass(){
-    PASSWORD_STORE_DIR=~/.password-store/personal/ _pass
-}
-
-complete -o filenames -o nospace -F _ppass ppass
-
-_pp(){
-    _ppass
-}
-
-complete -o filenames -o nospace -F _pp pp
-
-_lb-pass(){
-    PASSWORD_STORE_DIR=~/.password-store/shared-projects/lingbib/ _pass
-}
-
-complete -o filenames -o nospace -F _lb-pass lb-pass
-
 # -----------------------------------------------------------------------
-# Virtualenvwrapper for Python/pip
+# Python
 # -----------------------------------------------------------------------
 source /usr/local/bin/virtualenvwrapper.sh
-
-# -----------------------------------------------------------------------
-# custom commands
-# -----------------------------------------------------------------------
 
 # For overriding the requirement of being in pip virtualenv
 gpip(){
    PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
-
-# Source .bash_aliases if it exists
-if [ -f "${HOME}/.bash_aliases" ]; then
-    source "${HOME}/.bash_aliases"
-fi
 

@@ -34,9 +34,9 @@ set -o nounset
 ########################################################################
 ## Define a list of the files to be looped over                       ##
 ########################################################################
-FILES="bash_aliases bash_profile bashrc .emacs.d gitconfig profile \
-tmux.conf zlogin zshrc OpenPGP/gpg.conf MailMate/Security.plist \
-MailMate/Layouts/verticalThreadCorr.plist \
+FILES="bash_aliases bash_completion bash_profile bashrc .emacs.d \
+gitconfig profile tmux.conf zlogin zshrc OpenPGP/gpg.conf \
+MailMate/Security.plist MailMate/Layouts/verticalThreadCorr.plist \
 MailMate/Layouts/verticalThreadTag.plist \
 MailMate/Layouts/widescreenThreadCorr.plist \
 MailMate/Layouts/widescreenThreadTag.plist \
@@ -46,7 +46,8 @@ KeyBindings/DefaultKeyBinding.dict"
 ## Create directory for MailMate layouts                              ##
 ########################################################################
 echo "Creating directory for MailMate layouts"
-mkdir -p "${HOME}/Library/Application Support/MailMate/Resources/Layouts/Mailboxes"
+mkdir -p "${HOME}/Library/Application Support/MailMate/Resources/\
+Layouts/Mailboxes"
 
 ########################################################################
 ## Create directory for keybindings                                   ##
