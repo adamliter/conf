@@ -17,3 +17,10 @@
 	rebase = true
 [gpg]
 	program = gpg2
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	ui = true
+	pager = true
