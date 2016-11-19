@@ -1,8 +1,7 @@
-if [ -f $HOME/.profile ]; then
-	source $HOME/.profile
-fi
+# -*- mode: sh; fill-column: 72 -*-
 
-if [ -f $HOME/.bashrc ]; then
-	source $HOME/.bashrc
+# Source .bashrc if it exists
+if [ -f "${HOME}/.bashrc" ]; then
+	source "${HOME}/.bashrc"
 fi
 
