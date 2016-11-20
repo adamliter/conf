@@ -21,7 +21,7 @@ alias gpg='gpg2'
 alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
 
 # macOS specific stuff
-alias TW='open -a "TextWrangler"'
+alias tw='open -a "TextWrangler"'
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; \
 killall Finder'
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
