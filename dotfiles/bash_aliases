@@ -16,6 +16,9 @@ alias ll='ls -al'
 alias l.='ls -d .*'
 alias ll.'=ls -ld .*'
 
+# tmux
+alias tmux='tmux -2'
+
 # gpg
 alias gpg='gpg2'
 alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
