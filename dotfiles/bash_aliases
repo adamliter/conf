@@ -9,12 +9,12 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../..'
 
-alias l='ls -a'
-alias ll='ls -al'
+alias l='ls -aF'
+alias ll='ls -alF'
 
 # list only hidden directories and files
-alias l.='ls -d .*'
-alias ll.'=ls -ld .*'
+alias l.='ls -dF .*'
+alias ll.'=ls -ldF .*'
 
 # tmux
 alias tmux='tmux -2'
