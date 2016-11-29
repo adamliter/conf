@@ -13,7 +13,7 @@
 [push]
 	default = simple
 [core]
-	editor = emacsclient -t -a=\\\"\\\"
+	editor = "emacsclient -t -a=''"
 	excludesfile = /Users/adamliter/.gitignore_global
 [pull]
 	rebase = true
