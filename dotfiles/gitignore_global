@@ -88,8 +88,8 @@ tramp
 *_flymake.*
 
 # eshell files
-/eshell/history
-/eshell/lastdir
+**/eshell/history
+**/eshell/lastdir
 
 # elpa packages
 /elpa/
@@ -98,7 +98,7 @@ tramp
 *.rel
 
 # AUCTeX auto folder
-/auto/
+**/auto/
 
 # cask packages
 .cask/
