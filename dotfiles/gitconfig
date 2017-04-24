@@ -1,4 +1,4 @@
-# -*- mode: gitconfig; fill-column: 72 -*-
+# -*- mode: gitconfig; fill-column: 72l coding: utf-8 -*-
 
 [user]
 	name = Adam Liter
