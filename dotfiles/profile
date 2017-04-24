@@ -30,4 +30,4 @@ export ALTERNATE_EDITOR=""
 export PIP_REQUIRE_VIRTUALENV=true
 export PROJECT_HOME=$HOME/projects
 export WORKON_HOME=$HOME/.virtualenvs
-
+export VIRTUAL_ENV_DISABLE_PROMPT=1

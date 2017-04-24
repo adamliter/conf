@@ -3,7 +3,6 @@
 # ----------------------------------------------------------------------
 # Colors
 # ----------------------------------------------------------------------
-
 RED="\[\e[31m\]"
 LIGHT_RED="\[\e[91m\]"
 GREEN="\[\e[32m\]"
@@ -69,6 +68,17 @@ function set_git_branch {
 }
 
 # ----------------------------------------------------------------------
+# get virtualenv info for prompt
+# ----------------------------------------------------------------------
+function set_virtualenv () {
+    if test -z "$VIRTUAL_ENV"; then
+	MY_VENV=""
+    else
+	MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET} "
+    fi
+}
+
+# ----------------------------------------------------------------------
 # get exit code for prompt symbol
 # ----------------------------------------------------------------------
 function set_prompt_symbol () {
@@ -87,6 +97,9 @@ function set_bash_prompt () {
   # return value of the last command.
   set_prompt_symbol $?
 
+  # Get virtualenv info
+  set_virtualenv
+
   # Set the BRANCH variable.
   if is_git_repository ; then
     set_git_branch
@@ -96,6 +109,7 @@ function set_bash_prompt () {
 
   # Set the bash prompt variable.
   PS1="
+${MY_VENV}\
 ${WHITE}\u${COLOR_RESET}\
 ${LIGHT_GREEN}@${COLOR_RESET}\
 ${LIGHT_MAGENTA}\\h${COLOR_RESET} \
