@@ -1,9 +1,29 @@
-# -*- mode: sh; fill-column: 72 -*-
+# -*- mode: sh; fill-column: 72; coding: utf-8 -*-
+
+# ----------------------------------------------------------------------
+# git/hub
+# ----------------------------------------------------------------------
+if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+    source /usr/local/etc/bash_completion.d/git-completion.bash
+fi
+
+if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
+    source /usr/local/etc/bash_completion.d/hub.bash_completion.sh
+fi
+
+# ----------------------------------------------------------------------
+# tmux
+# ----------------------------------------------------------------------
+if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
+    source /usr/local/etc/bash_completion.d/tmux
+fi
 
 # ----------------------------------------------------------------------
 # pass
 # ----------------------------------------------------------------------
-source /usr/local/etc/bash_completion.d/pass
+if [ -f /usr/local/etc/bash_completion.d/pass ]; then
+    source /usr/local/etc/bash_completion.d/pass
+fi
 # personal completion
 _ppass(){
     PASSWORD_STORE_DIR=~/.password-store/personal/ _pass
@@ -23,4 +43,3 @@ _lb-pass(){
 }
 
 complete -o filenames -o nospace -F _lb-pass lb-pass
-
