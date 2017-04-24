@@ -4,13 +4,107 @@
 # Colors
 # ----------------------------------------------------------------------
 
+RED="\[\e[31m\]"
+LIGHT_RED="\[\e[91m\]"
+GREEN="\[\e[32m\]"
 LIGHT_GREEN="\[\e[92m\]"
-WHITE="\[\e[97m\]"
+YELLOW="\[\e[33m\]"
+LIGHT_YELLOW="\[\e[93m\]"
+BLUE="\[\e[34m\]"
+LIGHT_BLUE="\[\e[94m\]"
+MAGENTA="\[\e[35m\]"
 LIGHT_MAGENTA="\[\e[95m\]"
+CYAN="\[\e[36m\]"
+LIGHT_CYAN="\[\e[96m\]"
+LIGHT_GRAY="\[\e[37m\]"
+WHITE="\[\e[97m\]"
 COLOR_RESET="\[\e[0m\]"
 
-function parse_git_branch {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
+# ----------------------------------------------------------------------
+# git info for prompt
+# ----------------------------------------------------------------------
+# Detect whether the current directory is a git repository.
+function is_git_repository {
+  git branch > /dev/null 2>&1
 }
-PS1="${LIGHT_GREEN}$(parse_git_branch)${WHITE}\u${LIGHT_GREEN}@${LIGHT_MAGENTA}\h${LIGHT_GREEN}:${LIGHT_MAGENTA}\W \$ ${COLOR_RESET}"
-export PS1
+
+# Determine the branch/state information for this git repository.
+function set_git_branch {
+  # Capture the output of the "git status" command.
+  git_status="$(git status 2> /dev/null)"
+
+  # Set color based on clean/staged/dirty.
+  if [[ ${git_status} =~ "working tree clean" ]]; then
+    state="${LIGHT_GREEN}"
+  elif [[ ${git_status} =~ "Changes to be committed" ]]; then
+    state="${LIGHT_YELLOW}"
+  else
+    state="${RED}"
+  fi
+
+  # Set arrow icon based on status against remote.
+  remote_pattern="(# )?Your branch is (.*) of"
+  if [[ ${git_status} =~ ${remote_pattern} ]]; then
+    if [[ ${BASH_REMATCH[2]} == "ahead" ]]; then
+      remote="↑"
+    else
+      remote="↓"
+    fi
+  else
+    remote=""
+  fi
+  diverge_pattern="# Your branch and (.*) have diverged"
+  if [[ ${git_status} =~ ${diverge_pattern} ]]; then
+    remote="↕"
+  fi
+
+  # Get the name of the branch.
+  branch_pattern="^(# )?On branch ([^${IFS}]*)"
+  if [[ ${git_status} =~ ${branch_pattern} ]]; then
+    branch=${BASH_REMATCH[2]}
+  fi
+
+  # Set the final branch string.
+  BRANCH="${state}(${branch})${remote}${COLOR_RESET} "
+}
+
+# ----------------------------------------------------------------------
+# get exit code for prompt symbol
+# ----------------------------------------------------------------------
+function set_prompt_symbol () {
+  if test $1 -eq 0 ; then
+      PROMPT_SYMBOL="\$"
+  else
+      PROMPT_SYMBOL="${RED}\$${COLOR_RESET}"
+  fi
+}
+
+# ----------------------------------------------------------------------
+# function to set prompt
+# ----------------------------------------------------------------------
+function set_bash_prompt () {
+  # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
+  # return value of the last command.
+  set_prompt_symbol $?
+
+  # Set the BRANCH variable.
+  if is_git_repository ; then
+    set_git_branch
+  else
+    BRANCH=''
+  fi
+
+  # Set the bash prompt variable.
+  PS1="
+${WHITE}\u${COLOR_RESET}\
+${LIGHT_GREEN}@${COLOR_RESET}\
+${LIGHT_MAGENTA}\\h${COLOR_RESET} \
+${LIGHT_CYAN}\w${COLOR_RESET} \
+${BRANCH}
+${PROMPT_SYMBOL} "
+}
+
+# ----------------------------------------------------------------------
+# execute set_bash_prompt
+# ----------------------------------------------------------------------
+PROMPT_COMMAND=set_bash_prompt
