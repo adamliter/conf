@@ -1,7 +1,16 @@
 # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
 
+# ----------------------------------------------------------------------
+# Colors
+# ----------------------------------------------------------------------
+
+LIGHT_GREEN="\[\e[92m\]"
+WHITE="\[\e[97m\]"
+LIGHT_MAGENTA="\[\e[95m\]"
+COLOR_RESET="\[\e[0m\]"
+
 function parse_git_branch {
     git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
 }
-PS1="\[\e[92m\]\$(parse_git_branch)\[\e[97m\]\u\[\e[92m\]@\[\e[95m\]\h\[\e[92m\]:\[\e[95m\]\W \$ \[\e[m\]"
+PS1="${LIGHT_GREEN}$(parse_git_branch)${WHITE}\u${LIGHT_GREEN}@${LIGHT_MAGENTA}\h${LIGHT_GREEN}:${LIGHT_MAGENTA}\W \$ ${COLOR_RESET}"
 export PS1
