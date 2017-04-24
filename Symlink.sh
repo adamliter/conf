@@ -19,6 +19,7 @@ set -o nounset
 FILES="bash_aliases \
 bash_completion \
 bash_profile \
+bash_prompt \
 bashrc \
 .emacs.d \
 gitconfig \
