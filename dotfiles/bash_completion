@@ -12,6 +12,14 @@ if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
 fi
 
 # ----------------------------------------------------------------------
+# pandoc
+# ----------------------------------------------------------------------
+if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
+    source /usr/local/etc/bash_completion.d/pandoc
+fi
+
+
+# ----------------------------------------------------------------------
 # brew
 # ----------------------------------------------------------------------
 if [ -f /usr/local/etc/bash_completion.d/brew ]; then
