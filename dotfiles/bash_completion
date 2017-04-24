@@ -12,6 +12,13 @@ if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
 fi
 
 # ----------------------------------------------------------------------
+# brew
+# ----------------------------------------------------------------------
+if [ -f /usr/local/etc/bash_completion.d/brew ]; then
+    source /usr/local/etc/bash_completion.d/brew
+fi
+
+# ----------------------------------------------------------------------
 # tmux
 # ----------------------------------------------------------------------
 if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
