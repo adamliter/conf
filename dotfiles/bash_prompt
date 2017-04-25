@@ -21,6 +21,11 @@ WHITE="\[\e[97m\]"
 COLOR_RESET="\[\e[0m\]"
 
 # ----------------------------------------------------------------------
+# define a prompt separator
+# ----------------------------------------------------------------------
+MY_PS1_SEP=" ${WHITE}█${COLOR_RESET} "
+
+# ----------------------------------------------------------------------
 # git info for prompt
 # ----------------------------------------------------------------------
 # Detect whether the current directory is a git repository.
@@ -65,7 +70,7 @@ function set_git_branch {
   fi
 
   # Set the final branch string.
-  BRANCH="${state}(${branch})${remote}${COLOR_RESET} "
+  BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
 }
 
 # ----------------------------------------------------------------------
@@ -75,7 +80,8 @@ function set_virtualenv () {
     if test -z "$VIRTUAL_ENV"; then
 	MY_VENV=""
     else
-	MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET} "
+	MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+${MY_PS1_SEP}"
     fi
 }
 
@@ -113,8 +119,9 @@ function set_bash_prompt () {
 ${MY_VENV}\
 ${WHITE}\u${COLOR_RESET}\
 ${LIGHT_GREEN}@${COLOR_RESET}\
-${LIGHT_MAGENTA}\h${COLOR_RESET} \
-${LIGHT_CYAN}\w${COLOR_RESET} \
+${LIGHT_MAGENTA}\h${COLOR_RESET}\
+${MY_PS1_SEP}\
+${LIGHT_CYAN}\w${COLOR_RESET}\
 ${BRANCH}
 ${PROMPT_SYMBOL} "
 }
