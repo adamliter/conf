@@ -18,6 +18,12 @@ if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
     source /usr/local/etc/bash_completion.d/pandoc
 fi
 
+# ----------------------------------------------------------------------
+# django
+# ----------------------------------------------------------------------
+if [ -f /usr/local/etc/bash_completion.d/django ]; then
+    source /usr/local/etc/bash_completion.d/django
+fi
 
 # ----------------------------------------------------------------------
 # brew
