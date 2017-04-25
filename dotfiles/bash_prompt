@@ -15,6 +15,7 @@ MAGENTA="\[\e[35m\]"
 LIGHT_MAGENTA="\[\e[95m\]"
 CYAN="\[\e[36m\]"
 LIGHT_CYAN="\[\e[96m\]"
+LIGHT_GREY="\[\e[37m\]"
 LIGHT_GRAY="\[\e[37m\]"
 WHITE="\[\e[97m\]"
 COLOR_RESET="\[\e[0m\]"
@@ -42,9 +43,9 @@ function set_git_branch {
   fi
 
   # Set arrow icon based on status against remote.
-  remote_pattern="(# )?Your branch is (.*) of"
+  remote_pattern="(# )?Your branch is (ahead of|behind)"
   if [[ ${git_status} =~ ${remote_pattern} ]]; then
-    if [[ ${BASH_REMATCH[2]} == "ahead" ]]; then
+    if [[ ${BASH_REMATCH[2]} == "ahead of" ]]; then
       remote="↑"
     else
       remote="↓"
@@ -52,7 +53,7 @@ function set_git_branch {
   else
     remote=""
   fi
-  diverge_pattern="# Your branch and (.*) have diverged"
+  diverge_pattern="(# )?Your branch and (.*) have diverged"
   if [[ ${git_status} =~ ${diverge_pattern} ]]; then
     remote="↕"
   fi
@@ -112,7 +113,7 @@ function set_bash_prompt () {
 ${MY_VENV}\
 ${WHITE}\u${COLOR_RESET}\
 ${LIGHT_GREEN}@${COLOR_RESET}\
-${LIGHT_MAGENTA}\\h${COLOR_RESET} \
+${LIGHT_MAGENTA}\h${COLOR_RESET} \
 ${LIGHT_CYAN}\w${COLOR_RESET} \
 ${BRANCH}
 ${PROMPT_SYMBOL} "
