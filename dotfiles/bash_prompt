@@ -97,6 +97,26 @@ function set_prompt_symbol () {
 }
 
 # ----------------------------------------------------------------------
+# functions to build PS1_LESS_PWD for remaining length calculation
+# ----------------------------------------------------------------------
+strip_color () {
+    COLOR_REGEX='s/\\\[\\e\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]\\\]//g'
+    if [[ $OSTYPE == darwin* ]]; then
+	sed -Ee $COLOR_REGEX <<< """$1"""
+    else
+	sed -re $COLOR_REGEX <<< """$1"""
+    fi
+}
+
+get_ps1_less_pwd () {
+    PS1_LESS_PWD=$(printf "%s%s%s%s" \
+			  "$(strip_color "${MY_VENV}")" \
+			  "$(whoami)@$(hostname -s)" \
+			  "$(strip_color "${MY_PS1_SEP}")" \
+			  "$(strip_color "${BRANCH}")")
+}
+
+# ----------------------------------------------------------------------
 # function to set prompt
 # ----------------------------------------------------------------------
 function set_bash_prompt () {
@@ -114,6 +134,18 @@ function set_bash_prompt () {
     BRANCH=''
   fi
 
+  # get PS1_LESS_PWD to calculate length remaining
+  get_ps1_less_pwd
+
+  # get truncated PWD
+  # loosely based on http://stackoverflow.com/a/26555347/2571049
+  MY_PWD=$(pwd | awk -F/ -v "u=$PS1_LESS_PWD" -v "n=$(tput cols)" \
+		     -v "h=^$HOME" \
+	'{sub(h,"~"); u=length(u); n=n-u-1; b=$1} \
+length($0)<=n || NF==2 {print; next;} \
+NF>2 {b=b"/.../"; e=$NF; n-=length(b $NF); \
+for (i=NF-1; i>2 && n>length(e $i)+1; i--) e=$i"/"e;} {print b e;}')
+
   # Set the bash prompt variable.
   PS1="
 ${MY_VENV}\
@@ -121,7 +153,7 @@ ${WHITE}\u${COLOR_RESET}\
 ${LIGHT_GREEN}@${COLOR_RESET}\
 ${LIGHT_MAGENTA}\h${COLOR_RESET}\
 ${MY_PS1_SEP}\
-${LIGHT_CYAN}\w${COLOR_RESET}\
+${LIGHT_CYAN}${MY_PWD}${COLOR_RESET}\
 ${BRANCH}
 ${PROMPT_SYMBOL} "
 }
