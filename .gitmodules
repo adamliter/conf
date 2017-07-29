@@ -2,3 +2,7 @@
 	path = emacs.d
 	url = git@github.com:adamliter/emacs.d.git
 	branch = master
+[submodule "ssh"]
+	path = ssh
+	url = algit:ssh.git
+	branch = master
