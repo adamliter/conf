@@ -249,6 +249,35 @@ lead to a dirty working tree in =git=.
 
 *** bash
 
+**** Installation
+   :PROPERTIES:
+   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+   :END:
+
+The version of bash that ships on macOS is pretty outdated, so let's
+install a more recent version via Homebrew. In order to use this newer
+version of bash as the login shell, it needs to be added to the file
+=/etc/shells=. Then, the shell can be changed to =/usr/local/bin/bash=
+for the current user. In order for this to take effect, I log back in.
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == macOS ]]; then
+      brew update && brew install bash
+      if ! grep -q "/usr/local/bin/bash" /etc/shells; then
+          echo "Adding Homebrew's bash to possible login shells ..."
+          sudo bash -c "echo /usr/local/bin/bash >> /etc/shells"
+      else
+          echo "Homebrew's bash is already a possible login shell ..."
+      fi
+      if [ $SHELL == "/usr/local/bin/bash" ]; then
+          echo "Shell is already set to Homebrew's bash ..."
+      else
+          echo "Setting shell to Homebrew's bash ..."
+          chsh -s /usr/local/bin/bash
+      fi
+  fi
+#+END_SRC
+
 *** curl
 
 ~curl~ is installed by default on macOS but not on Linux:

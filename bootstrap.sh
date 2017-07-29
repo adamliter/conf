@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # -*- coding: utf-8; mode: sh; -*-
 # Exit when a command fails
 set -o errexit
@@ -59,5 +58,21 @@ emacs --batch \
   (org-babel-tangle)
   (org-babel-execute-buffer)
   (kill-buffer))"
+
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew update && brew install bash
+    if ! grep -q "/usr/local/bin/bash" /etc/shells; then
+        echo "Adding Homebrew's bash to possible login shells ..."
+        sudo bash -c "echo /usr/local/bin/bash >> /etc/shells"
+    else
+        echo "Homebrew's bash is already a possible login shell ..."
+    fi
+    if [ $SHELL == "/usr/local/bin/bash" ]; then
+        echo "Shell is already set to Homebrew's bash ..."
+    else
+        echo "Setting shell to Homebrew's bash ..."
+        chsh -s /usr/local/bin/bash
+    fi
+fi
 
 ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
