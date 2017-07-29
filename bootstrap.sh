@@ -59,3 +59,5 @@ emacs --batch \
   (org-babel-tangle)
   (org-babel-execute-buffer)
   (kill-buffer))"
+
+ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"

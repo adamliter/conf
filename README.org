@@ -236,6 +236,15 @@ proper locations.
 
 * Command line utilities
 
+This section of this =org= document both installs the relevant command
+line utility (if it is not already installed) and creates the
+appropriate configuration files for that utility, if necessary. Even
+though all of the configuration files are derived files, they are all
+kept under version control and symlinked into the appropriate
+locations. Doing so allows me to more readily notice any external
+programs or utilities that change my configuration files, as it will
+lead to a dirty working tree in =git=.
+
 ** All OSes
 
 *** bash
@@ -259,18 +268,23 @@ proper locations.
 *** ssh
 
 **** Configuration
-     :PROPERTIES:
-     :header-args:emacs-lisp: :eval yes :exports code :results output silent
-     :END:
+   :PROPERTIES:
+   :header-args:emacs-lisp: :eval yes :exports code :results output silent
+   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+   :END:
 
 My SSH configuration is kept in a submodule hosted by my private =git=
 server so as to keep the details of my SSH configuration private. The
 following code, which is executed when this file is tangled, will create
-my SSH config file in the appropriate location.
+my SSH config and then symlink it into the appropriate location.
 
 #+NAME: ssh-config
 #+BEGIN_SRC emacs-lisp
   (org-babel-tangle-file "~/config-files/ssh/README.org")
+#+END_SRC
+
+#+BEGIN_SRC sh
+  ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
 #+END_SRC
 
 *** tmux
