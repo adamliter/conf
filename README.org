@@ -250,9 +250,9 @@ lead to a dirty working tree in =git=.
 *** bash
 
 **** Installation
-   :PROPERTIES:
-   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
-   :END:
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+     :END:
 
 The version of bash that ships on macOS is pretty outdated, so let's
 install a more recent version via Homebrew. In order to use this newer
@@ -297,10 +297,10 @@ for the current user. In order for this to take effect, I log back in.
 *** ssh
 
 **** Configuration
-   :PROPERTIES:
-   :header-args:emacs-lisp: :eval yes :exports code :results output silent
-   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
-   :END:
+     :PROPERTIES:
+     :header-args:emacs-lisp: :eval yes :exports code :results output silent
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+     :END:
 
 My SSH configuration is kept in a submodule hosted by my private =git=
 server so as to keep the details of my SSH configuration private. The
