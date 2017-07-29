@@ -1,4 +1,4 @@
 [submodule "emacs.d"]
 	path = emacs.d
-	url = github:adamliter/emacs.d.git
+	url = git@github.com:adamliter/emacs.d.git
 	branch = master
