@@ -1,0 +1,369 @@
+#+TITLE: Adam Liter's computer configuration
+#+AUTHOR: Adam Liter
+#+EMAIL: io@adamliter.org
+
+#+LANGUAGE: en
+
+This =org= file documents how to bootstrap the setup of a new machine
+such that it is configured just like all of my other computers/servers.
+
+#+TOC: headlines 1
+
+* New machine setup
+
+** SSH
+   :PROPERTIES:
+   :header-args:sh: :eval no
+   :END:
+
+The first thing that must be done in order to set up a new machine is to
+configure SSH and create a key. This allows for cloning of [[https://github.com/adamliter/config-files][the =git=
+repo that contains my configuration files]], which is hosted on GitHub.
+
+First, create the SSH directory:
+
+#+BEGIN_SRC sh
+  mkdir -p ~/.ssh
+  chmod 700 ~/.ssh
+#+END_SRC
+
+Optionally, I can also set up an =authorized_keys= file, which is useful
+if the new machine is intended to be used as a server in any capacity.
+
+#+BEGIN_SRC sh
+  touch ~/.ssh/authorized_keys
+  chmod 600 ~/.ssh/authorized_keys
+#+END_SRC
+
+Next, I need to actually create a new SSH key, which can be done with:
+
+#+BEGIN_SRC sh
+  ssh-keygen -t rsa -b 4096 -C "COMMENT GOES HERE"
+#+END_SRC
+
+Then, I can set up a basic SSH configuration file to ensure that the key
+that I just generated is used when trying to connect to GitHub as well
+as my private =git= server, which contains some of the submodules in
+this repository. (Note that this basic SSH configuration file will be
+overwritten later in this new machine configuration process.)
+
+This allows repositories to be cloned in either of the following manners:
+
+1. ~git clone ssh://github/adamliter/config-files.git~
+2. ~git clone github:adamliter/config-files.git~
+
+#+BEGIN_SRC sh
+  cat > ~/.ssh/config <<EOF
+  Host github
+    Hostname github.com
+    IdentityFile ~/.ssh/id_rsa
+    User git
+
+  Host algit
+    Hostname git.adamliter.org
+    IdentityFile ~/.ssh/id_rsa
+    User git
+
+  # Local Variables:
+  # mode: conf
+  # coding: utf-8
+  # fill-column: 72
+  # indent-tabs-mode: nil
+  # End:
+  EOF
+  chmod 600 ~/.ssh/config
+#+END_SRC
+
+Finally, the public key needs to be added to GitHub and to
+~/home/git/.ssh/authorized_keys~ on the machine ~git.adamliter.org~.
+
+** Bootstrapping
+   :PROPERTIES:
+   :header-args:sh: :eval no
+   :END:
+
+To bootstrap the setup of a new machine, use the =bootstrap.sh= script,
+described [[bootstrap-script-explanation][below]].
+
+*** macOS
+
+To bootstrap the setup of a new Mac machine, do:
+
+#+BEGIN_SRC sh
+  curl -fsSL https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
+#+END_SRC
+
+*** Linux
+
+~curl~ is not installed on Ubuntu by default, but ~wget~ is. To
+bootstrap the setup of a new Linux machine, do:
+
+#+BEGIN_SRC sh
+  wget -O- https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
+#+END_SRC
+
+*** Windows
+
+Meh ... Maybe someday ...
+
+** <<bootstrap-script-explanation>>=bootstrap.sh=
+   :PROPERTIES:
+   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+   :END:
+
+There is a [[https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh][bootstrap script]] for getting an up-to-date package manager,
+Emacs, and =git= for both macOS and Linux (only tested on Ubuntu and
+(currently) only intended for Debian-based systems because of the
+assumption that =apt= is the package manager).
+
+That script is written to this repository when this file is tangled. The
+output of the tangling is not ignored by version control even though it
+is a derived file because tracking it allows a ~curl~-able version of
+the file to exist on GitHub for bootstrapping the setup of a new
+machine.
+
+The first thing the script does is set some flags for exiting and
+debugging:
+
+#+BEGIN_SRC sh
+  # -*- coding: utf-8; mode: sh; -*-
+  # Exit when a command fails
+  set -o errexit
+  # Exit when a command in a series of pipes fails
+  set -o pipefail
+  # Exit when there is an undeclared variable
+  set -o nounset
+  # Trace what gets executed (for debugging)
+  #set -o xtrace
+#+END_SRC
+
+Next, the script detects the operating system.
+
+#+BEGIN_SRC sh
+  if [[ $OSTYPE == darwin* ]]; then
+      BASH_OS_TYPE='macOS'
+  elif [[ $OSTYPE == linux-gnu ]]; then
+      BASH_OS_TYPE='Linux'
+  elif [[ '$OS' == Windows* ]]; then
+      BASH_OS_TYPE='Windows'
+  else
+      BASH_OS_TYPE='Unknown'
+  fi
+#+END_SRC
+
+Then, based on the OS, it installs and/or updates the package manager.
+Using the package manager, it also installs both Emacs and =git=, which
+will allow for programatically setting up the rest of my configuration.
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == macOS ]]; then
+      if type brew >/dev/null 2>&1; then
+          echo "Homebrew is already installed ..."
+      else
+          /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      fi
+      brew update && brew upgrade
+      brew tap caskroom/cask
+      brew cask install emacs
+      brew install git
+  elif [[ $BASH_OS_TYPE == Linux ]]; then
+      sudo apt-get update -y && sudo apt-get upgrade -y
+      sudo apt-get install -y emacs
+      sudo apt-get install -y git
+  fi
+#+END_SRC
+
+Next, the script clones [[https://github.com/adamliter/config-files][the repository that contains my configuration
+files]] into =${HOME}/config-files=. If that file already exists, the
+~git clone~ command will fail, so I remove it first just to be cautious,
+but this should be unnecessary if this is a new machine.
+
+After cloning, it updates all submodules. Submodules, as always, are a
+bit tricky. ~git submodule update --init --recursive~ will recursively
+initialize and update all submodules in the =git= repo. Moreover, with
+the ~--remote~ flag, any submodules that are specified to track a branch
+on the remote will be fast-forwarded to the most recent commit on that
+branch on the remote, regardless of the status of the submodule in the
+parent repo. Furthermore, since [[https://stackoverflow.com/a/20797186/2571049][submodules are always checked out in a
+detached HEAD state]], the script also checks out either the branch that
+the submodule is set up to track on the remote or the master branch for
+all submodules.
+
+#+BEGIN_SRC sh
+  rm -rf "${HOME}/config-files"
+  git clone github:adamliter/config-files.git "${HOME}/config-files"
+  cd "${HOME}/config-files"
+  git submodule update --init --remote --recursive
+
+  git submodule foreach --recursive \
+    'git checkout \
+    $(git config -f $toplevel/.gitmodules submodule.$name.branch || \
+    echo master)'
+#+END_SRC
+
+After all the futzing around with submodules, it symlinks some things
+into place.
+
+#+BEGIN_SRC sh
+  rm -rf "${HOME}/.emacs.d"
+  ln -sn "${HOME}/config-files/emacs.d" "${HOME}/.emacs.d"
+#+END_SRC
+
+Next, the script evaluates my =init.el= file in order to bootstrap the
+installation of all of the Emacs packages that I use. The ~--batch~
+option to ~emacs~ prevents Emacs from being opened as en
+editor. Instead, it just evaluates the file specified by ~--load~.
+
+#+BEGIN_SRC sh
+  emacs --batch --load="${HOME}/.emacs.d/init.el"
+#+END_SRC
+
+Finally, the script evaluates all source code blocks in the file
+=${HOME}/config-files/README.org= where ~:eval yes~ as well as tangling
+the file in order to put all other configuration information in the
+proper locations.
+
+#+BEGIN_SRC sh
+  emacs --batch \
+    --eval="(progn
+    (require 'org)
+    (setq org-confirm-babel-evaluate nil)
+    (find-file \"~/config-files/README.org\")
+    (org-babel-tangle)
+    (org-babel-execute-buffer)
+    (kill-buffer))"
+#+END_SRC
+
+* Command line utilities
+
+** All OSes
+
+*** bash
+
+*** curl
+
+~curl~ is installed by default on macOS but not on Linux:
+
+*** git
+
+*** gpg
+
+*** htop
+
+*** hub
+
+*** pandoc
+
+*** password-store
+
+*** ssh
+
+**** Configuration
+     :PROPERTIES:
+     :header-args:emacs-lisp: :eval yes :exports code :results output silent
+     :END:
+
+My SSH configuration is kept in a submodule hosted by my private =git=
+server so as to keep the details of my SSH configuration private. The
+following code, which is executed when this file is tangled, will create
+my SSH config file in the appropriate location.
+
+#+NAME: ssh-config
+#+BEGIN_SRC emacs-lisp
+  (org-babel-tangle-file "~/config-files/ssh/README.org")
+#+END_SRC
+
+*** tmux
+
+*** tree
+
+This should be installed when =password-store= is installed.
+
+*** wget
+
+~wget~ is installed by default on Linux but not on macOS:
+
+*** xclip
+
+** macOS only
+
+*** reattach-to-user-namespace
+
+** Linux only
+
+* Programming languages
+
+** All OSes
+
+*** Python
+
+*** R
+
+*** TeX
+
+** macOS only
+
+** Linux only
+
+* Applications and GUIs
+
+** All OSes
+
+*** Dropbox
+
+*** Firefox
+
+*** Google Chrome
+
+*** Google Drive
+
+*** Handbrake
+
+*** Inkscape
+
+*** LibreOffice
+
+*** MakeMKV
+
+*** ownCloud
+
+*** Plex
+
+*** Praat
+
+*** PsychoPy
+
+*** RStudio
+
+*** Skype
+
+*** Spotify
+
+*** VirtualBox
+
+*** VLC
+
+** macOS only
+
+*** Alfred
+
+*** Flux
+
+*** iTerm2
+
+*** MailMate
+
+*** Skim
+
+*** TextWrangler
+
+*** UnicodeChecker
+
+** Linux only
+
+# Local Variables:
+# mode: org
+# coding: utf-8
+# fill-column: 72
+# indent-tabs-mode: nil
+# End:
