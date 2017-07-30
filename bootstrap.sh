@@ -8,6 +8,7 @@ set -o pipefail
 set -o nounset
 # Trace what gets executed (for debugging)
 #set -o xtrace
+cd "${HOME}"
 if [[ $OSTYPE == darwin* ]]; then
     BASH_OS_TYPE='macOS'
 elif [[ $OSTYPE == linux-gnu ]]; then

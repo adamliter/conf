@@ -137,7 +137,13 @@ debugging:
   #set -o xtrace
 #+END_SRC
 
-Next, the script detects the operating system.
+Let's run the rest of the script from the home directory:
+
+#+BEGIN_SRC sh
+  cd "${HOME}"
+#+END_SRC
+
+Next, let's have the script detect the operating system.
 
 #+BEGIN_SRC sh
   if [[ $OSTYPE == darwin* ]]; then
