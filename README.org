@@ -108,7 +108,7 @@ Meh ... Maybe someday ...
 
 ** <<bootstrap-script-explanation>>=bootstrap.sh=
    :PROPERTIES:
-   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
    :END:
 
 There is a [[https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh][bootstrap script]] for getting an up-to-date package manager,
@@ -270,7 +270,7 @@ lead to a dirty working tree in =git=.
 
 **** Installation
      :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
      :END:
 
 The version of bash that ships on macOS is pretty outdated, so let's
@@ -341,7 +341,7 @@ need to make sure that =~/.bash_profile= sources =~/.bashrc=.
 At any rate, this can now be symlinked into the appropriate location,
 after it is tangled:
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
   ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
 #+END_SRC
 
@@ -820,7 +820,7 @@ See [[https://apple.stackexchange.com/q/33677/85567][How can I configure Mac Ter
 Finally, =~/.bashrc= can be symlinked into the appropriate location,
 after it is tangled:
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
   ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
 #+END_SRC
 
@@ -868,7 +868,7 @@ environment variables.
 Finally, =~/.profile= can be symlinked into the appropriate location,
 after it is tangled:
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
   ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
 #+END_SRC
 
@@ -893,7 +893,7 @@ after it is tangled:
 **** Configuration
      :PROPERTIES:
      :header-args:emacs-lisp: :eval yes :exports code :results output silent
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
      :END:
 
 My SSH configuration is kept in a submodule hosted by my private =git=

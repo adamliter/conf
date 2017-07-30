@@ -8,7 +8,6 @@ set -o pipefail
 set -o nounset
 # Trace what gets executed (for debugging)
 #set -o xtrace
-
 if [[ $OSTYPE == darwin* ]]; then
     BASH_OS_TYPE='macOS'
 elif [[ $OSTYPE == linux-gnu ]]; then
@@ -18,7 +17,6 @@ elif [[ '$OS' == Windows* ]]; then
 else
     BASH_OS_TYPE='Unknown'
 fi
-
 if [[ $BASH_OS_TYPE == macOS ]]; then
     if type brew >/dev/null 2>&1; then
         echo "Homebrew is already installed ..."
@@ -34,7 +32,6 @@ elif [[ $BASH_OS_TYPE == Linux ]]; then
     sudo apt-get install -y emacs
     sudo apt-get install -y git
 fi
-
 if [ -f "${HOME}/.ssh/config" ]; then
     cp -H "${HOME}/.ssh/config" "${HOME}/.ssh/config.temp"
     rm "${HOME}/.ssh/config"
@@ -42,7 +39,6 @@ if [ -f "${HOME}/.ssh/config" ]; then
 fi
 rm -rf "${HOME}/config-files"
 git clone github:adamliter/config-files.git "${HOME}/config-files"
-
 cd "${HOME}/config-files"
 git submodule update --init --remote --recursive
 
@@ -50,12 +46,9 @@ git submodule foreach --recursive \
   'git checkout \
   $(git config -f $toplevel/.gitmodules submodule.$name.branch || \
   echo master)'
-
 rm -rf "${HOME}/.emacs.d"
 ln -sn "${HOME}/config-files/emacs.d" "${HOME}/.emacs.d"
-
 emacs --batch --load="${HOME}/.emacs.d/init.el"
-
 emacs --batch \
   --eval="(progn
   (require 'org)
@@ -64,7 +57,6 @@ emacs --batch \
   (org-babel-tangle)
   (org-babel-execute-buffer)
   (kill-buffer))"
-
 if [[ $BASH_OS_TYPE == macOS ]]; then
     brew update && brew install bash
     if ! grep -q "/usr/local/bin/bash" /etc/shells; then
@@ -83,5 +75,4 @@ fi
 ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
 ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
 ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
-
 ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
