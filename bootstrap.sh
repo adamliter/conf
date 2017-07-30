@@ -35,8 +35,14 @@ elif [[ $BASH_OS_TYPE == Linux ]]; then
     sudo apt-get install -y git
 fi
 
+if [ -f "${HOME}/.ssh/config" ]; then
+    cp -H "${HOME}/.ssh/config" "${HOME}/.ssh/config.temp"
+    rm "${HOME}/.ssh/config"
+    mv "${HOME}/.ssh/config.temp" "${HOME}/.ssh/config"
+fi
 rm -rf "${HOME}/config-files"
 git clone github:adamliter/config-files.git "${HOME}/config-files"
+
 cd "${HOME}/config-files"
 git submodule update --init --remote --recursive
 

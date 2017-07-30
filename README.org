@@ -178,6 +178,27 @@ files]] into =${HOME}/config-files=. If that file already exists, the
 ~git clone~ command will fail, so I remove it first just to be cautious,
 but this should be unnecessary if this is a new machine.
 
+In the case that this is not a new machine, the command ~rm -rf
+"${HOME}/config-files"~ will remove the file =~/.ssh/config=, since that
+file is a symlink that points inside of the =git= repository. This will
+cause the =bootstrap.sh= script to fail since the submodules in the
+repository make use of the SSH hosts defined in the SSH config
+file. Thus, in order to ensure that this =bootstrap.sh= script can also
+be run on a machine that is already setup (to, for example, reset how
+everything is configured or apply new changes), we want to ensure that
+those SSH hosts still exist when this script tries to clone the repo and
+its submodules.
+
+#+BEGIN_SRC sh
+  if [ -f "${HOME}/.ssh/config" ]; then
+      cp -H "${HOME}/.ssh/config" "${HOME}/.ssh/config.temp"
+      rm "${HOME}/.ssh/config"
+      mv "${HOME}/.ssh/config.temp" "${HOME}/.ssh/config"
+  fi
+  rm -rf "${HOME}/config-files"
+  git clone github:adamliter/config-files.git "${HOME}/config-files"
+#+END_SRC
+
 After cloning, it updates all submodules. Submodules, as always, are a
 bit tricky. ~git submodule update --init --recursive~ will recursively
 initialize and update all submodules in the =git= repo. Moreover, with
@@ -190,8 +211,6 @@ the submodule is set up to track on the remote or the master branch for
 all submodules.
 
 #+BEGIN_SRC sh
-  rm -rf "${HOME}/config-files"
-  git clone github:adamliter/config-files.git "${HOME}/config-files"
   cd "${HOME}/config-files"
   git submodule update --init --remote --recursive
 
