@@ -74,5 +74,8 @@ if [[ $BASH_OS_TYPE == macOS ]]; then
         chsh -s /usr/local/bin/bash
     fi
 fi
+ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
+ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
+ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
 
 ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"

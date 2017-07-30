@@ -1,7 +1,0 @@
-# -*- mode: sh; fill-column: 72; coding: utf-8 -*-
-
-# Source .bashrc if it exists
-if [ -f "${HOME}/.bashrc" ]; then
-	source "${HOME}/.bashrc"
-fi
-

@@ -1,12 +1,7 @@
 # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
-# ----------------------------------------------------------------------
-# PATH stuff
-# ----------------------------------------------------------------------
-export PATH=/usr/local/bin:$PATH
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ]; then
-    export PATH="$HOME/bin:$PATH"
+if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
+    export PATH="${HOME}/bin:${PATH}"
 fi
 
 # This should come at the end of any path stuff,

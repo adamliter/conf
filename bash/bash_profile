@@ -1,0 +1,4 @@
+# -*- mode: sh; fill-column: 72; coding: utf-8 -*-
+if [ -f "${HOME}/.bashrc" ] && [[ $- == *i* ]]; then
+    source "${HOME}/.bashrc"
+fi

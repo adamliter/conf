@@ -278,6 +278,581 @@ for the current user. In order for this to take effect, I log back in.
   fi
 #+END_SRC
 
+**** Configuration
+
+References:
+
+- [[https://superuser.com/q/183870/756208][Difference between .bashrc and .bash_profile]]
+- [[https://superuser.com/q/789448/756208][Choosing between .bashrc, .profile, .bash_profile, etc]]
+
+***** =~/.bash_profile=
+      :PROPERTIES:
+      :header-args:sh: :eval no :exports code :tangle ~/config-files/bash/bash_profile :mkdirp yes :padline no
+      :END:
+
+Login shells (/e.g./ a shell that you start from a non-graphical desktop
+environment, like when logging into a machine via SSH) read one of three
+files (assuming your shell is bash):
+
+1. =~/.bash_profile=
+2. =~/.bash_login=
+3. =~/.profile=
+
+Whichever file is found first is the one that gets read, and the shell
+stops looking for the others. Furthermore, login shells do *not* read
+=~/.bashrc=, but the best practice is to have an *interactive* login
+shell read =~/.bashrc=. Ensuring that this happens is done by adding the
+following to the =~/.bash_profile= file:
+
+#+BEGIN_SRC sh
+  # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
+  if [ -f "${HOME}/.bashrc" ] && [[ $- == *i* ]]; then
+      source "${HOME}/.bashrc"
+  fi
+#+END_SRC
+
+It's worth noting that on macOS, unlike on Linux, all shells started
+from Terminal.app (or iTerm.app) in a graphical environment are started
+as login shells and thus read =~/.bash_profile= (instead of =~/.bashrc=,
+which is what is read when starting Terminal in a graphical desktop
+environment on Linux, since it is a non-login shell). Thus, if you want
+anything in your =~/.bashrc= to be read when using macOS, you certainly
+need to make sure that =~/.bash_profile= sources =~/.bashrc=.
+
+At any rate, this can now be symlinked into the appropriate location,
+after it is tangled:
+
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+  ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
+#+END_SRC
+
+***** =~/.bashrc=
+      :PROPERTIES:
+      :header-args:sh: :eval no :exports code :tangle ~/config-files/bash/bashrc :mkdirp yes :padline no
+      :END:
+
+In the =~/.bashrc= file, I want to ensure that the system-wide =bashrc=
+file is read, if it exists:
+
+#+BEGIN_SRC sh
+  if [ -f /etc/bashrc ]; then
+      source /etc/bashrc
+  fi
+#+END_SRC
+
+While it is not considered best practice to source =~/.profile= from
+inside of =~/.bashrc= (in particular, see [[https://superuser.com/a/183980/756208][Gilles's answer]] to [[https://superuser.com/q/183870/756208][Difference
+between .bashrc and .bash_profile]]), I'm going to go ahead and do this
+anyway because it makes life easier, and I have yet to encounter any
+problems because of it. The recommended best practice is to source
+=~/.basrhc= and =~/.profile= from =~/.bash_profile=, in that
+order. However, for the reasonos mentioned above when discussing macOS
+shells started in the graphical desktop environment, most shells started
+in a graphical desktop environment will only read =~/.bashrc= because
+they are non-login shells. However, this means that environment
+variables that are set in =~/.profile= will not be available in these
+shells. So I'll flout the best practice for now, until I run into
+problems because of it.
+
+#+BEGIN_SRC sh
+  if [ -f "${HOME}/.profile" ]; then
+      source "${HOME}/.profile"
+  fi
+#+END_SRC
+
+****** Aliases
+
+Always gotta shrug:
+
+#+BEGIN_SRC sh
+  alias eh="echo ¯\\\_\(ツ\)_/¯ | pbcopy"
+  alias ehh="eh"
+#+END_SRC
+
+Some aliases for changing directories:
+
+#+BEGIN_SRC sh
+  alias .1='cd ..'
+  alias ..='cd ..'
+  alias .2='cd ../..'
+  alias ....='cd ../..'
+  alias .3='cd ../../..'
+  alias .4='cd ../../../..'
+  alias .5='cd ../../../../..'
+#+END_SRC
+
+List all the things:
+
+#+BEGIN_SRC sh
+  alias l='ls -aF'
+  alias ll='ls -alF'
+
+  # list only hidden directories and files
+  alias l.='ls -dF .*'
+  alias ll.'=ls -ldF .*'
+#+END_SRC
+
+To ensure the availability of 256 colors in =tmux= (see [[https://stackoverflow.com/a/10163861/2571049][this answer]] to
+[[https://stackoverflow.com/q/10158508/2571049][lose vim colorscheme in tmux mode]]).
+
+#+BEGIN_SRC sh
+  alias tmux='tmux -2'
+#+END_SRC
+
+Some =gpg= aliases:
+
+#+BEGIN_SRC sh
+  alias gpg='gpg2'
+  alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
+#+END_SRC
+
+Some macOS-specific aliases:
+
+#+BEGIN_SRC sh
+  if [[ $OSTYPE == darwin* ]]; then
+      alias tw='open -a "TextWrangler"'
+      alias showFiles='defaults write com.apple.finder AppleShowAllFiles \
+  YES; killall Finder'
+      alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
+  killall Finder'
+  fi
+#+END_SRC
+
+Some aliases for Homebrew:
+
+#+BEGIN_SRC sh
+  if type brew >/dev/null 2>&1; then
+      alias bud='brew update -v'
+      alias bug='brew upgrade  -v'
+      alias brc='brew cleanup -v'
+      alias brp='brew prune -v'
+      alias bra='bud && bug && brc && brp'
+  fi
+#+END_SRC
+
+An SSH alias for =ssh-add=:
+
+#+BEGIN_SRC sh
+  alias sshid='ssh-add ~/.ssh/id_rsa'
+#+END_SRC
+
+Some aliases for =pass=:
+
+#+BEGIN_SRC sh
+  alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
+  alias pp='ppass'
+
+  # lingbib password store
+  alias lb-pass='PASSWORD_STORE_DIR=~/.password-store/shared-projects\
+  /lingbib/ pass'
+
+  # common logins
+  alias amazon='pp -c misc/amazon'
+  alias amex='pp -c finances/amex'
+  alias bb='pp -c misc/bitbucket'
+  alias chess='pp -c misc/chess'
+  alias delta='pp -c travel/delta'
+  alias fmail='pp -c email/fastmail/password'
+  alias kb='pp -c keybase/passphrase'
+  alias msufcu='pp -c finances/msufcu'
+#+END_SRC
+
+Some aliases for Emacs:
+
+#+BEGIN_SRC sh
+  alias e='emacsclient -t -a=""'
+#+END_SRC
+
+Some aliases for =git= and =hub=:
+
+#+BEGIN_SRC sh
+  if type hub >/dev/null 2>&1; then
+      alias git='hub'
+  fi
+  alias g='git status -sb'
+  alias gp='git pull'
+  alias gpr='git pull --rebase'
+  alias gpp='git pull --rebase && git push'
+  alias ga='git add'
+  alias gc='git commit'
+  alias gcn='git commit --no-edit'
+  alias gce='git commit -e'
+  alias gces='git commit -eS'
+  alias gca='git commit --amend'
+  alias gcah='git commit --amend -C HEAD'
+  alias gcv='git commit --no-verify'
+  alias gdv='git diff'
+  alias gdc='git diff --cached'
+  alias gl='git log --oneline --decorate --graph'
+  alias gla='git log --oneline --decorate --graph --all'
+  alias gt='git tag'
+  alias grc='git rebase --continue'
+  alias gsl='git stash list'
+  alias gss='git stash save'
+#+END_SRC
+
+Some aliases for some common directories:
+
+#+BEGIN_SRC sh
+  if type brew >/dev/null 2>&1; then
+      alias cdcbrew='cd $(brew --repository homebrew/core)'
+  fi
+  alias cdpsite='cd ~/projects/website-src'
+  alias cdtex='cd ~/Dropbox/TeXnology'
+  alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
+  alias cdconfig='cd ~/config-files'
+  alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
+  alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
+  alias cdling='cd ~/Dropbox/linguistics'
+  alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
+  alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
+  alias cdemacs='cd ~/config-files/.emacs.d'
+#+END_SRC
+
+An alias for using CorpusSearch:
+
+#+BEGIN_SRC sh
+  if [ -f "${HOME}/Applications/CS_2.003.04.jar" ]; then
+      alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
+  csearch/CorpusSearch'
+  fi
+#+END_SRC
+
+****** Auto completion
+
+Tab auto completion for =git= and =hub=:
+
+#+BEGIN_SRC sh
+  if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+      source /usr/local/etc/bash_completion.d/git-completion.bash
+  fi
+
+  if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
+      source /usr/local/etc/bash_completion.d/hub.bash_completion.sh
+  fi
+#+END_SRC
+
+Tab auto completon for pandoc:
+
+#+BEGIN_SRC sh
+  if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
+      source /usr/local/etc/bash_completion.d/pandoc
+  fi
+#+END_SRC
+
+Tab auto completion for Django:
+
+#+BEGIN_SRC sh
+  if [ -f /usr/local/etc/bash_completion.d/django ]; then
+      source /usr/local/etc/bash_completion.d/django
+  fi
+#+END_SRC
+
+Tab auto completion for Homebrew:
+
+#+BEGIN_SRC sh
+  if [ -f /usr/local/etc/bash_completion.d/brew ]; then
+      source /usr/local/etc/bash_completion.d/brew
+  fi
+#+END_SRC
+
+Tab auto completion for =tmux=:
+
+#+BEGIN_SRC sh
+  if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
+      source /usr/local/etc/bash_completion.d/tmux
+  fi
+#+END_SRC
+
+Tab auto completion for =pass=:
+
+#+BEGIN_SRC sh
+  if [ -f /usr/local/etc/bash_completion.d/pass ]; then
+      source /usr/local/etc/bash_completion.d/pass
+  fi
+  # personal completion
+  _ppass(){
+      PASSWORD_STORE_DIR=~/.password-store/personal/ _pass
+  }
+
+  complete -o filenames -o nospace -F _ppass ppass
+
+  _pp(){
+      _ppass
+  }
+
+  complete -o filenames -o nospace -F _pp pp
+
+  # lingbib completion
+  _lb-pass(){
+      PASSWORD_STORE_DIR=~/.password-store/shared-projects/lingbib/ _pass
+  }
+
+  complete -o filenames -o nospace -F _lb-pass lb-pass
+#+END_SRC
+
+****** Prompt
+
+First, let's set up some more useful ways to refer to colors:
+
+#+BEGIN_SRC sh
+  RED="\[\e[31m\]"
+  LIGHT_RED="\[\e[91m\]"
+  GREEN="\[\e[32m\]"
+  LIGHT_GREEN="\[\e[92m\]"
+  YELLOW="\[\e[33m\]"
+  LIGHT_YELLOW="\[\e[93m\]"
+  BLUE="\[\e[34m\]"
+  LIGHT_BLUE="\[\e[94m\]"
+  MAGENTA="\[\e[35m\]"
+  LIGHT_MAGENTA="\[\e[95m\]"
+  CYAN="\[\e[36m\]"
+  LIGHT_CYAN="\[\e[96m\]"
+  LIGHT_GREY="\[\e[37m\]"
+  LIGHT_GRAY="\[\e[37m\]"
+  WHITE="\[\e[97m\]"
+  COLOR_RESET="\[\e[0m\]"
+#+END_SRC
+
+Next, let's define a separator to separate information in the prompt:
+
+#+BEGIN_SRC sh
+  MY_PS1_SEP=" ${WHITE}█${COLOR_RESET} "
+#+END_SRC
+
+Next, let's write a function to determine if the current directory is a
+=git= repo:
+
+#+BEGIN_SRC sh
+  function is_git_repository {
+      git branch > /dev/null 2>&1
+  }
+#+END_SRC
+
+If it is, we'll want to determine some information about it:
+
+#+BEGIN_SRC sh
+  function set_git_branch {
+      # Capture the output of the "git status" command.
+      git_status="$(git status 2> /dev/null)"
+
+      # Set color based on clean/staged/dirty.
+      if [[ ${git_status} =~ "working tree clean" ]]; then
+          state="${LIGHT_GREEN}"
+      elif [[ ${git_status} =~ "Changes to be committed" ]]; then
+          state="${LIGHT_YELLOW}"
+      else
+          state="${RED}"
+      fi
+
+      # Set arrow icon based on status against remote.
+      remote_pattern="(# )?Your branch is (ahead of|behind)"
+      if [[ ${git_status} =~ ${remote_pattern} ]]; then
+          if [[ ${BASH_REMATCH[2]} == "ahead of" ]]; then
+              remote="↑"
+          else
+              remote="↓"
+          fi
+      else
+          remote=""
+      fi
+      diverge_pattern="(# )?Your branch and (.*) have diverged"
+      if [[ ${git_status} =~ ${diverge_pattern} ]]; then
+          remote="↕"
+      fi
+
+      # Get the name of the branch.
+      branch_pattern="^(# )?On branch ([^${IFS}]*)"
+      if [[ ${git_status} =~ ${branch_pattern} ]]; then
+          branch=${BASH_REMATCH[2]}
+      fi
+
+      # Set the final branch string.
+      BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
+  }
+#+END_SRC
+
+Additionally, if this is also a Python virtual environment, we'll want
+to add some information about that to the prompt:
+
+#+BEGIN_SRC sh
+  function set_virtualenv () {
+      if test -z "$VIRTUAL_ENV"; then
+          MY_VENV=""
+      else
+          MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+  ${MY_PS1_SEP}"
+      fi
+  }
+#+END_SRC
+
+We can also change the color of the prompt symbol, based on the exit
+code of the last command. Here's a function to get and set that
+information:
+
+#+BEGIN_SRC sh
+  function set_prompt_symbol () {
+      if test $1 -eq 0 ; then
+          PROMPT_SYMBOL="\$"
+      else
+          PROMPT_SYMBOL="${RED}\$${COLOR_RESET}"
+      fi
+  }
+#+END_SRC
+
+I'd also like to shorten the path to the current working directory in
+the prompt if there isn't enough room to display it in the shell. In
+order to do this, I need to first compute the prompt minus the working
+directory in order to determine the number of remaining columns that I
+have left to work with:
+
+#+BEGIN_SRC sh
+  strip_color () {
+      COLOR_REGEX='s/\\\[\\e\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]\\\]//g'
+      if [[ $OSTYPE == darwin* ]]; then
+          sed -Ee $COLOR_REGEX <<< """$1"""
+      else
+          sed -re $COLOR_REGEX <<< """$1"""
+      fi
+  }
+
+  get_ps1_less_pwd () {
+      PS1_LESS_PWD=$(printf "%s%s%s%s" \
+                            "$(strip_color "${MY_VENV}")" \
+                            "$(whoami)@$(hostname -s)" \
+                            "$(strip_color "${MY_PS1_SEP}")" \
+                            "$(strip_color "${BRANCH}")")
+  }
+#+END_SRC
+
+Now I can finally declare the function to actually compute and calculate
+the bash prompt:
+
+#+BEGIN_SRC sh
+  function set_bash_prompt () {
+      # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
+      # return value of the last command.
+      set_prompt_symbol $?
+
+      # Get virtualenv info
+      set_virtualenv
+
+      # Set the BRANCH variable.
+      if is_git_repository ; then
+          set_git_branch
+      else
+          BRANCH=''
+      fi
+
+      # get PS1_LESS_PWD to calculate length remaining
+      get_ps1_less_pwd
+
+      # get truncated PWD
+      # loosely based on http://stackoverflow.com/a/26555347/2571049
+      MY_PWD=$(pwd | awk -F/ -v "u=$PS1_LESS_PWD" -v "n=$(tput cols)" \
+                         -v "h=^$HOME" \
+                         '{sub(h,"~"); u=length(u); n=n-u-1; b=$1} \
+                         length($0)<=n || NF==2 {print; next;} \
+                         NF>2 {b=b"/.../"; e=$NF; n-=length(b $NF); \
+                         for (i=NF-1; i>2 && n>length(e $i)+1; i--) e=$i"/"e;} {print b e;}')
+
+      # Set the bash prompt variable.
+      PS1="
+  ${MY_VENV}\
+  ${WHITE}\u${COLOR_RESET}\
+  ${LIGHT_GREEN}@${COLOR_RESET}\
+  ${LIGHT_MAGENTA}\h${COLOR_RESET}\
+  ${MY_PS1_SEP}\
+  ${LIGHT_CYAN}${MY_PWD}${COLOR_RESET}\
+  ${BRANCH}
+  ${PROMPT_SYMBOL} "
+  }
+#+END_SRC
+
+And, finally, we can actually call the function to set the prompt:
+
+#+BEGIN_SRC sh
+  PROMPT_COMMAND=set_bash_prompt
+#+END_SRC
+
+****** Colors
+
+See [[https://apple.stackexchange.com/q/33677/85567][How can I configure Mac Terminal to have color ls output?]]
+
+#+BEGIN_SRC sh
+  export CLICOLOR=1
+  export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+#+END_SRC
+
+****** Some Python stuff
+
+#+BEGIN_SRC sh
+  source /usr/local/bin/virtualenvwrapper.sh
+
+  gpip2(){
+      PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
+  }
+
+  gpip3(){
+      PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+  }
+#+END_SRC
+
+Finally, =~/.bashrc= can be symlinked into the appropriate location,
+after it is tangled:
+
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+  ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
+#+END_SRC
+
+***** =~/.profile=
+      :PROPERTIES:
+      :header-args:sh: :eval no :exports code :tangle ~/config-files/bash/profile :mkdirp yes :padline no
+      :END:
+
+=~/.profile= is where stuff that is not bash-specifc goes, such as
+environment variables.
+
+#+BEGIN_SRC sh
+  # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
+
+  if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
+      export PATH="${HOME}/bin:${PATH}"
+  fi
+
+  # This should come at the end of any path stuff,
+  # otherwise the rvm-managed version of Ruby
+  # will not be at the beginning of the path, and rvm
+  # will complain about this
+
+  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+  export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+  # ----------------------------------------------------------------------
+  # EDITOR
+  # ----------------------------------------------------------------------
+  export EDITOR=/usr/local/bin/ec
+  export ALTERNATE_EDITOR=""
+
+  # ----------------------------------------------------------------------
+  # Python stuff
+  # ----------------------------------------------------------------------
+  export PIP_REQUIRE_VIRTUALENV=true
+  export VIRTUALENVWRAPPER_PYTHON=$(which python3)
+  export PROJECT_HOME=$HOME/projects
+  export WORKON_HOME=$HOME/.virtualenvs
+  export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+#+END_SRC
+
+Finally, =~/.profile= can be symlinked into the appropriate location,
+after it is tangled:
+
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash"
+  ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
+#+END_SRC
+
 *** curl
 
 ~curl~ is installed by default on macOS but not on Linux:

@@ -1,0 +1,276 @@
+if [ -f /etc/bashrc ]; then
+    source /etc/bashrc
+fi
+if [ -f "${HOME}/.profile" ]; then
+    source "${HOME}/.profile"
+fi
+alias eh="echo ¯\\\_\(ツ\)_/¯ | pbcopy"
+alias ehh="eh"
+alias .1='cd ..'
+alias ..='cd ..'
+alias .2='cd ../..'
+alias ....='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
+alias l='ls -aF'
+alias ll='ls -alF'
+
+# list only hidden directories and files
+alias l.='ls -dF .*'
+alias ll.'=ls -ldF .*'
+alias tmux='tmux -2'
+alias gpg='gpg2'
+alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
+if [[ $OSTYPE == darwin* ]]; then
+    alias tw='open -a "TextWrangler"'
+    alias showFiles='defaults write com.apple.finder AppleShowAllFiles \
+YES; killall Finder'
+    alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
+killall Finder'
+fi
+if type brew >/dev/null 2>&1; then
+    alias bud='brew update -v'
+    alias bug='brew upgrade  -v'
+    alias brc='brew cleanup -v'
+    alias brp='brew prune -v'
+    alias bra='bud && bug && brc && brp'
+fi
+alias sshid='ssh-add ~/.ssh/id_rsa'
+alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
+alias pp='ppass'
+
+# lingbib password store
+alias lb-pass='PASSWORD_STORE_DIR=~/.password-store/shared-projects\
+/lingbib/ pass'
+
+# common logins
+alias amazon='pp -c misc/amazon'
+alias amex='pp -c finances/amex'
+alias bb='pp -c misc/bitbucket'
+alias chess='pp -c misc/chess'
+alias delta='pp -c travel/delta'
+alias fmail='pp -c email/fastmail/password'
+alias kb='pp -c keybase/passphrase'
+alias msufcu='pp -c finances/msufcu'
+alias e='emacsclient -t -a=""'
+if type hub >/dev/null 2>&1; then
+    alias git='hub'
+fi
+alias g='git status -sb'
+alias gp='git pull'
+alias gpr='git pull --rebase'
+alias gpp='git pull --rebase && git push'
+alias ga='git add'
+alias gc='git commit'
+alias gcn='git commit --no-edit'
+alias gce='git commit -e'
+alias gces='git commit -eS'
+alias gca='git commit --amend'
+alias gcah='git commit --amend -C HEAD'
+alias gcv='git commit --no-verify'
+alias gdv='git diff'
+alias gdc='git diff --cached'
+alias gl='git log --oneline --decorate --graph'
+alias gla='git log --oneline --decorate --graph --all'
+alias gt='git tag'
+alias grc='git rebase --continue'
+alias gsl='git stash list'
+alias gss='git stash save'
+if type brew >/dev/null 2>&1; then
+    alias cdcbrew='cd $(brew --repository homebrew/core)'
+fi
+alias cdpsite='cd ~/projects/website-src'
+alias cdtex='cd ~/Dropbox/TeXnology'
+alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
+alias cdconfig='cd ~/config-files'
+alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
+alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
+alias cdling='cd ~/Dropbox/linguistics'
+alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
+alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
+alias cdemacs='cd ~/config-files/.emacs.d'
+if [ -f "${HOME}/Applications/CS_2.003.04.jar" ]; then
+    alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
+csearch/CorpusSearch'
+fi
+if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+    source /usr/local/etc/bash_completion.d/git-completion.bash
+fi
+
+if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
+    source /usr/local/etc/bash_completion.d/hub.bash_completion.sh
+fi
+if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
+    source /usr/local/etc/bash_completion.d/pandoc
+fi
+if [ -f /usr/local/etc/bash_completion.d/django ]; then
+    source /usr/local/etc/bash_completion.d/django
+fi
+if [ -f /usr/local/etc/bash_completion.d/brew ]; then
+    source /usr/local/etc/bash_completion.d/brew
+fi
+if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
+    source /usr/local/etc/bash_completion.d/tmux
+fi
+if [ -f /usr/local/etc/bash_completion.d/pass ]; then
+    source /usr/local/etc/bash_completion.d/pass
+fi
+# personal completion
+_ppass(){
+    PASSWORD_STORE_DIR=~/.password-store/personal/ _pass
+}
+
+complete -o filenames -o nospace -F _ppass ppass
+
+_pp(){
+    _ppass
+}
+
+complete -o filenames -o nospace -F _pp pp
+
+# lingbib completion
+_lb-pass(){
+    PASSWORD_STORE_DIR=~/.password-store/shared-projects/lingbib/ _pass
+}
+
+complete -o filenames -o nospace -F _lb-pass lb-pass
+RED="\[\e[31m\]"
+LIGHT_RED="\[\e[91m\]"
+GREEN="\[\e[32m\]"
+LIGHT_GREEN="\[\e[92m\]"
+YELLOW="\[\e[33m\]"
+LIGHT_YELLOW="\[\e[93m\]"
+BLUE="\[\e[34m\]"
+LIGHT_BLUE="\[\e[94m\]"
+MAGENTA="\[\e[35m\]"
+LIGHT_MAGENTA="\[\e[95m\]"
+CYAN="\[\e[36m\]"
+LIGHT_CYAN="\[\e[96m\]"
+LIGHT_GREY="\[\e[37m\]"
+LIGHT_GRAY="\[\e[37m\]"
+WHITE="\[\e[97m\]"
+COLOR_RESET="\[\e[0m\]"
+MY_PS1_SEP=" ${WHITE}█${COLOR_RESET} "
+function is_git_repository {
+    git branch > /dev/null 2>&1
+}
+function set_git_branch {
+    # Capture the output of the "git status" command.
+    git_status="$(git status 2> /dev/null)"
+
+    # Set color based on clean/staged/dirty.
+    if [[ ${git_status} =~ "working tree clean" ]]; then
+        state="${LIGHT_GREEN}"
+    elif [[ ${git_status} =~ "Changes to be committed" ]]; then
+        state="${LIGHT_YELLOW}"
+    else
+        state="${RED}"
+    fi
+
+    # Set arrow icon based on status against remote.
+    remote_pattern="(# )?Your branch is (ahead of|behind)"
+    if [[ ${git_status} =~ ${remote_pattern} ]]; then
+        if [[ ${BASH_REMATCH[2]} == "ahead of" ]]; then
+            remote="↑"
+        else
+            remote="↓"
+        fi
+    else
+        remote=""
+    fi
+    diverge_pattern="(# )?Your branch and (.*) have diverged"
+    if [[ ${git_status} =~ ${diverge_pattern} ]]; then
+        remote="↕"
+    fi
+
+    # Get the name of the branch.
+    branch_pattern="^(# )?On branch ([^${IFS}]*)"
+    if [[ ${git_status} =~ ${branch_pattern} ]]; then
+        branch=${BASH_REMATCH[2]}
+    fi
+
+    # Set the final branch string.
+    BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
+}
+function set_virtualenv () {
+    if test -z "$VIRTUAL_ENV"; then
+        MY_VENV=""
+    else
+        MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+${MY_PS1_SEP}"
+    fi
+}
+function set_prompt_symbol () {
+    if test $1 -eq 0 ; then
+        PROMPT_SYMBOL="\$"
+    else
+        PROMPT_SYMBOL="${RED}\$${COLOR_RESET}"
+    fi
+}
+strip_color () {
+    COLOR_REGEX='s/\\\[\\e\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]\\\]//g'
+    if [[ $OSTYPE == darwin* ]]; then
+        sed -Ee $COLOR_REGEX <<< """$1"""
+    else
+        sed -re $COLOR_REGEX <<< """$1"""
+    fi
+}
+
+get_ps1_less_pwd () {
+    PS1_LESS_PWD=$(printf "%s%s%s%s" \
+                          "$(strip_color "${MY_VENV}")" \
+                          "$(whoami)@$(hostname -s)" \
+                          "$(strip_color "${MY_PS1_SEP}")" \
+                          "$(strip_color "${BRANCH}")")
+}
+function set_bash_prompt () {
+    # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
+    # return value of the last command.
+    set_prompt_symbol $?
+
+    # Get virtualenv info
+    set_virtualenv
+
+    # Set the BRANCH variable.
+    if is_git_repository ; then
+        set_git_branch
+    else
+        BRANCH=''
+    fi
+
+    # get PS1_LESS_PWD to calculate length remaining
+    get_ps1_less_pwd
+
+    # get truncated PWD
+    # loosely based on http://stackoverflow.com/a/26555347/2571049
+    MY_PWD=$(pwd | awk -F/ -v "u=$PS1_LESS_PWD" -v "n=$(tput cols)" \
+                       -v "h=^$HOME" \
+                       '{sub(h,"~"); u=length(u); n=n-u-1; b=$1} \
+                       length($0)<=n || NF==2 {print; next;} \
+                       NF>2 {b=b"/.../"; e=$NF; n-=length(b $NF); \
+                       for (i=NF-1; i>2 && n>length(e $i)+1; i--) e=$i"/"e;} {print b e;}')
+
+    # Set the bash prompt variable.
+    PS1="
+${MY_VENV}\
+${WHITE}\u${COLOR_RESET}\
+${LIGHT_GREEN}@${COLOR_RESET}\
+${LIGHT_MAGENTA}\h${COLOR_RESET}\
+${MY_PS1_SEP}\
+${LIGHT_CYAN}${MY_PWD}${COLOR_RESET}\
+${BRANCH}
+${PROMPT_SYMBOL} "
+}
+PROMPT_COMMAND=set_bash_prompt
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+source /usr/local/bin/virtualenvwrapper.sh
+
+gpip2(){
+    PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
+}
+
+gpip3(){
+    PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}
