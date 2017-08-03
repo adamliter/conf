@@ -76,6 +76,9 @@ fi
 ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
 ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
 ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
+if [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y curl
+fi
 ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
 if [[ $BASH_OS_TYPE == macOS ]]; then
     brew install tmux

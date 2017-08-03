@@ -889,8 +889,17 @@ after it is tangled:
 #+END_SRC
 
 *** curl
+    :PROPERTIES:
+    :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+    :END:
 
 ~curl~ is installed by default on macOS but not on Linux:
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == Linux ]]; then
+      sudo apt-get install -y curl
+  fi
+#+END_SRC
 
 *** git
 
