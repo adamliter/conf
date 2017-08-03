@@ -357,11 +357,20 @@ after it is tangled:
       :END:
 
 In the =~/.bashrc= file, I want to ensure that the system-wide =bashrc=
-file is read, if it exists:
+file is read, if it exists. On macOS, this usually exists as
+=/etc/bashrc=.
 
 #+BEGIN_SRC sh
   if [ -f /etc/bashrc ]; then
       source /etc/bashrc
+  fi
+#+END_SRC
+
+And, on Ubuntu, this usually exists as =/etc/bash.bashrc=.
+
+#+BEGIN_SRC sh
+  if [ -f /etc/bash.bashrc ]; then
+      source /etc/bash.bashrc
   fi
 #+END_SRC
 

@@ -1,6 +1,9 @@
 if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
+if [ -f /etc/bash.bashrc ]; then
+    source /etc/bash.bashrc
+fi
 if [ -f "${HOME}/.profile" ]; then
     source "${HOME}/.profile"
 fi
