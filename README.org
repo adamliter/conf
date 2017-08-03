@@ -928,6 +928,110 @@ my SSH config and then symlink it into the appropriate location.
 
 *** tmux
 
+**** Installation
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+     :END:
+
+Install =tmux=:
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == macOS ]]; then
+      brew install tmux
+  elif [[ $BASH_OS_TYPE == Linux ]]; then
+      sudo apt-get install -y tmux
+  fi
+#+END_SRC
+
+On Ubuntu, when installing with =apt-get=, the bash completion script is
+installed to =/usr/share/doc/tmux/examples/bash_completion_tmux.sh=
+instead of installed in the standard bash completion directory of
+=/etc/bash_completion.d/=. So, let's symlink it there:
+
+#+BEGIN_SRC sh
+  if [[ BASH_OS_TYPE == Linux ]]; then
+      if [ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]; then
+          echo "Symlinking tmux bash completion into place ..."
+          ln -sf "/usr/share/doc/tmux/examples/bash_completion_tmux.sh" "/etc/bash_completion.d/tmux"
+      else
+          echo "Could not find tmux bash completion file ..."
+      fi
+  fi
+
+#+END_SRC
+
+**** Configuration
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle ~/config-files/tmux/tmux.conf :mkdirp yes :padline no
+     :END:
+
+To ensure that colors work properly, I've followed the suggestion in
+[[https://stackoverflow.com/a/22481496/2571049][this answer]] on Stack Overflow.
+
+#+BEGIN_SRC sh
+  # -*- coding: utf-8; mode: conf; fill-column: 72 -*-
+  set-option -g default-terminal "xterm-256color"
+#+END_SRC
+
+The following ensures that the macOS pasteboard is available in =tmux=
+sessions. See [[https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard][the Github repository]] for more information.
+
+#+BEGIN_SRC sh :tangle (when (eq system-type 'darwin) "~/config-files/tmux/tmux.conf")
+  set-option -g default-command "reattach-to-user-namespace -l $SHELL"
+#+END_SRC
+
+The following allows the =tmux= configuration file to be reloaded.
+
+#+BEGIN_SRC sh
+  bind-key r source-file ~/.tmux.conf
+#+END_SRC
+
+The following are some key bindings for opening new SSH sessions in
+either a new windows, a vertically split window, or a horizontally split
+window.
+
+#+BEGIN_SRC sh
+  bind-key S   command-prompt -p "host" "new-window -n %1 'ssh %1'"
+  bind-key C-S command-prompt -p "host" "split-window -v 'ssh %1'"
+  bind-key M-S command-prompt -p "host" "split-window -h 'ssh %1'"
+#+END_SRC
+
+The following are some key bindings for opening Emacs in either a new
+window, a vertically split window, or a horizontally split window.
+
+#+BEGIN_SRC sh
+  bind-key y   new-window -n "emacs"  "emacsclient -nw"
+  bind-key C-y split-window -v "emacsclient -nw"
+  bind-key M-y split-window -h "emacsclient -nw"
+#+END_SRC
+
+The following defines some more intuitive key bindings for splitting a
+window and undefines the default key bindings for this.
+
+#+BEGIN_SRC sh
+  bind-key | split-window -h
+  bind-key - split-window -v
+  unbind '"'
+  unbind %
+#+END_SRC
+
+The following allows for switching between =tmux= panes using just
+M-<arrow>, without the =tmux= prefix key.
+
+#+BEGIN_SRC sh
+  bind-key -n M-Left select-pane -L
+  bind-key -n M-Right select-pane -R
+  bind-key -n M-Up select-pane -U
+  bind-key -n M-Down select-pane -D
+#+END_SRC
+
+And, finally, the following symlinks the configuration file into the
+appropriate location.
+
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+  ln -sf "${HOME}/config-files/tmux/tmux.conf" "${HOME}/.tmux.conf"
+#+END_SRC
+
 *** tree
 
 This should be installed when =password-store= is installed.

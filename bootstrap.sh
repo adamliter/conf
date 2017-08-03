@@ -77,3 +77,17 @@ ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
 ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
 ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
 ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install tmux
+elif [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y tmux
+fi
+if [[ BASH_OS_TYPE == Linux ]]; then
+    if [ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]; then
+        echo "Symlinking tmux bash completion into place ..."
+        ln -sf "/usr/share/doc/tmux/examples/bash_completion_tmux.sh" "/etc/bash_completion.d/tmux"
+    else
+        echo "Could not find tmux bash completion file ..."
+    fi
+fi
+ln -sf "${HOME}/config-files/tmux/tmux.conf" "${HOME}/.tmux.conf"
