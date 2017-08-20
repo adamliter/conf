@@ -1,14 +1,7 @@
-# -*- mode: gitignore; fill-column: 72; coding: utf-8 -*-
-
-# ----------------------------------------------------------------------
-# macOS
-# ----------------------------------------------------------------------
+# -*- coding: utf-8; fill-column: 72; mode: conf; -*-
 *.DS_Store
 .AppleDouble
 .LSOverride
-
-# Icon must end with two \r
-Icon
 
 # Thumbnails
 ._*
@@ -28,10 +21,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-
-# ----------------------------------------------------------------------
-# linux
-# ----------------------------------------------------------------------
 # temporary files which can be created if a
 # process still has a handle open of a deleted file
 .fuse_hidden*
@@ -45,13 +34,12 @@ Temporary Items
 # .nfs files are created when an open file
 # is removed but is still being accessed
 .nfs*
-
-# ----------------------------------------------------------------------
-# windows
-# ----------------------------------------------------------------------
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
+
+# Dump file
+*.stackdump
 
 # Folder config file
 Desktop.ini
@@ -67,10 +55,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# ----------------------------------------------------------------------
-# emacs
-# ----------------------------------------------------------------------
 *~
 \#*\#
 /.emacs.desktop
@@ -115,10 +99,6 @@ flycheck_*.el
 
 # directory configuration
 .dir-locals.el
-
-# ----------------------------------------------------------------------
-# tex
-# ----------------------------------------------------------------------
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -176,8 +156,17 @@ acs-*.bib
 *.snm
 *.vrb
 
+# changes
+*.soc
+
 # cprotect
 *.cpt
+
+# elsarticle
+*.spl
+
+# endnotes
+*.ent
 
 # fixme
 *.lox
@@ -188,8 +177,6 @@ acs-*.bib
 *.t[1-9]
 *.t[1-9][0-9]
 *.tfm
-*.[1-9]
-*.[1-9][0-9]
 
 #(r)(e)ledmac/(r)(e)ledpar
 *.end
@@ -245,6 +232,9 @@ acs-*.bib
 *.mlf
 *.mlt
 *.mtc[0-9]*
+*.slf[0-9]*
+*.slt[0-9]*
+*.stc[0-9]*
 
 # minted
 _minted*
@@ -253,11 +243,14 @@ _minted*
 # morewrites
 *.mw
 
-# mylatexformat
-*.fmt
-
 # nomencl
 *.nlo
+
+# pax
+*.pax
+
+# pdfpcnotes
+*.pdfpc
 
 # sagetex
 *.sagetex.sage
@@ -323,10 +316,6 @@ TSWLatexianTemp*
 
 # auto folder when using emacs and auctex
 /auto/*
-
-# ----------------------------------------------------------------------
-# python
-# ----------------------------------------------------------------------
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -337,7 +326,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -349,6 +337,7 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -371,7 +360,7 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*,cover
+*.cover
 .hypothesis/
 
 # Translations
@@ -404,23 +393,27 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
-# dotenv
-.env
+# SageMath parsed files
+*.sage.py
 
 # virtualenv
+.env
 .venv/
 venv/
 ENV/
 
 # Spyder project settings
 .spyderproject
+.spyproject
 
 # Rope project settings
 .ropeproject
 
-# ----------------------------------------------------------------------
-# R
-# ----------------------------------------------------------------------
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
 # History files
 .Rhistory
 .Rapp.history

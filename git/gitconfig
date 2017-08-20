@@ -1,0 +1,23 @@
+# -*- coding: utf-8; mode: conf; fill-column: 72; -*-
+[user]
+    name = Adam Liter
+    email = io@adamliter.org
+    signkey = 0x98723A2089026CD6
+[core]
+    editor = "emacsclient -t -a=''"
+    excludesfile = ~/.gitignore_global
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = true
+    pager = true
+[alias]
+    pushall = push --recurse-submodule=on-demand
+[push]
+    default = simple
+[pull]
+    rebase = preserve
+[gpg]
+    program = gpg2
