@@ -1544,6 +1544,32 @@ proper location.
 
 *** htop
 
+**** Installation
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+     :END:
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == macOS ]]; then
+      brew install htop
+  elif [[ $BASH_OS_TYPE == Linux ]]; then
+      sudo apt-get install -y htop
+  fi
+#+END_SRC
+
+**** Configuration
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle "~/config-files/htop/htoprc" :mkdirp yes :padline no
+     :END:
+
+
+I don't have any special configuration for =htop=. If I did, it would go
+in =$HOME/.config/htop/htoprc=:
+
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+  #ln -sf "${HOME}/config-files/htop/htoprc" "${HOME}/.config/htop/htoprc"
+#+END_SRC
+
 *** hub
 
 *** pandoc

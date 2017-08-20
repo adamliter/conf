@@ -81,6 +81,12 @@ if [[ $BASH_OS_TYPE == Linux ]]; then
 fi
 ln -sf "${HOME}/config-files/git/gitconfig" "${HOME}/.gitconfig"
 ln -sf "${HOME}/config-files/git/gitignore_global" "${HOME}/.gitignore_global"
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install htop
+elif [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y htop
+fi
+#ln -sf "${HOME}/config-files/htop/htoprc" "${HOME}/.config/htop/htoprc"
 ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
 if [[ $BASH_OS_TYPE == macOS ]]; then
     brew install tmux
