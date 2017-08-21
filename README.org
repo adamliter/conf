@@ -1574,6 +1574,23 @@ in =$HOME/.config/htop/htoprc=:
 
 *** pandoc
 
+**** Installation
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+     :END:
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == macOS ]]; then
+      brew install pandoc
+  elif [[ $BASH_OS_TYPE == Linux ]]; then
+      sudo apt-get install -y pandoc
+  fi
+#+END_SRC
+
+**** Configuration
+
+There is no configuration setup for =pandoc=.
+
 *** password-store
 
 *** ssh

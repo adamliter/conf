@@ -87,6 +87,11 @@ elif [[ $BASH_OS_TYPE == Linux ]]; then
     sudo apt-get install -y htop
 fi
 #ln -sf "${HOME}/config-files/htop/htoprc" "${HOME}/.config/htop/htoprc"
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install pandoc
+elif [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y pandoc
+fi
 ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
 if [[ $BASH_OS_TYPE == macOS ]]; then
     brew install tmux
