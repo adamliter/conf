@@ -1754,6 +1754,8 @@ This should be installed when =password-store= is installed.
 
 ** Linux only
 
+There are currently no programs that I use on Linux only.
+
 * Programming languages
 
 ** All OSes
