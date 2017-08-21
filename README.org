@@ -889,9 +889,11 @@ after it is tangled:
 #+END_SRC
 
 *** curl
-    :PROPERTIES:
-    :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-    :END:
+
+**** Installation
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+     :END:
 
 ~curl~ is installed by default on macOS but not on Linux:
 
@@ -1594,6 +1596,10 @@ There is no configuration setup for =pandoc=.
 *** password-store
 
 *** ssh
+
+**** Installation
+
+=ssh= is already installed on both macOS and Linux, by default.
 
 **** Configuration
      :PROPERTIES:
