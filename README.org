@@ -1733,7 +1733,18 @@ This should be installed when =password-store= is installed.
 
 *** wget
 
+**** Installation
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+     :END:
+
 ~wget~ is installed by default on Linux but not on macOS:
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == Linux ]]; then
+      sudo apt-get install -y wget
+  fi
+#+END_SRC
 
 *** xclip
 

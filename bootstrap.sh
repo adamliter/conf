@@ -107,3 +107,6 @@ if [[ BASH_OS_TYPE == Linux ]]; then
     fi
 fi
 ln -sf "${HOME}/config-files/tmux/tmux.conf" "${HOME}/.tmux.conf"
+if [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y wget
+fi
