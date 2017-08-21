@@ -1752,6 +1752,20 @@ This should be installed when =password-store= is installed.
 
 *** reattach-to-user-namespace
 
+This allows for accessing the clipboard from inside of =tmux= sessions
+on macOS. See the [[https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard][GitHub repository for more info]].
+
+**** Installation
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+     :END:
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == macOS ]]; then
+      brew install reattach-to-user-namespace
+  fi
+#+END_SRC
+
 ** Linux only
 
 There are currently no programs that I use on Linux only.

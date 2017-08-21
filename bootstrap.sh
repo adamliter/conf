@@ -110,3 +110,6 @@ ln -sf "${HOME}/config-files/tmux/tmux.conf" "${HOME}/.tmux.conf"
 if [[ $BASH_OS_TYPE == Linux ]]; then
     sudo apt-get install -y wget
 fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install reattach-to-user-namespace
+fi
