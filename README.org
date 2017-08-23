@@ -17,7 +17,7 @@ such that it is configured just like all of my other computers/servers.
    :END:
 
 The first thing that must be done in order to set up a new machine is to
-configure SSH and create a key. This allows for cloning of [[https://github.com/adamliter/config-files][the =git=
+configure SSH and create a key. This allows for cloning of [[config-files][the =git=
 repo that contains my configuration files]], which is hosted on GitHub.
 
 First, create the SSH directory:
@@ -179,7 +179,7 @@ will allow for programatically setting up the rest of my configuration.
   fi
 #+END_SRC
 
-Next, the script clones [[https://github.com/adamliter/config-files][the repository that contains my configuration
+Next, the script clones [[config-files][the repository that contains my configuration
 files]] into =${HOME}/config-files=. If that file already exists, the
 ~git clone~ command will fail, so I remove it first just to be cautious,
 but this should be unnecessary if this is a new machine.
@@ -1019,14 +1019,14 @@ location.
       :END:
 
 A good reference for all sorts of patterns that =git= ought to ignore is
-[[https://github.com/github/gitignore][=github/gitingore=]].
+[[gh-gitignore][=github/gitingore=]].
 
 The following things are things that I have =git= ignore by default
 globally.
 
 ****** macOS
 
-Some stuff to ignore on macOS, taken from [[https://github.com/github/gitignore/blob/master/Global/macOS.gitignore][=github/gitignore=]]. However, I
+Some stuff to ignore on macOS, taken from [[gh-gitignore-mac][=github/gitignore=]]. However, I
 haven't added the Icon ignore pattern because [[https://superuser.com/a/298798/756208][it needs to end with a
 carriage return]], and I have Emacs set up to trim trailing white
 space. I'd rather not disable that for this document just to be able to
@@ -1064,7 +1064,7 @@ change/set a directory's icon).
 ****** Linux
 
 The following is stuff to ignore on Linux, taken from
-[[https://github.com/github/gitignore/blob/master/Global/Linux.gitignore][=github/gitignore=]].
+[[gh-gitignore-linux][=github/gitignore=]].
 
 #+BEGIN_SRC sh
   # temporary files which can be created if a
@@ -1085,7 +1085,7 @@ The following is stuff to ignore on Linux, taken from
 ****** Windows
 
 The following is stuff to ignore in Windows, taken from
-[[https://github.com/github/gitignore/blob/master/Global/Windows.gitignore][=github/gitingore=]].
+[[gh-gitignore-windows][=github/gitingore=]].
 
 #+BEGIN_SRC sh
   # Windows image file caches
@@ -1113,7 +1113,7 @@ The following is stuff to ignore in Windows, taken from
 
 ****** Emacs
 
-The following is Emacs stuff to ignore, taken from [[https://github.com/github/gitignore/blob/master/Global/Emacs.gitignore][=github/gitignore=]].
+The following is Emacs stuff to ignore, taken from [[gh-gitignore-emacs][=github/gitignore=]].
 
 #+BEGIN_SRC sh
   ,*~
@@ -1165,7 +1165,7 @@ The following is Emacs stuff to ignore, taken from [[https://github.com/github/g
 ****** TeX
 
 The following is stuff to ignore for (La)TeX, taken from
-[[https://github.com/github/gitignore/blob/master/TeX.gitignore][=github/gitignore=]].
+[[gh-gitignore-tex][=github/gitignore=]].
 
 #+BEGIN_SRC sh
   ## Core latex/pdflatex auxiliary files:
@@ -1390,7 +1390,7 @@ The following is stuff to ignore for (La)TeX, taken from
 ****** Python
 
 The following is stuff to ignore for Python, taken from
-[[https://github.com/github/gitignore/blob/master/Python.gitignore][=github/gitignore=]].
+[[gh-gitignore-python][=github/gitignore=]].
 
 #+BEGIN_SRC sh
   # Byte-compiled / optimized / DLL files
@@ -1495,7 +1495,7 @@ The following is stuff to ignore for Python, taken from
 
 ****** R
 
-The following is stuff to ignore for R, taken from [[https://github.com/github/gitignore/blob/master/R.gitignore][=github/gitignore=]].
+The following is stuff to ignore for R, taken from [[gh-gitignore-r][=github/gitignore=]].
 
 #+BEGIN_SRC sh
   # History files
@@ -1669,7 +1669,7 @@ To ensure that colors work properly, I've followed the suggestion in
 #+END_SRC
 
 The following ensures that the macOS pasteboard is available in =tmux=
-sessions. See [[https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard][the Github repository]] for more information.
+sessions. See [[tmux-macos-pasteboard][the Github repository]] for more information.
 
 #+BEGIN_SRC sh :tangle (when (eq system-type 'darwin) "~/config-files/tmux/tmux.conf")
   set-option -g default-command "reattach-to-user-namespace -l $SHELL"
@@ -1753,7 +1753,7 @@ This should be installed when =password-store= is installed.
 *** reattach-to-user-namespace
 
 This allows for accessing the clipboard from inside of =tmux= sessions
-on macOS. See the [[https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard][GitHub repository for more info]].
+on macOS. See the [[tmux-macos-pasteboard][GitHub repository for more info]].
 
 **** Installation
      :PROPERTIES:
