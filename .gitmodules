@@ -6,3 +6,7 @@
 	path = ssh
 	url = algit:ssh.git
 	branch = master
+[submodule "org"]
+	path = org
+	url = algit:org.git
+	branch = master

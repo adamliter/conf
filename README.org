@@ -1790,6 +1790,29 @@ There are currently no programs that I use on Linux only.
 
 *** Dropbox
 
+*** Emacs
+
+Emacs itself is already installed in the bootstrapping process; however,
+there are several further things that remain to be configured that also
+fall a bit outside the scope of configuaring my Emacs
+initialization. Because of this, these things are configured here,
+rather than in my [[emacs-d][=emacs.d= repository]].
+
+**** =org=
+     :PROPERTIES:
+     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+     :END:
+
+My default directory for =org= files is a submodule of this repository
+and thus needs to be symlinked into the location of ~org-directory~,
+whose value I've set to =~/org= in my =init.el= file. The submodule
+lives on my private git repository so as to keep these files private.
+
+#+BEGIN_SRC sh
+  rm -rf "${HOME}/org"
+  ln -sn "${HOME}/config-files/org" "${HOME}/org"
+#+END_SRC
+
 *** Firefox
 
 *** Google Chrome

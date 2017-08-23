@@ -113,3 +113,5 @@ fi
 if [[ $BASH_OS_TYPE == macOS ]]; then
     brew install reattach-to-user-namespace
 fi
+rm -rf "${HOME}/org"
+ln -sn "${HOME}/config-files/org" "${HOME}/org"
