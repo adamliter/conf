@@ -540,7 +540,7 @@ Some aliases for some common directories:
   alias cdling='cd ~/Dropbox/linguistics'
   alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
   alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
-  alias cdemacs='cd ~/config-files/.emacs.d'
+  alias cdemacs='cd ~/config-files/emacs.d'
 #+END_SRC
 
 An alias for using CorpusSearch:

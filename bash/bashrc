@@ -92,7 +92,7 @@ alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
 alias cdling='cd ~/Dropbox/linguistics'
 alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
 alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
-alias cdemacs='cd ~/config-files/.emacs.d'
+alias cdemacs='cd ~/config-files/emacs.d'
 if [ -f "${HOME}/Applications/CS_2.003.04.jar" ]; then
     alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
 csearch/CorpusSearch'
