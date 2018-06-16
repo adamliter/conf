@@ -698,8 +698,11 @@ If it is, we'll want to determine some information about it:
 
       # Get the name of the branch.
       branch_pattern="^(# )?On branch ([^${IFS}]*)"
+      detached_head_pattern="HEAD detached from"
       if [[ ${git_status} =~ ${branch_pattern} ]]; then
           branch=${BASH_REMATCH[2]}
+      elif [[ ${git_status} =~ ${detached_head_pattern} ]]; then
+          branch="HEAD"
       fi
 
       # Set the final branch string.
