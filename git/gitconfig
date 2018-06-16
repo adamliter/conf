@@ -6,6 +6,7 @@
 [core]
     editor = "emacsclient -t -a=''"
     excludesfile = ~/.gitignore_global
+    attributesfile = ~/.gitattributes_global
 [color]
     diff = auto
     status = auto
@@ -15,6 +16,9 @@
     pager = true
 [alias]
     pushall = push --recurse-submodule=on-demand
+[diff "pandoc"]
+    textconv=pandoc --to=markdown
+    prompt = false
 [push]
     default = simple
 [pull]

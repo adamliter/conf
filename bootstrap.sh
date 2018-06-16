@@ -81,6 +81,7 @@ if [[ $BASH_OS_TYPE == Linux ]]; then
 fi
 ln -sf "${HOME}/config-files/git/gitconfig" "${HOME}/.gitconfig"
 ln -sf "${HOME}/config-files/git/gitignore_global" "${HOME}/.gitignore_global"
+ln -sf "${HOME}/config-files/git/gitattributes_global" "${HOME}/.gitattributes_global"
 if [[ $BASH_OS_TYPE == macOS ]]; then
     brew install htop
 elif [[ $BASH_OS_TYPE == Linux ]]; then

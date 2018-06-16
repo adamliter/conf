@@ -939,6 +939,7 @@ Set up my editor for =git= and a global ignore file.
   [core]
       editor = "emacsclient -t -a=''"
       excludesfile = ~/.gitignore_global
+      attributesfile = ~/.gitattributes_global
 #+END_SRC
 
 ****** =[color]=
@@ -962,6 +963,18 @@ This sets up an alias for automatically pushing submodules.
 #+BEGIN_SRC sh
   [alias]
       pushall = push --recurse-submodule=on-demand
+#+END_SRC
+
+****** <<git-config-diff>> =[diff]=
+
+The following sets up a =diff= driver called =pandoc= for diffing Word
+documents that =git= is tracking. For reference, see /e.g./,
+[[http://blog.martinfenner.org/2014/08/25/using-microsoft-word-with-git/][Using Microsoft Word with git]].
+
+#+BEGIN_SRC sh
+  [diff "pandoc"]
+      textconv=pandoc --to=markdown
+      prompt = false
 #+END_SRC
 
 ****** =[push]=
@@ -1543,6 +1556,26 @@ proper location.
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
   ln -sf "${HOME}/config-files/git/gitignore_global" "${HOME}/.gitignore_global"
+#+END_SRC
+
+***** =~/.gitattributes_global=
+      :PROPERTIES:
+      :header-args:sh: :eval no :exports code :tangle ~/config-files/git/gitattributes_global :mkdirp yes :padline no
+      :END:
+
+This sets attribtues globally for Word documents so that I can diff Word
+documents using the =pandoc= driver. See the [[git-config-diff][=diff= section above]].
+
+#+BEGIN_SRC sh
+  ,*.docx diff=pandoc
+  ,*.doc  diff=pandoc
+#+END_SRC
+
+Finally, the =gitattributes_global= file needs to be symlinked into the
+proper location.
+
+#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+  ln -sf "${HOME}/config-files/git/gitattributes_global" "${HOME}/.gitattributes_global"
 #+END_SRC
 
 *** gpg
