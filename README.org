@@ -106,7 +106,7 @@ bootstrap the setup of a new Linux machine, do:
 
 Meh ... Maybe someday ...
 
-** <<bootstrap-script-explanation>>=bootstrap.sh=
+** <<bootstrap-script-explanation>> =bootstrap.sh=
    :PROPERTIES:
    :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
    :END:
@@ -380,7 +380,7 @@ between .bashrc and .bash_profile]]), I'm going to go ahead and do this
 anyway because it makes life easier, and I have yet to encounter any
 problems because of it. The recommended best practice is to source
 =~/.basrhc= and =~/.profile= from =~/.bash_profile=, in that
-order. However, for the reasonos mentioned above when discussing macOS
+order. However, for the reasons mentioned above when discussing macOS
 shells started in the graphical desktop environment, most shells started
 in a graphical desktop environment will only read =~/.bashrc= because
 they are non-login shells. However, this means that environment
@@ -977,7 +977,7 @@ see either of the following questions on Stack Overflow:
 
 ****** =[pull]=
 
-=git pull= should rebase by default. In versions of =git= older than
+~git pull~ should rebase by default. In versions of =git= older than
 1.8.5, this can be achieved by setting the configuration option
 =pull.rebase= to =true=. In =git= 1.8.5 and more recent versions, it
 became possible to set the configuration option =pull.rebase= to
