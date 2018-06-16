@@ -977,6 +977,18 @@ documents that =git= is tracking. For reference, see /e.g./,
       prompt = false
 #+END_SRC
 
+****** =[filter]=
+
+The following sets up a =filter= driver called =lfs= for using [[https://git-lfs.github.com/][Git LFS]].
+
+#+BEGIN_SRC sh
+  [filter "lfs"]
+      clean = git-lfs clean -- %f
+      smudge = git-lfs smudge -- %f
+      process = git-lfs filter-process
+      required = true
+#+END_SRC
+
 ****** =[push]=
 
 The following sets the default behavior of ~git push~ such that it only
@@ -1569,6 +1581,20 @@ documents using the =pandoc= driver. See the [[git-config-diff][=diff= section a
 #+BEGIN_SRC sh
   ,*.docx diff=pandoc
   ,*.doc  diff=pandoc
+#+END_SRC
+
+This sets up global file patterns to be tracked by Git LFS.
+
+#+BEGIN_SRC sh
+  # Image files
+  ,*.jpeg filter=lfs diff=lfs merge=lfs -text
+  ,*.jpg  filter=lfs diff=lfs merge=lfs -text
+  ,*.png  filter=lfs diff=lfs merge=lfs -text
+  ,*.gif  filter=lfs diff=lfs merge=lfs -text
+  ,*.tiff filter=lfs diff=lfs merge=lfs -text
+  ,*.psd  filter=lfs diff=lfs merge=lfs -text
+  # Sound files
+  ,*.wav  filter=lfs diff=lfs merge=lfs -text
 #+END_SRC
 
 Finally, the =gitattributes_global= file needs to be symlinked into the
