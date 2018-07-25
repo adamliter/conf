@@ -1583,20 +1583,6 @@ documents using the =pandoc= driver. See the [[git-config-diff][=diff= section a
   ,*.doc  diff=pandoc
 #+END_SRC
 
-This sets up global file patterns to be tracked by Git LFS.
-
-#+BEGIN_SRC sh
-  # Image files
-  ,*.jpeg filter=lfs diff=lfs merge=lfs -text
-  ,*.jpg  filter=lfs diff=lfs merge=lfs -text
-  ,*.png  filter=lfs diff=lfs merge=lfs -text
-  ,*.gif  filter=lfs diff=lfs merge=lfs -text
-  ,*.tiff filter=lfs diff=lfs merge=lfs -text
-  ,*.psd  filter=lfs diff=lfs merge=lfs -text
-  # Sound files
-  ,*.wav  filter=lfs diff=lfs merge=lfs -text
-#+END_SRC
-
 Finally, the =gitattributes_global= file needs to be symlinked into the
 proper location.
 
