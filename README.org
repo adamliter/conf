@@ -433,11 +433,10 @@ To ensure the availability of 256 colors in =tmux= (see [[https://stackoverflow.
   alias tmux='tmux -2'
 #+END_SRC
 
-Some =gpg= aliases:
+A =gpg= alias for use with flash drive:
 
 #+BEGIN_SRC sh
-  alias gpg='gpg2'
-  alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
+  alias gpgusb='gpg --home=/Volumes/adamliter/.gnupg'
 #+END_SRC
 
 Some macOS-specific aliases:
@@ -1025,11 +1024,12 @@ commit.
 
 ****** =[gpg]=
 
-For =gpg= stuff with =git=, use =gpg2=.
+For =gpg= stuff with =git=, we want to use =gpg2=, which is now just
+=gpg=, at least if installed with Homebrew.
 
 #+BEGIN_SRC sh
   [gpg]
-      program = gpg2
+      program = gpg
 #+END_SRC
 
 ****** Symlink into place

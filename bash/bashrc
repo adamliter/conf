@@ -23,8 +23,7 @@ alias ll='ls -alF'
 alias l.='ls -dF .*'
 alias ll.'=ls -ldF .*'
 alias tmux='tmux -2'
-alias gpg='gpg2'
-alias gpgusb='gpg2 --home=/Volumes/adamliter/.gnupg'
+alias gpgusb='gpg --home=/Volumes/adamliter/.gnupg'
 if [[ $OSTYPE == darwin* ]]; then
     alias tw='open -a "TextWrangler"'
     alias showFiles='defaults write com.apple.finder AppleShowAllFiles \
