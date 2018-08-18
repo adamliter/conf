@@ -1643,6 +1643,23 @@ There is no configuration setup for =pandoc=.
 
 *** password-store
 
+*** pdf-tools
+
+This is for viewing PDFs in Emacs buffers.
+
+**** Installation
+
+#+BEGIN_SRC sh
+  if [[ $BASH_OS_TYPE == macOS ]]; then
+      brew tap dunn/emacs
+      brew install pdf-tools
+  fi
+#+END_SRC
+
+**** Configuration
+
+There is no configuration setup for =pdf-tools=.
+
 *** ssh
 
 **** Installation
