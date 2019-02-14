@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>signatures</key>
+	<array>
+		<dict>
+			<key>html</key>
+			<string></string>
+			<key>htmlEnabled</key>
+			<false/>
+			<key>name</key>
+			<string>basic</string>
+			<key>string</key>
+			<string>-- 
+Adam Liter
+Pronouns: http://pronoun.is/he/him/his
+Web: https://adamliter.org | PGP: https://keybase.io/adamliter/key.asc
+</string>
+			<key>uuid</key>
+			<string>0E0FB7E8-EC5B-4F5B-A7E1-847C2340DEE9</string>
+		</dict>
+		<dict>
+			<key>html</key>
+			<string></string>
+			<key>htmlEnabled</key>
+			<false/>
+			<key>name</key>
+			<string>umd-phd-candidate</string>
+			<key>string</key>
+			<string>-- 
+Adam Liter
+Pronouns: http://pronoun.is/he/him/his
+PhD Candidate
+Department of Linguistics, University of Maryland, College Park
+Tel.: +1-952-807-5616 | Web: https://adamliter.org
+</string>
+			<key>uuid</key>
+			<string>3C9B6EA0-660A-4D09-9A3E-8B91721DED56</string>
+		</dict>
+		<dict>
+			<key>addressGlob</key>
+			<string>liter@umd.edu</string>
+			<key>html</key>
+			<string></string>
+			<key>htmlEnabled</key>
+			<false/>
+			<key>name</key>
+			<string>umd-acqlab</string>
+			<key>string</key>
+			<string>--
+Adam Liter &lt;liter@umd.edu&gt;
+Project on Children's Language Learning
+http://ling.umd.edu/research/acquisition_lab/
+University of Maryland, Dept of Linguistics
+Lab: +1-301-405-0518
+</string>
+			<key>uuid</key>
+			<string>5908DA8B-60E8-43C9-9232-168101E71AA3</string>
+		</dict>
+		<dict>
+			<key>addressGlob</key>
+			<string>liter@umd.edu</string>
+			<key>html</key>
+			<string></string>
+			<key>htmlEnabled</key>
+			<false/>
+			<key>name</key>
+			<string>umd-acqlab-cell</string>
+			<key>string</key>
+			<string>--
+Adam Liter &lt;liter@umd.edu&gt;
+Project on Children's Language Learning
+http://ling.umd.edu/research/acquisition_lab/
+University of Maryland, Dept of Linguistics
+Lab: +1-301-405-0518 | Cell: +1-952-807-5616
+</string>
+			<key>uuid</key>
+			<string>D8F25C19-C6C0-42A1-9F38-9AD03E05B89F</string>
+		</dict>
+	</array>
+</dict>
+</plist>
