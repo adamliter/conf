@@ -271,7 +271,13 @@ ${PROMPT_SYMBOL} "
 PROMPT_COMMAND=set_bash_prompt
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
-source /usr/local/bin/virtualenvwrapper.sh
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+
+if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then
+    eval "$(pyenv virtualenv-init -)"
+fi
 
 gpip2(){
     PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
@@ -279,4 +285,8 @@ gpip2(){
 
 gpip3(){
     PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}
+
+gpip(){
+    PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }

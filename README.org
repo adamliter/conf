@@ -823,8 +823,17 @@ See [[https://apple.stackexchange.com/q/33677/85567][How can I configure Mac Ter
 
 ****** Some Python stuff
 
+Note that ~eval "$(pyenv virtualenv-init -)"~ needs to come after
+setting ~PROMPT_COMMAND~ in order to work correctly.
+
 #+BEGIN_SRC sh
-  source /usr/local/bin/virtualenvwrapper.sh
+  if command -v pyenv 1>/dev/null 2>&1; then
+      eval "$(pyenv init -)"
+  fi
+
+  if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then
+      eval "$(pyenv virtualenv-init -)"
+  fi
 
   gpip2(){
       PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
@@ -832,6 +841,10 @@ See [[https://apple.stackexchange.com/q/33677/85567][How can I configure Mac Ter
 
   gpip3(){
       PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+  }
+
+  gpip(){
+      PIP_REQUIRE_VIRTUALENV="" pip "$@"
   }
 #+END_SRC
 
@@ -876,11 +889,8 @@ environment variables.
   # Python stuff
   # ----------------------------------------------------------------------
   export PIP_REQUIRE_VIRTUALENV=true
-  export VIRTUALENVWRAPPER_PYTHON=$(which python3)
-  export PROJECT_HOME=$HOME/projects
-  export WORKON_HOME=$HOME/.virtualenvs
   export VIRTUAL_ENV_DISABLE_PROMPT=1
-
+  export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1
 #+END_SRC
 
 Finally, =~/.profile= can be symlinked into the appropriate location,
