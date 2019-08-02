@@ -855,6 +855,14 @@ after it is tangled:
   ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
 #+END_SRC
 
+****** Some Ruby stuff
+
+#+BEGIN_SRC sh
+  if command -v rbenv 1>/dev/null 2>&1; then
+      eval "$(rbenv init -)"
+  fi
+#+END_SRC
+
 ***** =~/.profile=
       :PROPERTIES:
       :header-args:sh: :eval no :exports code :tangle ~/config-files/bash/profile :mkdirp yes :padline no
@@ -869,15 +877,6 @@ environment variables.
   if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
       export PATH="${HOME}/bin:${PATH}"
   fi
-
-  # This should come at the end of any path stuff,
-  # otherwise the rvm-managed version of Ruby
-  # will not be at the beginning of the path, and rvm
-  # will complain about this
-
-  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-  export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
   # ----------------------------------------------------------------------
   # EDITOR
