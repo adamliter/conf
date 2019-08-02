@@ -1041,6 +1041,18 @@ For =gpg= stuff with =git=, we want to use =gpg2=, which is now just
       program = gpg
 #+END_SRC
 
+****** Configuration for [[https://github.com/magit/forge][=forge=]]
+
+This sets up my user names on the git forges, GitHub and GitLab, for use
+with [[https://github.com/magit/forge][=forge=]].
+
+#+BEGIN_SRC sh
+  [gitlab]
+      user = adamliter
+  [github]
+      user = adamliter
+#+END_SRC
+
 ****** Symlink into place
 
 Finally, the =gitconfig= file needs to be symlinked into the proper

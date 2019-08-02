@@ -30,3 +30,7 @@
     rebase = preserve
 [gpg]
     program = gpg
+[gitlab]
+    user = adamliter
+[github]
+    user = adamliter
