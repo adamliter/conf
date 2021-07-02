@@ -13,6 +13,9 @@ export ALTERNATE_EDITOR=""
 # ----------------------------------------------------------------------
 # Python stuff
 # ----------------------------------------------------------------------
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
 export PIP_REQUIRE_VIRTUALENV=true
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1
