@@ -23,22 +23,22 @@ repo that contains my configuration files]], which is hosted on GitHub.
 First, create the SSH directory:
 
 #+BEGIN_SRC sh
-  mkdir -p ~/.ssh
-  chmod 700 ~/.ssh
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
 #+END_SRC
 
 Optionally, I can also set up an =authorized_keys= file, which is useful
 if the new machine is intended to be used as a server in any capacity.
 
 #+BEGIN_SRC sh
-  touch ~/.ssh/authorized_keys
-  chmod 600 ~/.ssh/authorized_keys
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
 #+END_SRC
 
 Next, I need to actually create a new SSH key, which can be done with:
 
 #+BEGIN_SRC sh
-  ssh-keygen -t rsa -b 4096 -C "COMMENT GOES HERE"
+ssh-keygen -t rsa -b 4096 -C "COMMENT GOES HERE"
 #+END_SRC
 
 Then, I can set up a basic SSH configuration file to ensure that the key
@@ -53,25 +53,25 @@ This allows repositories to be cloned in either of the following manners:
 2. ~git clone github:adamliter/config-files.git~
 
 #+BEGIN_SRC sh
-  cat > ~/.ssh/config <<EOF
-  Host github
-    Hostname github.com
-    IdentityFile ~/.ssh/id_rsa
-    User git
+cat > ~/.ssh/config <<EOF
+Host github
+  Hostname github.com
+  IdentityFile ~/.ssh/id_rsa
+  User git
 
-  Host algit
-    Hostname git.adamliter.org
-    IdentityFile ~/.ssh/id_rsa
-    User git
+Host algit
+  Hostname git.adamliter.org
+  IdentityFile ~/.ssh/id_rsa
+  User git
 
-  # Local Variables:
-  # mode: conf
-  # coding: utf-8
-  # fill-column: 72
-  # indent-tabs-mode: nil
-  # End:
-  EOF
-  chmod 600 ~/.ssh/config
+# Local Variables:
+# mode: conf
+# coding: utf-8
+# fill-column: 72
+# indent-tabs-mode: nil
+# End:
+EOF
+chmod 600 ~/.ssh/config
 #+END_SRC
 
 Finally, the public key needs to be added to GitHub and to
@@ -90,7 +90,7 @@ described [[bootstrap-script-explanation][below]].
 To bootstrap the setup of a new Mac machine, do:
 
 #+BEGIN_SRC sh
-  curl -fsSL https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
+curl -fsSL https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
 #+END_SRC
 
 *** Linux
@@ -99,7 +99,7 @@ To bootstrap the setup of a new Mac machine, do:
 bootstrap the setup of a new Linux machine, do:
 
 #+BEGIN_SRC sh
-  wget -O- https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
+wget -O- https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
 #+END_SRC
 
 *** Windows
@@ -126,35 +126,35 @@ The first thing the script does is set some flags for exiting and
 debugging:
 
 #+BEGIN_SRC sh
-  # -*- coding: utf-8; mode: sh; -*-
-  # Exit when a command fails
-  set -o errexit
-  # Exit when a command in a series of pipes fails
-  set -o pipefail
-  # Exit when there is an undeclared variable
-  set -o nounset
-  # Trace what gets executed (for debugging)
-  #set -o xtrace
+# -*- coding: utf-8; mode: sh; -*-
+# Exit when a command fails
+set -o errexit
+# Exit when a command in a series of pipes fails
+set -o pipefail
+# Exit when there is an undeclared variable
+set -o nounset
+# Trace what gets executed (for debugging)
+#set -o xtrace
 #+END_SRC
 
 Let's run the rest of the script from the home directory:
 
 #+BEGIN_SRC sh
-  cd "${HOME}"
+cd "${HOME}"
 #+END_SRC
 
 Next, let's have the script detect the operating system.
 
 #+BEGIN_SRC sh
-  if [[ $OSTYPE == darwin* ]]; then
-      BASH_OS_TYPE='macOS'
-  elif [[ $OSTYPE == linux-gnu ]]; then
-      BASH_OS_TYPE='Linux'
-  elif [[ '$OS' == Windows* ]]; then
-      BASH_OS_TYPE='Windows'
-  else
-      BASH_OS_TYPE='Unknown'
-  fi
+if [[ $OSTYPE == darwin* ]]; then
+    BASH_OS_TYPE='macOS'
+elif [[ $OSTYPE == linux-gnu ]]; then
+    BASH_OS_TYPE='Linux'
+elif [[ '$OS' == Windows* ]]; then
+    BASH_OS_TYPE='Windows'
+else
+    BASH_OS_TYPE='Unknown'
+fi
 #+END_SRC
 
 Then, based on the OS, it installs and/or updates the package manager.
@@ -162,21 +162,21 @@ Using the package manager, it also installs both Emacs and =git=, which
 will allow for programatically setting up the rest of my configuration.
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == macOS ]]; then
-      if type brew >/dev/null 2>&1; then
-          echo "Homebrew is already installed ..."
-      else
-          /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      fi
-      brew update && brew upgrade
-      brew tap caskroom/cask
-      brew cask install emacs
-      brew install git
-  elif [[ $BASH_OS_TYPE == Linux ]]; then
-      sudo apt-get update -y && sudo apt-get upgrade -y
-      sudo apt-get install -y emacs
-      sudo apt-get install -y git
-  fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    if type brew >/dev/null 2>&1; then
+        echo "Homebrew is already installed ..."
+    else
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+    brew update && brew upgrade
+    brew tap caskroom/cask
+    brew cask install emacs
+    brew install git
+elif [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get update -y && sudo apt-get upgrade -y
+    sudo apt-get install -y emacs
+    sudo apt-get install -y git
+fi
 #+END_SRC
 
 Next, the script clones [[config-files][the repository that contains my configuration
@@ -196,13 +196,13 @@ those SSH hosts still exist when this script tries to clone the repo and
 its submodules.
 
 #+BEGIN_SRC sh
-  if [ -f "${HOME}/.ssh/config" ]; then
-      cp -H "${HOME}/.ssh/config" "${HOME}/.ssh/config.temp"
-      rm "${HOME}/.ssh/config"
-      mv "${HOME}/.ssh/config.temp" "${HOME}/.ssh/config"
-  fi
-  rm -rf "${HOME}/config-files"
-  git clone github:adamliter/config-files.git "${HOME}/config-files"
+if [ -f "${HOME}/.ssh/config" ]; then
+    cp -H "${HOME}/.ssh/config" "${HOME}/.ssh/config.temp"
+    rm "${HOME}/.ssh/config"
+    mv "${HOME}/.ssh/config.temp" "${HOME}/.ssh/config"
+fi
+rm -rf "${HOME}/config-files"
+git clone github:adamliter/config-files.git "${HOME}/config-files"
 #+END_SRC
 
 After cloning, it updates all submodules. Submodules, as always, are a
@@ -217,21 +217,21 @@ the submodule is set up to track on the remote or the master branch for
 all submodules.
 
 #+BEGIN_SRC sh
-  cd "${HOME}/config-files"
-  git submodule update --init --remote --recursive
+cd "${HOME}/config-files"
+git submodule update --init --remote --recursive
 
-  git submodule foreach --recursive \
-    'git checkout \
-    $(git config -f $toplevel/.gitmodules submodule.$name.branch || \
-    echo master)'
+git submodule foreach --recursive \
+  'git checkout \
+  $(git config -f $toplevel/.gitmodules submodule.$name.branch || \
+  echo master)'
 #+END_SRC
 
 After all the futzing around with submodules, it symlinks some things
 into place.
 
 #+BEGIN_SRC sh
-  rm -rf "${HOME}/.emacs.d"
-  ln -sn "${HOME}/config-files/emacs.d" "${HOME}/.emacs.d"
+rm -rf "${HOME}/.emacs.d"
+ln -sn "${HOME}/config-files/emacs.d" "${HOME}/.emacs.d"
 #+END_SRC
 
 Next, the script evaluates my =init.el= file in order to bootstrap the
@@ -240,7 +240,7 @@ option to ~emacs~ prevents Emacs from being opened as en
 editor. Instead, it just evaluates the file specified by ~--load~.
 
 #+BEGIN_SRC sh
-  emacs --batch --load="${HOME}/.emacs.d/init.el"
+emacs --batch --load="${HOME}/.emacs.d/init.el"
 #+END_SRC
 
 Finally, the script evaluates all source code blocks in the file
@@ -249,14 +249,14 @@ the file in order to put all other configuration information in the
 proper locations.
 
 #+BEGIN_SRC sh
-  emacs --batch \
-    --eval="(progn
-    (require 'org)
-    (setq org-confirm-babel-evaluate nil)
-    (find-file \"~/config-files/README.org\")
-    (org-babel-tangle)
-    (org-babel-execute-buffer)
-    (kill-buffer))"
+emacs --batch \
+  --eval="(progn
+  (require 'org)
+  (setq org-confirm-babel-evaluate nil)
+  (find-file \"~/config-files/README.org\")
+  (org-babel-tangle)
+  (org-babel-execute-buffer)
+  (kill-buffer))"
 #+END_SRC
 
 * Command line utilities
@@ -286,21 +286,21 @@ version of bash as the login shell, it needs to be added to the file
 for the current user. In order for this to take effect, I log back in.
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == macOS ]]; then
-      brew update && brew install bash
-      if ! grep -q "/usr/local/bin/bash" /etc/shells; then
-          echo "Adding Homebrew's bash to possible login shells ..."
-          sudo bash -c "echo /usr/local/bin/bash >> /etc/shells"
-      else
-          echo "Homebrew's bash is already a possible login shell ..."
-      fi
-      if [ $SHELL == "/usr/local/bin/bash" ]; then
-          echo "Shell is already set to Homebrew's bash ..."
-      else
-          echo "Setting shell to Homebrew's bash ..."
-          chsh -s /usr/local/bin/bash
-      fi
-  fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew update && brew install bash
+    if ! grep -q "/usr/local/bin/bash" /etc/shells; then
+        echo "Adding Homebrew's bash to possible login shells ..."
+        sudo bash -c "echo /usr/local/bin/bash >> /etc/shells"
+    else
+        echo "Homebrew's bash is already a possible login shell ..."
+    fi
+    if [ $SHELL == "/usr/local/bin/bash" ]; then
+        echo "Shell is already set to Homebrew's bash ..."
+    else
+        echo "Setting shell to Homebrew's bash ..."
+        chsh -s /usr/local/bin/bash
+    fi
+fi
 #+END_SRC
 
 **** Configuration
@@ -330,10 +330,10 @@ shell read =~/.bashrc=. Ensuring that this happens is done by adding the
 following to the =~/.bash_profile= file:
 
 #+BEGIN_SRC sh
-  # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
-  if [ -f "${HOME}/.bashrc" ] && [[ $- == *i* ]]; then
-      source "${HOME}/.bashrc"
-  fi
+# -*- mode: sh; fill-column: 72; coding: utf-8 -*-
+if [ -f "${HOME}/.bashrc" ] && [[ $- == *i* ]]; then
+    source "${HOME}/.bashrc"
+fi
 #+END_SRC
 
 It's worth noting that on macOS, unlike on Linux, all shells started
@@ -348,7 +348,7 @@ At any rate, this can now be symlinked into the appropriate location,
 after it is tangled:
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
+ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
 #+END_SRC
 
 ***** =~/.bashrc=
@@ -361,17 +361,17 @@ file is read, if it exists. On macOS, this usually exists as
 =/etc/bashrc=.
 
 #+BEGIN_SRC sh
-  if [ -f /etc/bashrc ]; then
-      source /etc/bashrc
-  fi
+if [ -f /etc/bashrc ]; then
+    source /etc/bashrc
+fi
 #+END_SRC
 
 And, on Ubuntu, this usually exists as =/etc/bash.bashrc=.
 
 #+BEGIN_SRC sh
-  if [ -f /etc/bash.bashrc ]; then
-      source /etc/bash.bashrc
-  fi
+if [ -f /etc/bash.bashrc ]; then
+    source /etc/bash.bashrc
+fi
 #+END_SRC
 
 While it is not considered best practice to source =~/.profile= from
@@ -389,9 +389,9 @@ shells. So I'll flout the best practice for now, until I run into
 problems because of it.
 
 #+BEGIN_SRC sh
-  if [ -f "${HOME}/.profile" ]; then
-      source "${HOME}/.profile"
-  fi
+if [ -f "${HOME}/.profile" ]; then
+    source "${HOME}/.profile"
+fi
 #+END_SRC
 
 ****** Aliases
@@ -399,156 +399,156 @@ problems because of it.
 Always gotta shrug:
 
 #+BEGIN_SRC sh
-  alias eh="echo ¯\\\_\(ツ\)_/¯ | pbcopy"
-  alias ehh="eh"
+alias eh="echo ¯\\\_\(ツ\)_/¯ | pbcopy"
+alias ehh="eh"
 #+END_SRC
 
 Some aliases for changing directories:
 
 #+BEGIN_SRC sh
-  alias .1='cd ..'
-  alias ..='cd ..'
-  alias .2='cd ../..'
-  alias ....='cd ../..'
-  alias .3='cd ../../..'
-  alias .4='cd ../../../..'
-  alias .5='cd ../../../../..'
+alias .1='cd ..'
+alias ..='cd ..'
+alias .2='cd ../..'
+alias ....='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
 #+END_SRC
 
 List all the things:
 
 #+BEGIN_SRC sh
-  alias l='ls -aF'
-  alias ll='ls -alF'
+alias l='ls -aF'
+alias ll='ls -alF'
 
-  # list only hidden directories and files
-  alias l.='ls -dF .*'
-  alias ll.'=ls -ldF .*'
+# list only hidden directories and files
+alias l.='ls -dF .*'
+alias ll.'=ls -ldF .*'
 #+END_SRC
 
 To ensure the availability of 256 colors in =tmux= (see [[https://stackoverflow.com/a/10163861/2571049][this answer]] to
 [[https://stackoverflow.com/q/10158508/2571049][lose vim colorscheme in tmux mode]]).
 
 #+BEGIN_SRC sh
-  alias tmux='tmux -2'
+alias tmux='tmux -2'
 #+END_SRC
 
 A =gpg= alias for use with flash drive:
 
 #+BEGIN_SRC sh
-  alias gpgusb='gpg --home=/Volumes/adamliter/.gnupg'
+alias gpgusb='gpg --home=/Volumes/adamliter/.gnupg'
 #+END_SRC
 
 Some macOS-specific aliases:
 
 #+BEGIN_SRC sh
-  if [[ $OSTYPE == darwin* ]]; then
-      alias tw='open -a "TextWrangler"'
-      alias showFiles='defaults write com.apple.finder AppleShowAllFiles \
-  YES; killall Finder'
-      alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
-  killall Finder'
-  fi
+if [[ $OSTYPE == darwin* ]]; then
+    alias tw='open -a "TextWrangler"'
+    alias showFiles='defaults write com.apple.finder AppleShowAllFiles \
+YES; killall Finder'
+    alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
+killall Finder'
+fi
 #+END_SRC
 
 Some aliases for Homebrew:
 
 #+BEGIN_SRC sh
-  if type brew >/dev/null 2>&1; then
-      alias bud='brew update -v'
-      alias bug='brew upgrade  -v'
-      alias brc='brew cleanup -v'
-      alias brp='brew prune -v'
-      alias bra='bud && bug && brc && brp'
-  fi
+if type brew >/dev/null 2>&1; then
+    alias bud='brew update -v'
+    alias bug='brew upgrade  -v'
+    alias brc='brew cleanup -v'
+    alias brp='brew prune -v'
+    alias bra='bud && bug && brc && brp'
+fi
 #+END_SRC
 
 An SSH alias for =ssh-add=:
 
 #+BEGIN_SRC sh
-  alias sshid='ssh-add ~/.ssh/id_rsa'
+alias sshid='ssh-add ~/.ssh/id_rsa'
 #+END_SRC
 
 Some aliases for =pass=:
 
 #+BEGIN_SRC sh
-  alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
-  alias pp='ppass'
+alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
+alias pp='ppass'
 
-  # lingbib password store
-  alias lb-pass='PASSWORD_STORE_DIR=~/.password-store/shared-projects\
-  /lingbib/ pass'
+# lingbib password store
+alias lb-pass='PASSWORD_STORE_DIR=~/.password-store/shared-projects\
+/lingbib/ pass'
 
-  # common logins
-  alias amazon='pp -c misc/amazon'
-  alias amex='pp -c finances/amex'
-  alias bb='pp -c misc/bitbucket'
-  alias chess='pp -c misc/chess'
-  alias delta='pp -c travel/delta'
-  alias fmail='pp -c email/fastmail/password'
-  alias kb='pp -c keybase/passphrase'
-  alias msufcu='pp -c finances/msufcu'
+# common logins
+alias amazon='pp -c misc/amazon'
+alias amex='pp -c finances/amex'
+alias bb='pp -c misc/bitbucket'
+alias chess='pp -c misc/chess'
+alias delta='pp -c travel/delta'
+alias fmail='pp -c email/fastmail/password'
+alias kb='pp -c keybase/passphrase'
+alias msufcu='pp -c finances/msufcu'
 #+END_SRC
 
 Some aliases for Emacs:
 
 #+BEGIN_SRC sh
-  alias e='emacsclient -t -a=""'
+alias e='emacsclient -t -a=""'
 #+END_SRC
 
 Some aliases for =git= and =hub=:
 
 #+BEGIN_SRC sh
-  if type hub >/dev/null 2>&1; then
-      alias git='hub'
-  fi
-  alias g='git status -sb'
-  alias gp='git pull'
-  alias gpr='git pull --rebase'
-  alias gpp='git pull --rebase && git push'
-  alias ga='git add'
-  alias gc='git commit'
-  alias gcn='git commit --no-edit'
-  alias gce='git commit -e'
-  alias gces='git commit -eS'
-  alias gca='git commit --amend'
-  alias gcah='git commit --amend -C HEAD'
-  alias gcv='git commit --no-verify'
-  alias gdv='git diff'
-  alias gdc='git diff --cached'
-  alias gl='git log --oneline --decorate --graph'
-  alias gla='git log --oneline --decorate --graph --all'
-  alias gt='git tag'
-  alias grc='git rebase --continue'
-  alias gsl='git stash list'
-  alias gss='git stash save'
+if type hub >/dev/null 2>&1; then
+    alias git='hub'
+fi
+alias g='git status -sb'
+alias gp='git pull'
+alias gpr='git pull --rebase'
+alias gpp='git pull --rebase && git push'
+alias ga='git add'
+alias gc='git commit'
+alias gcn='git commit --no-edit'
+alias gce='git commit -e'
+alias gces='git commit -eS'
+alias gca='git commit --amend'
+alias gcah='git commit --amend -C HEAD'
+alias gcv='git commit --no-verify'
+alias gdv='git diff'
+alias gdc='git diff --cached'
+alias gl='git log --oneline --decorate --graph'
+alias gla='git log --oneline --decorate --graph --all'
+alias gt='git tag'
+alias grc='git rebase --continue'
+alias gsl='git stash list'
+alias gss='git stash save'
 #+END_SRC
 
 Some aliases for some common directories:
 
 #+BEGIN_SRC sh
-  if type brew >/dev/null 2>&1; then
-      alias cdcbrew='cd $(brew --repository homebrew/core)'
-  fi
-  alias cdpsite='cd ~/projects/website-src'
-  alias cdtex='cd ~/Dropbox/TeXnology'
-  alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
-  alias cdconfig='cd ~/config-files'
-  alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
-  alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
-  alias cdling='cd ~/Dropbox/linguistics'
-  alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
-  alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
-  alias cdemacs='cd ~/config-files/emacs.d'
+if type brew >/dev/null 2>&1; then
+    alias cdcbrew='cd $(brew --repository homebrew/core)'
+fi
+alias cdpsite='cd ~/projects/website-src'
+alias cdtex='cd ~/Dropbox/TeXnology'
+alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
+alias cdconfig='cd ~/config-files'
+alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
+alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
+alias cdling='cd ~/Dropbox/linguistics'
+alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
+alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
+alias cdemacs='cd ~/config-files/emacs.d'
 #+END_SRC
 
 An alias for using CorpusSearch:
 
 #+BEGIN_SRC sh
-  if [ -f "${HOME}/Applications/CS_2.003.04.jar" ]; then
-      alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
-  csearch/CorpusSearch'
-  fi
+if [ -f "${HOME}/Applications/CS_2.003.04.jar" ]; then
+    alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
+csearch/CorpusSearch'
+fi
 #+END_SRC
 
 ****** Auto completion
@@ -556,72 +556,72 @@ An alias for using CorpusSearch:
 Tab auto completion for =git= and =hub=:
 
 #+BEGIN_SRC sh
-  if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
-      source /usr/local/etc/bash_completion.d/git-completion.bash
-  fi
+if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+    source /usr/local/etc/bash_completion.d/git-completion.bash
+fi
 
-  if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
-      source /usr/local/etc/bash_completion.d/hub.bash_completion.sh
-  fi
+if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
+    source /usr/local/etc/bash_completion.d/hub.bash_completion.sh
+fi
 #+END_SRC
 
 Tab auto completon for pandoc:
 
 #+BEGIN_SRC sh
-  if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
-      source /usr/local/etc/bash_completion.d/pandoc
-  fi
+if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
+    source /usr/local/etc/bash_completion.d/pandoc
+fi
 #+END_SRC
 
 Tab auto completion for Django:
 
 #+BEGIN_SRC sh
-  if [ -f /usr/local/etc/bash_completion.d/django ]; then
-      source /usr/local/etc/bash_completion.d/django
-  fi
+if [ -f /usr/local/etc/bash_completion.d/django ]; then
+    source /usr/local/etc/bash_completion.d/django
+fi
 #+END_SRC
 
 Tab auto completion for Homebrew:
 
 #+BEGIN_SRC sh
-  if [ -f /usr/local/etc/bash_completion.d/brew ]; then
-      source /usr/local/etc/bash_completion.d/brew
-  fi
+if [ -f /usr/local/etc/bash_completion.d/brew ]; then
+    source /usr/local/etc/bash_completion.d/brew
+fi
 #+END_SRC
 
 Tab auto completion for =tmux=:
 
 #+BEGIN_SRC sh
-  if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
-      source /usr/local/etc/bash_completion.d/tmux
-  fi
+if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
+    source /usr/local/etc/bash_completion.d/tmux
+fi
 #+END_SRC
 
 Tab auto completion for =pass=:
 
 #+BEGIN_SRC sh
-  if [ -f /usr/local/etc/bash_completion.d/pass ]; then
-      source /usr/local/etc/bash_completion.d/pass
-  fi
-  # personal completion
-  _ppass(){
-      PASSWORD_STORE_DIR=~/.password-store/personal/ _pass
-  }
+if [ -f /usr/local/etc/bash_completion.d/pass ]; then
+    source /usr/local/etc/bash_completion.d/pass
+fi
+# personal completion
+_ppass(){
+    PASSWORD_STORE_DIR=~/.password-store/personal/ _pass
+}
 
-  complete -o filenames -o nospace -F _ppass ppass
+complete -o filenames -o nospace -F _ppass ppass
 
-  _pp(){
-      _ppass
-  }
+_pp(){
+    _ppass
+}
 
-  complete -o filenames -o nospace -F _pp pp
+complete -o filenames -o nospace -F _pp pp
 
-  # lingbib completion
-  _lb-pass(){
-      PASSWORD_STORE_DIR=~/.password-store/shared-projects/lingbib/ _pass
-  }
+# lingbib completion
+_lb-pass(){
+    PASSWORD_STORE_DIR=~/.password-store/shared-projects/lingbib/ _pass
+}
 
-  complete -o filenames -o nospace -F _lb-pass lb-pass
+complete -o filenames -o nospace -F _lb-pass lb-pass
 #+END_SRC
 
 ****** Prompt
@@ -629,98 +629,98 @@ Tab auto completion for =pass=:
 First, let's set up some more useful ways to refer to colors:
 
 #+BEGIN_SRC sh
-  RED="\[\e[31m\]"
-  LIGHT_RED="\[\e[91m\]"
-  GREEN="\[\e[32m\]"
-  LIGHT_GREEN="\[\e[92m\]"
-  YELLOW="\[\e[33m\]"
-  LIGHT_YELLOW="\[\e[93m\]"
-  BLUE="\[\e[34m\]"
-  LIGHT_BLUE="\[\e[94m\]"
-  MAGENTA="\[\e[35m\]"
-  LIGHT_MAGENTA="\[\e[95m\]"
-  CYAN="\[\e[36m\]"
-  LIGHT_CYAN="\[\e[96m\]"
-  LIGHT_GREY="\[\e[37m\]"
-  LIGHT_GRAY="\[\e[37m\]"
-  WHITE="\[\e[97m\]"
-  COLOR_RESET="\[\e[0m\]"
+RED="\[\e[31m\]"
+LIGHT_RED="\[\e[91m\]"
+GREEN="\[\e[32m\]"
+LIGHT_GREEN="\[\e[92m\]"
+YELLOW="\[\e[33m\]"
+LIGHT_YELLOW="\[\e[93m\]"
+BLUE="\[\e[34m\]"
+LIGHT_BLUE="\[\e[94m\]"
+MAGENTA="\[\e[35m\]"
+LIGHT_MAGENTA="\[\e[95m\]"
+CYAN="\[\e[36m\]"
+LIGHT_CYAN="\[\e[96m\]"
+LIGHT_GREY="\[\e[37m\]"
+LIGHT_GRAY="\[\e[37m\]"
+WHITE="\[\e[97m\]"
+COLOR_RESET="\[\e[0m\]"
 #+END_SRC
 
 Next, let's define a separator to separate information in the prompt:
 
 #+BEGIN_SRC sh
-  MY_PS1_SEP=" ${WHITE}█${COLOR_RESET} "
+MY_PS1_SEP=" ${WHITE}█${COLOR_RESET} "
 #+END_SRC
 
 Next, let's write a function to determine if the current directory is a
 =git= repo:
 
 #+BEGIN_SRC sh
-  function is_git_repository {
-      git branch > /dev/null 2>&1
-  }
+function is_git_repository {
+    git branch > /dev/null 2>&1
+}
 #+END_SRC
 
 If it is, we'll want to determine some information about it:
 
 #+BEGIN_SRC sh
-  function set_git_branch {
-      # Capture the output of the "git status" command.
-      git_status="$(git status 2> /dev/null)"
+function set_git_branch {
+    # Capture the output of the "git status" command.
+    git_status="$(git status 2> /dev/null)"
 
-      # Set color based on clean/staged/dirty
-      clean_pattern="working (tree|directory) clean"
-      if [[ ${git_status} =~ ${clean_pattern} ]]; then
-          state="${LIGHT_GREEN}"
-      elif [[ ${git_status} =~ "Changes to be committed" ]]; then
-          state="${LIGHT_YELLOW}"
-      else
-          state="${RED}"
-      fi
+    # Set color based on clean/staged/dirty
+    clean_pattern="working (tree|directory) clean"
+    if [[ ${git_status} =~ ${clean_pattern} ]]; then
+        state="${LIGHT_GREEN}"
+    elif [[ ${git_status} =~ "Changes to be committed" ]]; then
+        state="${LIGHT_YELLOW}"
+    else
+        state="${RED}"
+    fi
 
-      # Set arrow icon based on status against remote.
-      remote_pattern="(# )?Your branch is (ahead of|behind)"
-      if [[ ${git_status} =~ ${remote_pattern} ]]; then
-          if [[ ${BASH_REMATCH[2]} == "ahead of" ]]; then
-              remote="↑"
-          else
-              remote="↓"
-          fi
-      else
-          remote=""
-      fi
-      diverge_pattern="(# )?Your branch and (.*) have diverged"
-      if [[ ${git_status} =~ ${diverge_pattern} ]]; then
-          remote="↕"
-      fi
+    # Set arrow icon based on status against remote.
+    remote_pattern="(# )?Your branch is (ahead of|behind)"
+    if [[ ${git_status} =~ ${remote_pattern} ]]; then
+        if [[ ${BASH_REMATCH[2]} == "ahead of" ]]; then
+            remote="↑"
+        else
+            remote="↓"
+        fi
+    else
+        remote=""
+    fi
+    diverge_pattern="(# )?Your branch and (.*) have diverged"
+    if [[ ${git_status} =~ ${diverge_pattern} ]]; then
+        remote="↕"
+    fi
 
-      # Get the name of the branch.
-      branch_pattern="^(# )?On branch ([^${IFS}]*)"
-      detached_head_pattern="HEAD detached from"
-      if [[ ${git_status} =~ ${branch_pattern} ]]; then
-          branch=${BASH_REMATCH[2]}
-      elif [[ ${git_status} =~ ${detached_head_pattern} ]]; then
-          branch="HEAD"
-      fi
+    # Get the name of the branch.
+    branch_pattern="^(# )?On branch ([^${IFS}]*)"
+    detached_head_pattern="HEAD detached from"
+    if [[ ${git_status} =~ ${branch_pattern} ]]; then
+        branch=${BASH_REMATCH[2]}
+    elif [[ ${git_status} =~ ${detached_head_pattern} ]]; then
+        branch="HEAD"
+    fi
 
-      # Set the final branch string.
-      BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
-  }
+    # Set the final branch string.
+    BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
+}
 #+END_SRC
 
 Additionally, if this is also a Python virtual environment, we'll want
 to add some information about that to the prompt:
 
 #+BEGIN_SRC sh
-  function set_virtualenv () {
-      if test -z "$VIRTUAL_ENV"; then
-          MY_VENV=""
-      else
-          MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
-  ${MY_PS1_SEP}"
-      fi
-  }
+function set_virtualenv () {
+    if test -z "$VIRTUAL_ENV"; then
+        MY_VENV=""
+    else
+        MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+${MY_PS1_SEP}"
+    fi
+}
 #+END_SRC
 
 We can also change the color of the prompt symbol, based on the exit
@@ -728,13 +728,13 @@ code of the last command. Here's a function to get and set that
 information:
 
 #+BEGIN_SRC sh
-  function set_prompt_symbol () {
-      if test $1 -eq 0 ; then
-          PROMPT_SYMBOL="\$"
-      else
-          PROMPT_SYMBOL="${RED}\$${COLOR_RESET}"
-      fi
-  }
+function set_prompt_symbol () {
+    if test $1 -eq 0 ; then
+        PROMPT_SYMBOL="\$"
+    else
+        PROMPT_SYMBOL="${RED}\$${COLOR_RESET}"
+    fi
+}
 #+END_SRC
 
 I'd also like to shorten the path to the current working directory in
@@ -744,72 +744,72 @@ directory in order to determine the number of remaining columns that I
 have left to work with:
 
 #+BEGIN_SRC sh
-  strip_color () {
-      COLOR_REGEX='s/\\\[\\e\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]\\\]//g'
-      if [[ $OSTYPE == darwin* ]]; then
-          sed -Ee $COLOR_REGEX <<< """$1"""
-      else
-          sed -re $COLOR_REGEX <<< """$1"""
-      fi
-  }
+strip_color () {
+    COLOR_REGEX='s/\\\[\\e\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]\\\]//g'
+    if [[ $OSTYPE == darwin* ]]; then
+        sed -Ee $COLOR_REGEX <<< """$1"""
+    else
+        sed -re $COLOR_REGEX <<< """$1"""
+    fi
+}
 
-  get_ps1_less_pwd () {
-      PS1_LESS_PWD=$(printf "%s%s%s%s" \
-                            "$(strip_color "${MY_VENV}")" \
-                            "$(whoami)@$(hostname -s)" \
-                            "$(strip_color "${MY_PS1_SEP}")" \
-                            "$(strip_color "${BRANCH}")")
-  }
+get_ps1_less_pwd () {
+    PS1_LESS_PWD=$(printf "%s%s%s%s" \
+                          "$(strip_color "${MY_VENV}")" \
+                          "$(whoami)@$(hostname -s)" \
+                          "$(strip_color "${MY_PS1_SEP}")" \
+                          "$(strip_color "${BRANCH}")")
+}
 #+END_SRC
 
 Now I can finally declare the function to actually compute and calculate
 the bash prompt:
 
 #+BEGIN_SRC sh
-  function set_bash_prompt () {
-      # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
-      # return value of the last command.
-      set_prompt_symbol $?
+function set_bash_prompt () {
+    # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
+    # return value of the last command.
+    set_prompt_symbol $?
 
-      # Get virtualenv info
-      set_virtualenv
+    # Get virtualenv info
+    set_virtualenv
 
-      # Set the BRANCH variable.
-      if is_git_repository ; then
-          set_git_branch
-      else
-          BRANCH=''
-      fi
+    # Set the BRANCH variable.
+    if is_git_repository ; then
+        set_git_branch
+    else
+        BRANCH=''
+    fi
 
-      # get PS1_LESS_PWD to calculate length remaining
-      get_ps1_less_pwd
+    # get PS1_LESS_PWD to calculate length remaining
+    get_ps1_less_pwd
 
-      # get truncated PWD
-      # loosely based on http://stackoverflow.com/a/26555347/2571049
-      MY_PWD=$(pwd | awk -F/ -v "u=$PS1_LESS_PWD" -v "n=$(tput cols)" \
-                         -v "h=^$HOME" \
-                         '{sub(h,"~"); u=length(u); n=n-u-1; b=$1} \
-                         length($0)<=n || NF==2 {print; next;} \
-                         NF>2 {b=b"/.../"; e=$NF; n-=length(b $NF); \
-                         for (i=NF-1; i>2 && n>length(e $i)+1; i--) e=$i"/"e;} {print b e;}')
+    # get truncated PWD
+    # loosely based on http://stackoverflow.com/a/26555347/2571049
+    MY_PWD=$(pwd | awk -F/ -v "u=$PS1_LESS_PWD" -v "n=$(tput cols)" \
+                       -v "h=^$HOME" \
+                       '{sub(h,"~"); u=length(u); n=n-u-1; b=$1} \
+                       length($0)<=n || NF==2 {print; next;} \
+                       NF>2 {b=b"/.../"; e=$NF; n-=length(b $NF); \
+                       for (i=NF-1; i>2 && n>length(e $i)+1; i--) e=$i"/"e;} {print b e;}')
 
-      # Set the bash prompt variable.
-      PS1="
-  ${MY_VENV}\
-  ${WHITE}\u${COLOR_RESET}\
-  ${LIGHT_GREEN}@${COLOR_RESET}\
-  ${LIGHT_MAGENTA}\h${COLOR_RESET}\
-  ${MY_PS1_SEP}\
-  ${LIGHT_CYAN}${MY_PWD}${COLOR_RESET}\
-  ${BRANCH}
-  ${PROMPT_SYMBOL} "
-  }
+    # Set the bash prompt variable.
+    PS1="
+${MY_VENV}\
+${WHITE}\u${COLOR_RESET}\
+${LIGHT_GREEN}@${COLOR_RESET}\
+${LIGHT_MAGENTA}\h${COLOR_RESET}\
+${MY_PS1_SEP}\
+${LIGHT_CYAN}${MY_PWD}${COLOR_RESET}\
+${BRANCH}
+${PROMPT_SYMBOL} "
+}
 #+END_SRC
 
 And, finally, we can actually call the function to set the prompt:
 
 #+BEGIN_SRC sh
-  PROMPT_COMMAND=set_bash_prompt
+PROMPT_COMMAND=set_bash_prompt
 #+END_SRC
 
 ****** Colors
@@ -817,8 +817,8 @@ And, finally, we can actually call the function to set the prompt:
 See [[https://apple.stackexchange.com/q/33677/85567][How can I configure Mac Terminal to have color ls output?]]
 
 #+BEGIN_SRC sh
-  export CLICOLOR=1
-  export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 #+END_SRC
 
 ****** Some Python stuff
@@ -827,40 +827,40 @@ Note that ~eval "$(pyenv virtualenv-init -)"~ needs to come after
 setting ~PROMPT_COMMAND~ in order to work correctly.
 
 #+BEGIN_SRC sh
-  if command -v pyenv 1>/dev/null 2>&1; then
-      eval "$(pyenv init -)"
-  fi
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
 
-  if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then
-      eval "$(pyenv virtualenv-init -)"
-  fi
+if command -v pyenv-virtualenv-init 1>/dev/null 2>&1; then
+    eval "$(pyenv virtualenv-init -)"
+fi
 
-  gpip2(){
-      PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
-  }
+gpip2(){
+    PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
+}
 
-  gpip3(){
-      PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
-  }
+gpip3(){
+    PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}
 
-  gpip(){
-      PIP_REQUIRE_VIRTUALENV="" pip "$@"
-  }
+gpip(){
+    PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}
 #+END_SRC
 
 Finally, =~/.bashrc= can be symlinked into the appropriate location,
 after it is tangled:
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
+ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
 #+END_SRC
 
 ****** Some Ruby stuff
 
 #+BEGIN_SRC sh
-  if command -v rbenv 1>/dev/null 2>&1; then
-      eval "$(rbenv init -)"
-  fi
+if command -v rbenv 1>/dev/null 2>&1; then
+    eval "$(rbenv init -)"
+fi
 #+END_SRC
 
 ***** =~/.profile=
@@ -872,31 +872,31 @@ after it is tangled:
 environment variables.
 
 #+BEGIN_SRC sh
-  # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
+# -*- mode: sh; fill-column: 72; coding: utf-8 -*-
 
-  if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
-      export PATH="${HOME}/bin:${PATH}"
-  fi
+if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
+    export PATH="${HOME}/bin:${PATH}"
+fi
 
-  # ----------------------------------------------------------------------
-  # EDITOR
-  # ----------------------------------------------------------------------
-  export EDITOR=/usr/local/bin/ec
-  export ALTERNATE_EDITOR=""
+# ----------------------------------------------------------------------
+# EDITOR
+# ----------------------------------------------------------------------
+export EDITOR=/usr/local/bin/ec
+export ALTERNATE_EDITOR=""
 
-  # ----------------------------------------------------------------------
-  # Python stuff
-  # ----------------------------------------------------------------------
-  export PIP_REQUIRE_VIRTUALENV=true
-  export VIRTUAL_ENV_DISABLE_PROMPT=1
-  export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1
+# ----------------------------------------------------------------------
+# Python stuff
+# ----------------------------------------------------------------------
+export PIP_REQUIRE_VIRTUALENV=true
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1
 #+END_SRC
 
 Finally, =~/.profile= can be symlinked into the appropriate location,
 after it is tangled:
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
+ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
 #+END_SRC
 
 *** curl
@@ -909,9 +909,9 @@ after it is tangled:
 ~curl~ is installed by default on macOS but not on Linux:
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == Linux ]]; then
-      sudo apt-get install -y curl
-  fi
+if [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y curl
+fi
 #+END_SRC
 
 *** git
@@ -932,11 +932,11 @@ after it is tangled:
 =git= needs to know who I am.
 
 #+BEGIN_SRC sh
-  # -*- coding: utf-8; mode: conf; fill-column: 72; -*-
-  [user]
-      name = Adam Liter
-      email = io@adamliter.org
-      signkey = 0x98723A2089026CD6
+# -*- coding: utf-8; mode: conf; fill-column: 72; -*-
+[user]
+    name = Adam Liter
+    email = io@adamliter.org
+    signkey = 0x98723A2089026CD6
 #+END_SRC
 
 ****** =[core]=
@@ -944,10 +944,10 @@ after it is tangled:
 Set up my editor for =git= and a global ignore file.
 
 #+BEGIN_SRC sh
-  [core]
-      editor = "emacsclient -t -a=''"
-      excludesfile = ~/.gitignore_global
-      attributesfile = ~/.gitattributes_global
+[core]
+    editor = "emacsclient -t -a=''"
+    excludesfile = ~/.gitignore_global
+    attributesfile = ~/.gitattributes_global
 #+END_SRC
 
 ****** =[color]=
@@ -955,13 +955,13 @@ Set up my editor for =git= and a global ignore file.
 This sets up some defaults for displaying color with =git=.
 
 #+BEGIN_SRC sh
-  [color]
-      diff = auto
-      status = auto
-      branch = auto
-      interactive = auto
-      ui = true
-      pager = true
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = true
+    pager = true
 #+END_SRC
 
 ****** =[alias]=
@@ -969,8 +969,8 @@ This sets up some defaults for displaying color with =git=.
 This sets up an alias for automatically pushing submodules.
 
 #+BEGIN_SRC sh
-  [alias]
-      pushall = push --recurse-submodule=on-demand
+[alias]
+    pushall = push --recurse-submodule=on-demand
 #+END_SRC
 
 ****** <<git-config-diff>> =[diff]=
@@ -980,9 +980,9 @@ documents that =git= is tracking. For reference, see /e.g./,
 [[http://blog.martinfenner.org/2014/08/25/using-microsoft-word-with-git/][Using Microsoft Word with git]].
 
 #+BEGIN_SRC sh
-  [diff "pandoc"]
-      textconv=pandoc --to=markdown
-      prompt = false
+[diff "pandoc"]
+    textconv=pandoc --to=markdown
+    prompt = false
 #+END_SRC
 
 ****** =[filter]=
@@ -990,11 +990,11 @@ documents that =git= is tracking. For reference, see /e.g./,
 The following sets up a =filter= driver called =lfs= for using [[https://git-lfs.github.com/][Git LFS]].
 
 #+BEGIN_SRC sh
-  [filter "lfs"]
-      clean = git-lfs clean -- %f
-      smudge = git-lfs smudge -- %f
-      process = git-lfs filter-process
-      required = true
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 #+END_SRC
 
 ****** =[push]=
@@ -1007,8 +1007,8 @@ see either of the following questions on Stack Overflow:
 - [[https://stackoverflow.com/q/13148066/2571049][Warning: push.default is unset; its implicit value is changing in Git 2.0]]
 
 #+BEGIN_SRC sh
-  [push]
-      default = simple
+[push]
+    default = simple
 #+END_SRC
 
 ****** =[pull]=
@@ -1027,8 +1027,8 @@ just did, whereas ~git pull --preserve-merges~ will preserve that merge
 commit.
 
 #+BEGIN_SRC sh
-  [pull]
-      rebase = preserve
+[pull]
+    rebase = preserve
 #+END_SRC
 
 ****** =[gpg]=
@@ -1037,8 +1037,8 @@ For =gpg= stuff with =git=, we want to use =gpg2=, which is now just
 =gpg=, at least if installed with Homebrew.
 
 #+BEGIN_SRC sh
-  [gpg]
-      program = gpg
+[gpg]
+    program = gpg
 #+END_SRC
 
 ****** Configuration for [[https://github.com/magit/forge][=forge=]]
@@ -1047,10 +1047,10 @@ This sets up my user names on the git forges, GitHub and GitLab, for use
 with [[https://github.com/magit/forge][=forge=]].
 
 #+BEGIN_SRC sh
-  [gitlab]
-      user = adamliter
-  [github]
-      user = adamliter
+[gitlab]
+    user = adamliter
+[github]
+    user = adamliter
 #+END_SRC
 
 ****** Symlink into place
@@ -1059,7 +1059,7 @@ Finally, the =gitconfig= file needs to be symlinked into the proper
 location.
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  ln -sf "${HOME}/config-files/git/gitconfig" "${HOME}/.gitconfig"
+ln -sf "${HOME}/config-files/git/gitconfig" "${HOME}/.gitconfig"
 #+END_SRC
 
 ***** =~/.gitignore_global=
@@ -1085,29 +1085,29 @@ associated with services like Dropbox or Google Drive (I don't generally
 change/set a directory's icon).
 
 #+BEGIN_SRC sh
-  # -*- coding: utf-8; fill-column: 72; mode: conf; -*-
-  ,*.DS_Store
-  .AppleDouble
-  .LSOverride
+# -*- coding: utf-8; fill-column: 72; mode: conf; -*-
+,*.DS_Store
+.AppleDouble
+.LSOverride
 
-  # Thumbnails
-  ._*
+# Thumbnails
+._*
 
-  # Files that might appear in the root of a volume
-  .DocumentRevisions-V100
-  .fseventsd
-  .Spotlight-V100
-  .TemporaryItems
-  .Trashes
-  .VolumeIcon.icns
-  .com.apple.timemachine.donotpresent
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
-  # Directories potentially created on remote AFP share
-  .AppleDB
-  .AppleDesktop
-  Network Trash Folder
-  Temporary Items
-  .apdisk
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 #+END_SRC
 
 ****** Linux
@@ -1116,19 +1116,19 @@ The following is stuff to ignore on Linux, taken from
 [[gh-gitignore-linux][=github/gitignore=]].
 
 #+BEGIN_SRC sh
-  # temporary files which can be created if a
-  # process still has a handle open of a deleted file
-  .fuse_hidden*
+# temporary files which can be created if a
+# process still has a handle open of a deleted file
+.fuse_hidden*
 
-  # KDE directory preferences
-  .directory
+# KDE directory preferences
+.directory
 
-  # Linux trash folder which might appear on any partition or disk
-  .Trash-*
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
 
-  # .nfs files are created when an open file
-  # is removed but is still being accessed
-  .nfs*
+# .nfs files are created when an open file
+# is removed but is still being accessed
+.nfs*
 #+END_SRC
 
 ****** Windows
@@ -1137,27 +1137,27 @@ The following is stuff to ignore in Windows, taken from
 [[gh-gitignore-windows][=github/gitingore=]].
 
 #+BEGIN_SRC sh
-  # Windows image file caches
-  Thumbs.db
-  ehthumbs.db
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
 
-  # Dump file
-  ,*.stackdump
+# Dump file
+,*.stackdump
 
-  # Folder config file
-  Desktop.ini
+# Folder config file
+Desktop.ini
 
-  # Recycle Bin used on file shares
-  $RECYCLE.BIN/
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
 
-  # Windows Installer files
-  ,*.cab
-  ,*.msi
-  ,*.msm
-  ,*.msp
+# Windows Installer files
+,*.cab
+,*.msi
+,*.msm
+,*.msp
 
-  # Windows shortcuts
-  ,*.lnk
+# Windows shortcuts
+,*.lnk
 #+END_SRC
 
 ****** Emacs
@@ -1165,50 +1165,50 @@ The following is stuff to ignore in Windows, taken from
 The following is Emacs stuff to ignore, taken from [[gh-gitignore-emacs][=github/gitignore=]].
 
 #+BEGIN_SRC sh
-  ,*~
-  \#*\#
-  /.emacs.desktop
-  /.emacs.desktop.lock
-  ,*.elc
-  auto-save-list
-  tramp
-  .\#*
+,*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+,*.elc
+auto-save-list
+tramp
+.\#*
 
-  # Org-mode
-  .org-id-locations
-  ,*_archive
+# Org-mode
+.org-id-locations
+,*_archive
 
-  # flymake-mode
-  ,*_flymake.*
+# flymake-mode
+,*_flymake.*
 
-  # eshell files
-  ,**/eshell/history
-  ,**/eshell/lastdir
+# eshell files
+,**/eshell/history
+,**/eshell/lastdir
 
-  # elpa packages
-  /elpa/
+# elpa packages
+/elpa/
 
-  # reftex files
-  ,*.rel
+# reftex files
+,*.rel
 
-  # AUCTeX auto folder
-  ,**/auto/
+# AUCTeX auto folder
+,**/auto/
 
-  # cask packages
-  .cask/
-  dist/
+# cask packages
+.cask/
+dist/
 
-  # Flycheck
-  flycheck_*.el
+# Flycheck
+flycheck_*.el
 
-  # server auth directory
-  /server/
+# server auth directory
+/server/
 
-  # projectiles files
-  .projectile
+# projectiles files
+.projectile
 
-  # directory configuration
-  .dir-locals.el
+# directory configuration
+.dir-locals.el
 #+END_SRC
 
 ****** TeX
@@ -1217,223 +1217,223 @@ The following is stuff to ignore for (La)TeX, taken from
 [[gh-gitignore-tex][=github/gitignore=]].
 
 #+BEGIN_SRC sh
-  ## Core latex/pdflatex auxiliary files:
-  ,*.aux
-  ,*.lof
-  ,*.log
-  ,*.lot
-  ,*.fls
-  ,*.out
-  ,*.toc
-  ,*.fmt
-  ,*.fot
-  ,*.cb
-  ,*.cb2
+## Core latex/pdflatex auxiliary files:
+,*.aux
+,*.lof
+,*.log
+,*.lot
+,*.fls
+,*.out
+,*.toc
+,*.fmt
+,*.fot
+,*.cb
+,*.cb2
 
-  ## Intermediate documents:
-  ,*.dvi
-  ,*-converted-to.*
-  # these rules might exclude image files for figures etc.
-  # *.ps
-  # *.eps
-  # *.pdf
+## Intermediate documents:
+,*.dvi
+,*-converted-to.*
+# these rules might exclude image files for figures etc.
+# *.ps
+# *.eps
+# *.pdf
 
-  ## Generated if empty string is given at "Please type another file name for output:"
-  .pdf
+## Generated if empty string is given at "Please type another file name for output:"
+.pdf
 
-  ## Bibliography auxiliary files (bibtex/biblatex/biber):
-  ,*.bbl
-  ,*.bcf
-  ,*.blg
-  ,*-blx.aux
-  ,*-blx.bib
-  ,*.brf
-  ,*.run.xml
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+,*.bbl
+,*.bcf
+,*.blg
+,*-blx.aux
+,*-blx.bib
+,*.brf
+,*.run.xml
 
-  ## Build tool auxiliary files:
-  ,*.fdb_latexmk
-  ,*.synctex
-  ,*.synctex(busy)
-  ,*.synctex.gz
-  ,*.synctex.gz(busy)
-  ,*.pdfsync
+## Build tool auxiliary files:
+,*.fdb_latexmk
+,*.synctex
+,*.synctex(busy)
+,*.synctex.gz
+,*.synctex.gz(busy)
+,*.pdfsync
 
-  ## Auxiliary and intermediate files from other packages:
-  # algorithms
-  ,*.alg
-  ,*.loa
+## Auxiliary and intermediate files from other packages:
+# algorithms
+,*.alg
+,*.loa
 
-  # achemso
-  acs-*.bib
+# achemso
+acs-*.bib
 
-  # amsthm
-  ,*.thm
+# amsthm
+,*.thm
 
-  # beamer
-  ,*.nav
-  ,*.snm
-  ,*.vrb
+# beamer
+,*.nav
+,*.snm
+,*.vrb
 
-  # changes
-  ,*.soc
+# changes
+,*.soc
 
-  # cprotect
-  ,*.cpt
+# cprotect
+,*.cpt
 
-  # elsarticle
-  ,*.spl
+# elsarticle
+,*.spl
 
-  # endnotes
-  ,*.ent
+# endnotes
+,*.ent
 
-  # fixme
-  ,*.lox
+# fixme
+,*.lox
 
-  # feynmf/feynmp
-  ,*.mf
-  ,*.mp
-  ,*.t[1-9]
-  ,*.t[1-9][0-9]
-  ,*.tfm
+# feynmf/feynmp
+,*.mf
+,*.mp
+,*.t[1-9]
+,*.t[1-9][0-9]
+,*.tfm
 
-  #(r)(e)ledmac/(r)(e)ledpar
-  ,*.end
-  ,*.?end
-  ,*.[1-9]
-  ,*.[1-9][0-9]
-  ,*.[1-9][0-9][0-9]
-  ,*.[1-9]R
-  ,*.[1-9][0-9]R
-  ,*.[1-9][0-9][0-9]R
-  ,*.eledsec[1-9]
-  ,*.eledsec[1-9]R
-  ,*.eledsec[1-9][0-9]
-  ,*.eledsec[1-9][0-9]R
-  ,*.eledsec[1-9][0-9][0-9]
-  ,*.eledsec[1-9][0-9][0-9]R
+#(r)(e)ledmac/(r)(e)ledpar
+,*.end
+,*.?end
+,*.[1-9]
+,*.[1-9][0-9]
+,*.[1-9][0-9][0-9]
+,*.[1-9]R
+,*.[1-9][0-9]R
+,*.[1-9][0-9][0-9]R
+,*.eledsec[1-9]
+,*.eledsec[1-9]R
+,*.eledsec[1-9][0-9]
+,*.eledsec[1-9][0-9]R
+,*.eledsec[1-9][0-9][0-9]
+,*.eledsec[1-9][0-9][0-9]R
 
-  # glossaries
-  ,*.acn
-  ,*.acr
-  ,*.glg
-  ,*.glo
-  ,*.gls
-  ,*.glsdefs
+# glossaries
+,*.acn
+,*.acr
+,*.glg
+,*.glo
+,*.gls
+,*.glsdefs
 
-  # gnuplottex
-  ,*-gnuplottex-*
+# gnuplottex
+,*-gnuplottex-*
 
-  # gregoriotex
-  ,*.gaux
-  ,*.gtex
+# gregoriotex
+,*.gaux
+,*.gtex
 
-  # hyperref
-  ,*.brf
+# hyperref
+,*.brf
 
-  # knitr
-  ,*-concordance.tex
-  # TODO Comment the next line if you want to keep your tikz graphics files
-  ,*.tikz
-  ,*-tikzDictionary
+# knitr
+,*-concordance.tex
+# TODO Comment the next line if you want to keep your tikz graphics files
+,*.tikz
+,*-tikzDictionary
 
-  # listings
-  ,*.lol
+# listings
+,*.lol
 
-  # makeidx
-  ,*.idx
-  ,*.ilg
-  ,*.ind
-  ,*.ist
+# makeidx
+,*.idx
+,*.ilg
+,*.ind
+,*.ist
 
-  # minitoc
-  ,*.maf
-  ,*.mlf
-  ,*.mlt
-  ,*.mtc[0-9]*
-  ,*.slf[0-9]*
-  ,*.slt[0-9]*
-  ,*.stc[0-9]*
+# minitoc
+,*.maf
+,*.mlf
+,*.mlt
+,*.mtc[0-9]*
+,*.slf[0-9]*
+,*.slt[0-9]*
+,*.stc[0-9]*
 
-  # minted
-  _minted*
-  ,*.pyg
+# minted
+_minted*
+,*.pyg
 
-  # morewrites
-  ,*.mw
+# morewrites
+,*.mw
 
-  # nomencl
-  ,*.nlo
+# nomencl
+,*.nlo
 
-  # pax
-  ,*.pax
+# pax
+,*.pax
 
-  # pdfpcnotes
-  ,*.pdfpc
+# pdfpcnotes
+,*.pdfpc
 
-  # sagetex
-  ,*.sagetex.sage
-  ,*.sagetex.py
-  ,*.sagetex.scmd
+# sagetex
+,*.sagetex.sage
+,*.sagetex.py
+,*.sagetex.scmd
 
-  # scrwfile
-  ,*.wrt
+# scrwfile
+,*.wrt
 
-  # sympy
-  ,*.sout
-  ,*.sympy
-  sympy-plots-for-*.tex/
+# sympy
+,*.sout
+,*.sympy
+sympy-plots-for-*.tex/
 
-  # pdfcomment
-  ,*.upa
-  ,*.upb
+# pdfcomment
+,*.upa
+,*.upb
 
-  # pythontex
-  ,*.pytxcode
-  pythontex-files-*/
+# pythontex
+,*.pytxcode
+pythontex-files-*/
 
-  # thmtools
-  ,*.loe
+# thmtools
+,*.loe
 
-  # TikZ & PGF
-  ,*.dpth
-  ,*.md5
-  ,*.auxlock
+# TikZ & PGF
+,*.dpth
+,*.md5
+,*.auxlock
 
-  # todonotes
-  ,*.tdo
+# todonotes
+,*.tdo
 
-  # easy-todo
-  ,*.lod
+# easy-todo
+,*.lod
 
-  # xindy
-  ,*.xdy
+# xindy
+,*.xdy
 
-  # xypic precompiled matrices
-  ,*.xyc
+# xypic precompiled matrices
+,*.xyc
 
-  # endfloat
-  ,*.ttt
-  ,*.fff
+# endfloat
+,*.ttt
+,*.fff
 
-  # Latexian
-  TSWLatexianTemp*
+# Latexian
+TSWLatexianTemp*
 
-  ## Editors:
-  # WinEdt
-  ,*.bak
-  ,*.sav
+## Editors:
+# WinEdt
+,*.bak
+,*.sav
 
-  # Texpad
-  .texpadtmp
+# Texpad
+.texpadtmp
 
-  # Kile
-  ,*.backup
+# Kile
+,*.backup
 
-  # KBibTeX
-  ,*~[0-9]*
+# KBibTeX
+,*~[0-9]*
 
-  # auto folder when using emacs and auctex
-  /auto/*
+# auto folder when using emacs and auctex
+/auto/*
 #+END_SRC
 
 ****** Python
@@ -1442,104 +1442,104 @@ The following is stuff to ignore for Python, taken from
 [[gh-gitignore-python][=github/gitignore=]].
 
 #+BEGIN_SRC sh
-  # Byte-compiled / optimized / DLL files
-  __pycache__/
-  ,*.py[cod]
-  ,*$py.class
+# Byte-compiled / optimized / DLL files
+__pycache__/
+,*.py[cod]
+,*$py.class
 
-  # C extensions
-  ,*.so
+# C extensions
+,*.so
 
-  # Distribution / packaging
-  .Python
-  build/
-  develop-eggs/
-  dist/
-  downloads/
-  eggs/
-  .eggs/
-  lib/
-  lib64/
-  parts/
-  sdist/
-  var/
-  wheels/
-  ,*.egg-info/
-  .installed.cfg
-  ,*.egg
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+,*.egg-info/
+.installed.cfg
+,*.egg
 
-  # PyInstaller
-  #  Usually these files are written by a python script from a template
-  #  before PyInstaller builds the exe, so as to inject date/other infos into it.
-  ,*.manifest
-  ,*.spec
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+,*.manifest
+,*.spec
 
-  # Installer logs
-  pip-log.txt
-  pip-delete-this-directory.txt
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-  # Unit test / coverage reports
-  htmlcov/
-  .tox/
-  .coverage
-  .coverage.*
-  .cache
-  nosetests.xml
-  coverage.xml
-  ,*.cover
-  .hypothesis/
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+,*.cover
+.hypothesis/
 
-  # Translations
-  ,*.mo
-  ,*.pot
+# Translations
+,*.mo
+,*.pot
 
-  # Django stuff:
-  ,*.log
-  local_settings.py
+# Django stuff:
+,*.log
+local_settings.py
 
-  # Flask stuff:
-  instance/
-  .webassets-cache
+# Flask stuff:
+instance/
+.webassets-cache
 
-  # Scrapy stuff:
-  .scrapy
+# Scrapy stuff:
+.scrapy
 
-  # Sphinx documentation
-  docs/_build/
+# Sphinx documentation
+docs/_build/
 
-  # PyBuilder
-  target/
+# PyBuilder
+target/
 
-  # Jupyter Notebook
-  .ipynb_checkpoints
+# Jupyter Notebook
+.ipynb_checkpoints
 
-  # pyenv
-  .python-version
+# pyenv
+.python-version
 
-  # celery beat schedule file
-  celerybeat-schedule
+# celery beat schedule file
+celerybeat-schedule
 
-  # SageMath parsed files
-  ,*.sage.py
+# SageMath parsed files
+,*.sage.py
 
-  # virtualenv
-  .env
-  .venv/
-  venv/
-  ENV/
+# virtualenv
+.env
+.venv/
+venv/
+ENV/
 
-  # Spyder project settings
-  .spyderproject
-  .spyproject
+# Spyder project settings
+.spyderproject
+.spyproject
 
-  # Rope project settings
-  .ropeproject
+# Rope project settings
+.ropeproject
 
-  # mkdocs documentation
-  /site
+# mkdocs documentation
+/site
 
-  # mypy
-  .mypy_cache/
+# mypy
+.mypy_cache/
 #+END_SRC
 
 ****** R
@@ -1547,39 +1547,39 @@ The following is stuff to ignore for Python, taken from
 The following is stuff to ignore for R, taken from [[gh-gitignore-r][=github/gitignore=]].
 
 #+BEGIN_SRC sh
-  # History files
-  .Rhistory
-  .Rapp.history
+# History files
+.Rhistory
+.Rapp.history
 
-  # Session Data files
-  .RData
+# Session Data files
+.RData
 
-  # Example code in package build process
-  ,*-Ex.R
+# Example code in package build process
+,*-Ex.R
 
-  # Output files from R CMD build
-  /*.tar.gz
+# Output files from R CMD build
+/*.tar.gz
 
-  # Output files from R CMD check
-  /*.Rcheck/
+# Output files from R CMD check
+/*.Rcheck/
 
-  # RStudio files
-  .Rproj.user/
+# RStudio files
+.Rproj.user/
 
-  # produced vignettes
-  vignettes/*.html
-  vignettes/*.pdf
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
 
-  # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
-  .httr-oauth
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
 
-  # knitr and R markdown default cache directories
-  /*_cache/
-  /cache/
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/
 
-  # Temporary files created by R markdown
-  ,*.utf8.md
-  ,*.knit.md
+# Temporary files created by R markdown
+,*.utf8.md
+,*.knit.md
 #+END_SRC
 
 ****** Symlink into place
@@ -1588,7 +1588,7 @@ Finally, the =gitignore_global= file needs to be symlinked into the
 proper location.
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  ln -sf "${HOME}/config-files/git/gitignore_global" "${HOME}/.gitignore_global"
+ln -sf "${HOME}/config-files/git/gitignore_global" "${HOME}/.gitignore_global"
 #+END_SRC
 
 ***** =~/.gitattributes_global=
@@ -1600,15 +1600,15 @@ This sets attribtues globally for Word documents so that I can diff Word
 documents using the =pandoc= driver. See the [[git-config-diff][=diff= section above]].
 
 #+BEGIN_SRC sh
-  ,*.docx diff=pandoc
-  ,*.doc  diff=pandoc
+,*.docx diff=pandoc
+,*.doc  diff=pandoc
 #+END_SRC
 
 Finally, the =gitattributes_global= file needs to be symlinked into the
 proper location.
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  ln -sf "${HOME}/config-files/git/gitattributes_global" "${HOME}/.gitattributes_global"
+ln -sf "${HOME}/config-files/git/gitattributes_global" "${HOME}/.gitattributes_global"
 #+END_SRC
 
 *** gpg
@@ -1621,11 +1621,11 @@ proper location.
      :END:
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == macOS ]]; then
-      brew install htop
-  elif [[ $BASH_OS_TYPE == Linux ]]; then
-      sudo apt-get install -y htop
-  fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install htop
+elif [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y htop
+fi
 #+END_SRC
 
 **** Configuration
@@ -1638,7 +1638,7 @@ I don't have any special configuration for =htop=. If I did, it would go
 in =$HOME/.config/htop/htoprc=:
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  #ln -sf "${HOME}/config-files/htop/htoprc" "${HOME}/.config/htop/htoprc"
+#ln -sf "${HOME}/config-files/htop/htoprc" "${HOME}/.config/htop/htoprc"
 #+END_SRC
 
 *** hub
@@ -1651,11 +1651,11 @@ in =$HOME/.config/htop/htoprc=:
      :END:
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == macOS ]]; then
-      brew install pandoc
-  elif [[ $BASH_OS_TYPE == Linux ]]; then
-      sudo apt-get install -y pandoc
-  fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install pandoc
+elif [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y pandoc
+fi
 #+END_SRC
 
 **** Configuration
@@ -1671,10 +1671,10 @@ This is for viewing PDFs in Emacs buffers.
 **** Installation
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == macOS ]]; then
-      brew tap dunn/emacs
-      brew install pdf-tools
-  fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew tap dunn/emacs
+    brew install pdf-tools
+fi
 #+END_SRC
 
 **** Configuration
@@ -1700,11 +1700,11 @@ my SSH config and then symlink it into the appropriate location.
 
 #+NAME: ssh-config
 #+BEGIN_SRC emacs-lisp
-  (org-babel-tangle-file "~/config-files/ssh/README.org")
+(org-babel-tangle-file "~/config-files/ssh/README.org")
 #+END_SRC
 
 #+BEGIN_SRC sh
-  ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
+ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
 #+END_SRC
 
 *** tmux
@@ -1717,11 +1717,11 @@ my SSH config and then symlink it into the appropriate location.
 Install =tmux=:
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == macOS ]]; then
-      brew install tmux
-  elif [[ $BASH_OS_TYPE == Linux ]]; then
-      sudo apt-get install -y tmux
-  fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install tmux
+elif [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y tmux
+fi
 #+END_SRC
 
 On Ubuntu, when installing with =apt-get=, the bash completion script is
@@ -1730,15 +1730,14 @@ instead of installed in the standard bash completion directory of
 =/etc/bash_completion.d/=. So, let's symlink it there:
 
 #+BEGIN_SRC sh
-  if [[ BASH_OS_TYPE == Linux ]]; then
-      if [ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]; then
-          echo "Symlinking tmux bash completion into place ..."
-          ln -sf "/usr/share/doc/tmux/examples/bash_completion_tmux.sh" "/etc/bash_completion.d/tmux"
-      else
-          echo "Could not find tmux bash completion file ..."
-      fi
-  fi
-
+if [[ BASH_OS_TYPE == Linux ]]; then
+    if [ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]; then
+        echo "Symlinking tmux bash completion into place ..."
+        ln -sf "/usr/share/doc/tmux/examples/bash_completion_tmux.sh" "/etc/bash_completion.d/tmux"
+    else
+        echo "Could not find tmux bash completion file ..."
+    fi
+fi
 #+END_SRC
 
 **** Configuration
@@ -1750,21 +1749,21 @@ To ensure that colors work properly, I've followed the suggestion in
 [[https://stackoverflow.com/a/22481496/2571049][this answer]] on Stack Overflow.
 
 #+BEGIN_SRC sh
-  # -*- coding: utf-8; mode: conf; fill-column: 72 -*-
-  set-option -g default-terminal "xterm-256color"
+# -*- coding: utf-8; mode: conf; fill-column: 72 -*-
+set-option -g default-terminal "xterm-256color"
 #+END_SRC
 
 The following ensures that the macOS pasteboard is available in =tmux=
 sessions. See [[tmux-macos-pasteboard][the Github repository]] for more information.
 
 #+BEGIN_SRC sh :tangle (when (eq system-type 'darwin) "~/config-files/tmux/tmux.conf")
-  set-option -g default-command "reattach-to-user-namespace -l $SHELL"
+set-option -g default-command "reattach-to-user-namespace -l $SHELL"
 #+END_SRC
 
 The following allows the =tmux= configuration file to be reloaded.
 
 #+BEGIN_SRC sh
-  bind-key r source-file ~/.tmux.conf
+bind-key r source-file ~/.tmux.conf
 #+END_SRC
 
 The following are some key bindings for opening new SSH sessions in
@@ -1772,45 +1771,45 @@ either a new windows, a vertically split window, or a horizontally split
 window.
 
 #+BEGIN_SRC sh
-  bind-key S   command-prompt -p "host" "new-window -n %1 'ssh %1'"
-  bind-key C-S command-prompt -p "host" "split-window -v 'ssh %1'"
-  bind-key M-S command-prompt -p "host" "split-window -h 'ssh %1'"
+bind-key S   command-prompt -p "host" "new-window -n %1 'ssh %1'"
+bind-key C-S command-prompt -p "host" "split-window -v 'ssh %1'"
+bind-key M-S command-prompt -p "host" "split-window -h 'ssh %1'"
 #+END_SRC
 
 The following are some key bindings for opening Emacs in either a new
 window, a vertically split window, or a horizontally split window.
 
 #+BEGIN_SRC sh
-  bind-key y   new-window -n "emacs"  "emacsclient -nw"
-  bind-key C-y split-window -v "emacsclient -nw"
-  bind-key M-y split-window -h "emacsclient -nw"
+bind-key y   new-window -n "emacs"  "emacsclient -nw"
+bind-key C-y split-window -v "emacsclient -nw"
+bind-key M-y split-window -h "emacsclient -nw"
 #+END_SRC
 
 The following defines some more intuitive key bindings for splitting a
 window and undefines the default key bindings for this.
 
 #+BEGIN_SRC sh
-  bind-key | split-window -h
-  bind-key - split-window -v
-  unbind '"'
-  unbind %
+bind-key | split-window -h
+bind-key - split-window -v
+unbind '"'
+unbind %
 #+END_SRC
 
 The following allows for switching between =tmux= panes using just
 M-<arrow>, without the =tmux= prefix key.
 
 #+BEGIN_SRC sh
-  bind-key -n M-Left select-pane -L
-  bind-key -n M-Right select-pane -R
-  bind-key -n M-Up select-pane -U
-  bind-key -n M-Down select-pane -D
+bind-key -n M-Left select-pane -L
+bind-key -n M-Right select-pane -R
+bind-key -n M-Up select-pane -U
+bind-key -n M-Down select-pane -D
 #+END_SRC
 
 And, finally, the following symlinks the configuration file into the
 appropriate location.
 
 #+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-  ln -sf "${HOME}/config-files/tmux/tmux.conf" "${HOME}/.tmux.conf"
+ln -sf "${HOME}/config-files/tmux/tmux.conf" "${HOME}/.tmux.conf"
 #+END_SRC
 
 *** tree
@@ -1827,9 +1826,9 @@ This should be installed when =password-store= is installed.
 ~wget~ is installed by default on Linux but not on macOS:
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == Linux ]]; then
-      sudo apt-get install -y wget
-  fi
+if [[ $BASH_OS_TYPE == Linux ]]; then
+    sudo apt-get install -y wget
+fi
 #+END_SRC
 
 *** xclip
@@ -1847,9 +1846,9 @@ on macOS. See the [[tmux-macos-pasteboard][GitHub repository for more info]].
      :END:
 
 #+BEGIN_SRC sh
-  if [[ $BASH_OS_TYPE == macOS ]]; then
-      brew install reattach-to-user-namespace
-  fi
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    brew install reattach-to-user-namespace
+fi
 #+END_SRC
 
 ** Linux only
@@ -1895,8 +1894,8 @@ whose value I've set to =~/org= in my =init.el= file. The submodule
 lives on my private git repository so as to keep these files private.
 
 #+BEGIN_SRC sh
-  rm -rf "${HOME}/org"
-  ln -sn "${HOME}/config-files/org" "${HOME}/org"
+rm -rf "${HOME}/org"
+ln -sn "${HOME}/config-files/org" "${HOME}/org"
 #+END_SRC
 
 *** Firefox
