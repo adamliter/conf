@@ -1,4 +1,6 @@
-# -*- coding: utf-8; mode: conf; fill-column: 72; -*-
+# -*- mode: gitconfig; coding: utf-8 -*-
+[init]
+    defaultBranch = main
 [user]
     name = Adam Liter
     email = io@adamliter.org

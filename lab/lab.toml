@@ -1,0 +1,5 @@
+# -*- mode: conf-toml; coding: utf-8; -*-
+[core]
+  host = "https://gitlab.com"
+  load_token = # TODO: set up load_token with pass
+  user = "adam.liter"

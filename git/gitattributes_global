@@ -1,2 +1,3 @@
+# -*- mode: gitattributes; coding: utf-8 -*-
 *.docx diff=pandoc
 *.doc  diff=pandoc

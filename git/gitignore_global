@@ -1,4 +1,4 @@
-# -*- coding: utf-8; fill-column: 72; mode: conf; -*-
+# -*- mode: gitignore; coding: utf-8 -*-
 *.DS_Store
 .AppleDouble
 .LSOverride

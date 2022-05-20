@@ -1,45 +1,44 @@
+# -*- mode: org; coding: utf-8; fill-column: 72; -*-
 #+TITLE: Adam Liter's computer configuration
 #+AUTHOR: Adam Liter
 #+EMAIL: io@adamliter.org
 
 #+LANGUAGE: en
-
-This =org= file documents how to bootstrap the setup of a new machine
-such that it is configured just like all of my other computers/servers.
-
 #+TOC: headlines 1
+#+STARTUP: fold
 
 * New machine setup
 
 ** SSH
-   :PROPERTIES:
-   :header-args:sh: :eval no
-   :END:
+:PROPERTIES:
+:header-args:sh: :eval no
+:header-args:conf-space: :eval no
+:END:
 
 The first thing that must be done in order to set up a new machine is to
-configure SSH and create a key. This allows for cloning of [[config-files][the =git=
+configure SSH and create a key. This allows for cloning of [[conf][the =git=
 repo that contains my configuration files]], which is hosted on GitHub.
 
 First, create the SSH directory:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
-#+END_SRC
+#+end_src
 
 Optionally, I can also set up an =authorized_keys= file, which is useful
 if the new machine is intended to be used as a server in any capacity.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 touch ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
-#+END_SRC
+#+end_src
 
 Next, I need to actually create a new SSH key, which can be done with:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 ssh-keygen -t rsa -b 4096 -C "COMMENT GOES HERE"
-#+END_SRC
+#+end_src
 
 Then, I can set up a basic SSH configuration file to ensure that the key
 that I just generated is used when trying to connect to GitHub as well
@@ -49,72 +48,56 @@ overwritten later in this new machine configuration process.)
 
 This allows repositories to be cloned in either of the following manners:
 
-1. ~git clone ssh://github/adamliter/config-files.git~
-2. ~git clone github:adamliter/config-files.git~
+1. ~git clone ssh://github/adamliter/conf.git~
+2. ~git clone github:adamliter/conf.git~
 
-#+BEGIN_SRC sh
+#+begin_src conf-space
 cat > ~/.ssh/config <<EOF
 Host github
   Hostname github.com
   IdentityFile ~/.ssh/id_rsa
   User git
 
-Host algit
+Host git-adamliter
   Hostname git.adamliter.org
   IdentityFile ~/.ssh/id_rsa
   User git
-
-# Local Variables:
-# mode: conf
-# coding: utf-8
-# fill-column: 72
-# indent-tabs-mode: nil
-# End:
 EOF
 chmod 600 ~/.ssh/config
-#+END_SRC
+#+end_src
 
 Finally, the public key needs to be added to GitHub and to
-~/home/git/.ssh/authorized_keys~ on the machine ~git.adamliter.org~.
+~/home/git/.ssh/authorized_keys~ on the machine ~git.adamliter.org~. (It
+will also eventually need to be added to GitLab and Bitbucket.)
 
 ** Bootstrapping
-   :PROPERTIES:
-   :header-args:sh: :eval no
-   :END:
+:PROPERTIES:
+:header-args:sh: :eval no
+:END:
 
 To bootstrap the setup of a new machine, use the =bootstrap.sh= script,
-described [[bootstrap-script-explanation][below]].
+described [[bootstrap-script-explanation][below]]. It can be downloaded from GitHub with either ~curl~ or
+~wget~:
 
-*** macOS
+With ~curl~:
 
-To bootstrap the setup of a new Mac machine, do:
+#+begin_src sh
+curl -fsSL https://raw.githubusercontent.com/adamliter/conf/master/bootstrap.sh | bash -v
+#+end_src
 
-#+BEGIN_SRC sh
-curl -fsSL https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
-#+END_SRC
+With ~wget~:
 
-*** Linux
+#+begin_src sh
+wget -O- https://raw.githubusercontent.com/adamliter/conf/master/bootstrap.sh | bash -v
+#+end_src
 
-~curl~ is not installed on Ubuntu by default, but ~wget~ is. To
-bootstrap the setup of a new Linux machine, do:
+*** =bootstrap.sh=
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-#+BEGIN_SRC sh
-wget -O- https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh | bash -v
-#+END_SRC
-
-*** Windows
-
-Meh ... Maybe someday ...
-
-** <<bootstrap-script-explanation>> =bootstrap.sh=
-   :PROPERTIES:
-   :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-   :END:
-
-There is a [[https://raw.githubusercontent.com/adamliter/config-files/master/bootstrap.sh][bootstrap script]] for getting an up-to-date package manager,
-Emacs, and =git= for both macOS and Linux (only tested on Ubuntu and
-(currently) only intended for Debian-based systems because of the
-assumption that =apt= is the package manager).
+This section defines a [[https://raw.githubusercontent.com/adamliter/conf/master/bootstrap.sh][bootstrap script]] for installing Homebrew, Emacs,
+Doom Emacs, and a variety of other things.
 
 That script is written to this repository when this file is tangled. The
 output of the tangling is not ignored by version control even though it
@@ -125,7 +108,7 @@ machine.
 The first thing the script does is set some flags for exiting and
 debugging:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 # -*- coding: utf-8; mode: sh; -*-
 # Exit when a command fails
 set -o errexit
@@ -135,75 +118,102 @@ set -o pipefail
 set -o nounset
 # Trace what gets executed (for debugging)
 #set -o xtrace
-#+END_SRC
+#+end_src
 
 Let's run the rest of the script from the home directory:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 cd "${HOME}"
-#+END_SRC
+#+end_src
 
-Next, let's have the script detect the operating system.
+# TODO: prevent this script from running if ~/conf exists and either
+# the working tree is not clean in the repository itself or any of its
+# submodules or there are any references that aren't tracked in the
+# remote version of the repository
 
-#+BEGIN_SRC sh
+Next, let's have the script detect the operating system, including
+whether it's a Mac with an Intel chip or an Apple silicon chip.
+
+#+begin_src sh
 if [[ $OSTYPE == darwin* ]]; then
     BASH_OS_TYPE='macOS'
 elif [[ $OSTYPE == linux-gnu ]]; then
     BASH_OS_TYPE='Linux'
+    echo "This bootstrapping script does not currently support Linux ..."
+    exit 1
 elif [[ '$OS' == Windows* ]]; then
     BASH_OS_TYPE='Windows'
+    echo "This bootstrapping script does not currently support Windows ..."
+    exit 1
 else
     BASH_OS_TYPE='Unknown'
+    echo "Unknown operating system ..."
+    exit 1
 fi
-#+END_SRC
 
-Then, based on the OS, it installs and/or updates the package manager.
-Using the package manager, it also installs both Emacs and =git=, which
-will allow for programatically setting up the rest of my configuration.
+if [[ $BASH_OS_TYPE == 'macOS' ]]; then
+    if [[ $(uname -m) == arm* ]]; then
+        MAC_OS_TYPE='apple-silicon'
+    elif [[ $(uname -m) == x86_64 ]]; then
+        MAC_OS_TYPE='intel'
+    else
+        MAC_OS_TYPE='Unknown'
+    fi
+fi
+#+end_src
 
-#+BEGIN_SRC sh
+**** Homebrew
+
+Let's install Homebrew as a package manager.
+
+#+begin_src sh
 if [[ $BASH_OS_TYPE == macOS ]]; then
     if type brew >/dev/null 2>&1; then
         echo "Homebrew is already installed ..."
     else
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        echo "Installing Homebrew ..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo "Homebrew was successfully installed ..."
+        if [[ $MAC_OS_TYPE == 'apple-silicon' ]]; then
+            echo "Temporarily adding Homebrew to PATH for Apple Silicon Mac ..."
+            eval $(/opt/homebrew/bin/brew shellenv)
+        fi
+        echo "Tapping ralwaycat/emacsport ..."
+        brew tap railwaycat/emacsmacport
     fi
-    brew update && brew upgrade
-    brew tap caskroom/cask
-    brew cask install emacs
-    brew install git
-elif [[ $BASH_OS_TYPE == Linux ]]; then
-    sudo apt-get update -y && sudo apt-get upgrade -y
-    sudo apt-get install -y emacs
-    sudo apt-get install -y git
 fi
-#+END_SRC
+#+end_src
 
-Next, the script clones [[config-files][the repository that contains my configuration
-files]] into =${HOME}/config-files=. If that file already exists, the
-~git clone~ command will fail, so I remove it first just to be cautious,
-but this should be unnecessary if this is a new machine.
+**** =${HOME}/conf=
 
-In the case that this is not a new machine, the command ~rm -rf
-"${HOME}/config-files"~ will remove the file =~/.ssh/config=, since that
-file is a symlink that points inside of the =git= repository. This will
-cause the =bootstrap.sh= script to fail since the submodules in the
-repository make use of the SSH hosts defined in the SSH config
-file. Thus, in order to ensure that this =bootstrap.sh= script can also
-be run on a machine that is already setup (to, for example, reset how
-everything is configured or apply new changes), we want to ensure that
-those SSH hosts still exist when this script tries to clone the repo and
-its submodules.
+Next, the script clones [[https://github.com/adamliter/conf][the repository that contains my configuration
+files]] into =${HOME}/conf=. If that directory already exists, the ~git
+clone~ command will fail, so I remove it first just to be cautious, but
+this should be unnecessary if this is a new machine.
 
-#+BEGIN_SRC sh
+If this is not a new machine, the command ~rm -rf "${HOME}/conf"~ will
+remove the file =~/.ssh/config=, since that file is a symlink that
+points inside of the =git= repository. This will cause the
+=bootstrap.sh= script to fail since the submodules in the repository
+make use of the SSH hosts defined in the SSH config file. Thus, in order
+to ensure that this =bootstrap.sh= script can also be run on a machine
+that is already setup (to, for example, reset how everything is
+configured or apply new changes), we want to ensure that those SSH hosts
+still exist when this script tries to clone the repo and its submodules.
+
+#+begin_src sh
 if [ -f "${HOME}/.ssh/config" ]; then
     cp -H "${HOME}/.ssh/config" "${HOME}/.ssh/config.temp"
     rm "${HOME}/.ssh/config"
     mv "${HOME}/.ssh/config.temp" "${HOME}/.ssh/config"
 fi
-rm -rf "${HOME}/config-files"
-git clone github:adamliter/config-files.git "${HOME}/config-files"
-#+END_SRC
+if [ -d "${HOME}/conf" ]; then
+    echo "~/conf already exists; backing it up to ~/conf.bkp ..."
+    cp -r "${HOME}/conf" "${HOME}/conf.bkp"
+fi
+rm -rf "${HOME}/conf"
+git clone github:adamliter/conf.git "${HOME}/conf"
+#+end_src
 
 After cloning, it updates all submodules. Submodules, as always, are a
 bit tricky. ~git submodule update --init --recursive~ will recursively
@@ -213,51 +223,112 @@ on the remote will be fast-forwarded to the most recent commit on that
 branch on the remote, regardless of the status of the submodule in the
 parent repo. Furthermore, since [[https://stackoverflow.com/a/20797186/2571049][submodules are always checked out in a
 detached HEAD state]], the script also checks out either the branch that
-the submodule is set up to track on the remote or the master branch for
+the submodule is set up to track on the remote or the =main= branch for
 all submodules.
 
-#+BEGIN_SRC sh
-cd "${HOME}/config-files"
+#+begin_src sh
+cd "${HOME}/conf"
 git submodule update --init --remote --recursive
 
 git submodule foreach --recursive \
   'git checkout \
   $(git config -f $toplevel/.gitmodules submodule.$name.branch || \
-  echo master)'
-#+END_SRC
+  echo main)'
 
-After all the futzing around with submodules, it symlinks some things
-into place.
+cd "${HOME}"
+#+end_src
 
-#+BEGIN_SRC sh
-rm -rf "${HOME}/.emacs.d"
-ln -sn "${HOME}/config-files/emacs.d" "${HOME}/.emacs.d"
-#+END_SRC
+**** XCode command line tools
 
-Next, the script evaluates my =init.el= file in order to bootstrap the
-installation of all of the Emacs packages that I use. The ~--batch~
-option to ~emacs~ prevents Emacs from being opened as en
-editor. Instead, it just evaluates the file specified by ~--load~.
+#+begin_src sh
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    if xcode-select -p >/dev/null 2>&1; then
+        echo "XCode command line tools are already installed ..."
+    else
+        echo "Installing XCode command line tools ..."
+        xcode-select --install
+    fi
+fi
+#+end_src
 
-#+BEGIN_SRC sh
-emacs --batch --load="${HOME}/.emacs.d/init.el"
-#+END_SRC
+**** Emacs
 
-Finally, the script evaluates all source code blocks in the file
-=${HOME}/config-files/README.org= where ~:eval yes~ as well as tangling
-the file in order to put all other configuration information in the
-proper locations.
+#+begin_src sh
+if [[ $BASH_OS_TYPE == macOS ]]; then
+    if ([[ $MAC_OS_TYPE == 'apple-silicon' ]] && [ -f /opt/homebrew/bin/emacs ]) \
+        || ([[ $MAC_OS_TYPE == 'intel' ]] && [ -f /usr/local/bin/emacs ]); then
+       echo "Emacs was already installed with Homebrew ..."
+    else
+        echo "Installing Emacs ..."
+        brew install emacs-mac  --with-emacs-big-sur-icon --with-imagemagick \
+            --with-natural-title-bar --with-native-comp
+    fi
+fi
+#+end_src
 
-#+BEGIN_SRC sh
+**** Doom Emacs
+
+First, let's symlink =.doom.d= into place:
+
+#+begin_src sh
+rm -rf "${HOME}/.doom.d"
+ln -sn "${HOME}/conf/doom.d" "${HOME}/.doom.d"
+#+end_src
+
+Next, let's install the dependencies for Doom Emacs:
+
+#+begin_src sh
+if ~/.emacs.d/bin/doom >/dev/null 2>&1; then
+    echo "Doom Emacs is arleady installed ..."
+else
+    echo "Installing dependencies for Doom Emacs ..."
+    if [[ $BASH_OS_TYPE == macOS ]]; then
+        brew install git ripgrep
+    fi
+    echo "Installing optional dependencies for Doom Emacs ..."
+    if [[ $BASH_OS_TYPE == macOS ]]; then
+        brew install coreutils fd
+    fi
+    echo "Cloning the doomemacs repository ..."
+    git clone https://github.com/doomemacs/doomemacs ~/.emacs.d
+    echo "Installing Doom Emacs ..."
+    ~/.emacs.d/bin/doom install
+fi
+#+end_src
+
+**** Tangle away
+
+Next, the script evaluates all source code blocks in the file
+=${HOME}/conf/README.org= where ~:eval yes~ as well as tangling the file
+in order to put all other configuration information in the proper
+locations.
+
+#+begin_src sh
 emacs --batch \
   --eval="(progn
   (require 'org)
   (setq org-confirm-babel-evaluate nil)
-  (find-file \"~/config-files/README.org\")
+  (find-file \"~/conf/README.org\")
   (org-babel-tangle)
   (org-babel-execute-buffer)
   (kill-buffer))"
-#+END_SRC
+
+#+end_src
+
+**** Symlinks
+
+Finally, the script sources a separate =symlink.sh= which symlinks most
+things into place (the exceptions are that =bootstrap.sh= does the
+symlinking for the submodules of this repository). The symlinking is
+separated out into its own script so that I can just run the
+=symlink.sh= script on a Linux machine where I don't want to install
+anything, but I do want, for example, my Bash configuration set up in
+the same way that it is set up on my personal machine. The use case for
+this is on the [[https://wiki.glassdoor.com/display/EB/New+Machine+Learning+Nodes][Machine Learning Nodes]].
+
+#+begin_src sh
+. "${HOME}/conf/symlink.sh"
+#+end_src
 
 * Command line utilities
 
@@ -270,50 +341,60 @@ locations. Doing so allows me to more readily notice any external
 programs or utilities that change my configuration files, as it will
 lead to a dirty working tree in =git=.
 
-** All OSes
+** bash
 
-*** bash
-
-**** Installation
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
 The version of bash that ships on macOS is pretty outdated, so let's
 install a more recent version via Homebrew. In order to use this newer
 version of bash as the login shell, it needs to be added to the file
-=/etc/shells=. Then, the shell can be changed to =/usr/local/bin/bash=
+=/etc/shells=. Then, the shell can be changed to the new bash version
 for the current user. In order for this to take effect, I log back in.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if [[ $BASH_OS_TYPE == macOS ]]; then
-    brew update && brew install bash
-    if ! grep -q "/usr/local/bin/bash" /etc/shells; then
+    brew install bash
+    if ([[ $MAC_OS_TYPE == 'apple-silicon' ]] && ! grep -q "/opt/homebrew/bin/bash" /etc/shells) \
+        || ([[ $MAC_OS_TYPE == 'intel' ]] && ! grep -q "/usr/local/bin/bash" /etc/shells); then
         echo "Adding Homebrew's bash to possible login shells ..."
-        sudo bash -c "echo /usr/local/bin/bash >> /etc/shells"
+        if [[ $MAC_OS_TYPE == 'apple-silicon' ]]; then
+            sudo bash -c "echo /opt/homebrew/bin/bash >> /etc/shells"
+        fi
+        if [[ $MAC_OS_TYPE == 'intel' ]]; then
+            sudo bash -c "echo /usr/local/bin/bash >> /etc/shells"
+        fi
     else
         echo "Homebrew's bash is already a possible login shell ..."
     fi
-    if [ $SHELL == "/usr/local/bin/bash" ]; then
+    if ([[ $MAC_OS_TYPE == 'apple-silicon' ]] && [ $SHELL == "/opt/homebrew/bin/bash" ]) \
+        || ([[ $MAC_OS_TYPE == 'intel' ]] && [ $SHELL == "/usr/local/bin/bash" ]); then
         echo "Shell is already set to Homebrew's bash ..."
     else
         echo "Setting shell to Homebrew's bash ..."
-        chsh -s /usr/local/bin/bash
+        if [[ $MAC_OS_TYPE == 'apple-silicon' ]]; then
+            chsh -s /opt/homebrew/bin/bash
+        fi
+        if [[ $MAC_OS_TYPE == 'intel' ]]; then
+            chsh -s /usr/local/bin/bash
+        fi
     fi
 fi
-#+END_SRC
+#+end_src
 
-**** Configuration
+*** Configuration
 
 References:
 
 - [[https://superuser.com/q/183870/756208][Difference between .bashrc and .bash_profile]]
 - [[https://superuser.com/q/789448/756208][Choosing between .bashrc, .profile, .bash_profile, etc]]
 
-***** =~/.bash_profile=
-      :PROPERTIES:
-      :header-args:sh: :eval no :exports code :tangle ~/config-files/bash/bash_profile :mkdirp yes :padline no
-      :END:
+**** =~/.bash_profile=
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle ~/conf/bash/bash_profile :mkdirp yes :padline no
+:END:
 
 Login shells (/e.g./ a shell that you start from a non-graphical desktop
 environment, like when logging into a machine via SSH) read one of three
@@ -329,12 +410,12 @@ stops looking for the others. Furthermore, login shells do *not* read
 shell read =~/.bashrc=. Ensuring that this happens is done by adding the
 following to the =~/.bash_profile= file:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
 if [ -f "${HOME}/.bashrc" ] && [[ $- == *i* ]]; then
     source "${HOME}/.bashrc"
 fi
-#+END_SRC
+#+end_src
 
 It's worth noting that on macOS, unlike on Linux, all shells started
 from Terminal.app (or iTerm.app) in a graphical environment are started
@@ -347,32 +428,32 @@ need to make sure that =~/.bash_profile= sources =~/.bashrc=.
 At any rate, this can now be symlinked into the appropriate location,
 after it is tangled:
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-ln -sf "${HOME}/config-files/bash/bash_profile" "${HOME}/.bash_profile"
-#+END_SRC
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/bash/bash_profile" "${HOME}/.bash_profile"
+#+end_src
 
-***** =~/.bashrc=
-      :PROPERTIES:
-      :header-args:sh: :eval no :exports code :tangle ~/config-files/bash/bashrc :mkdirp yes :padline no
-      :END:
+**** =~/.bashrc=
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle ~/conf/bash/bashrc :mkdirp yes :padline no
+:END:
 
 In the =~/.bashrc= file, I want to ensure that the system-wide =bashrc=
 file is read, if it exists. On macOS, this usually exists as
 =/etc/bashrc=.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
-#+END_SRC
+#+end_src
 
 And, on Ubuntu, this usually exists as =/etc/bash.bashrc=.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if [ -f /etc/bash.bashrc ]; then
     source /etc/bash.bashrc
 fi
-#+END_SRC
+#+end_src
 
 While it is not considered best practice to source =~/.profile= from
 inside of =~/.bashrc= (in particular, see [[https://superuser.com/a/183980/756208][Gilles's answer]] to [[https://superuser.com/q/183870/756208][Difference
@@ -388,24 +469,24 @@ variables that are set in =~/.profile= will not be available in these
 shells. So I'll flout the best practice for now, until I run into
 problems because of it.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if [ -f "${HOME}/.profile" ]; then
     source "${HOME}/.profile"
 fi
-#+END_SRC
+#+end_src
 
-****** Aliases
+***** Aliases
 
-Always gotta shrug:
+Sometimes you just need to shrug:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 alias eh="echo ¯\\\_\(ツ\)_/¯ | pbcopy"
 alias ehh="eh"
-#+END_SRC
+#+end_src
 
 Some aliases for changing directories:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 alias .1='cd ..'
 alias ..='cd ..'
 alias .2='cd ../..'
@@ -413,65 +494,46 @@ alias ....='cd ../..'
 alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../..'
-#+END_SRC
+#+end_src
 
 List all the things:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 alias l='ls -aF'
 alias ll='ls -alF'
 
 # list only hidden directories and files
 alias l.='ls -dF .*'
 alias ll.'=ls -ldF .*'
-#+END_SRC
+#+end_src
 
 To ensure the availability of 256 colors in =tmux= (see [[https://stackoverflow.com/a/10163861/2571049][this answer]] to
 [[https://stackoverflow.com/q/10158508/2571049][lose vim colorscheme in tmux mode]]).
 
-#+BEGIN_SRC sh
+#+begin_src sh
 alias tmux='tmux -2'
-#+END_SRC
-
-A =gpg= alias for use with flash drive:
-
-#+BEGIN_SRC sh
-alias gpgusb='gpg --home=/Volumes/adamliter/.gnupg'
-#+END_SRC
+#+end_src
 
 Some macOS-specific aliases:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if [[ $OSTYPE == darwin* ]]; then
-    alias tw='open -a "TextWrangler"'
     alias showFiles='defaults write com.apple.finder AppleShowAllFiles \
 YES; killall Finder'
     alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
 killall Finder'
 fi
-#+END_SRC
-
-Some aliases for Homebrew:
-
-#+BEGIN_SRC sh
-if type brew >/dev/null 2>&1; then
-    alias bud='brew update -v'
-    alias bug='brew upgrade  -v'
-    alias brc='brew cleanup -v'
-    alias brp='brew prune -v'
-    alias bra='bud && bug && brc && brp'
-fi
-#+END_SRC
+#+end_src
 
 An SSH alias for =ssh-add=:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 alias sshid='ssh-add ~/.ssh/id_rsa'
-#+END_SRC
+#+end_src
 
 Some aliases for =pass=:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
 alias pp='ppass'
 
@@ -488,17 +550,11 @@ alias delta='pp -c travel/delta'
 alias fmail='pp -c email/fastmail/password'
 alias kb='pp -c keybase/passphrase'
 alias msufcu='pp -c finances/msufcu'
-#+END_SRC
-
-Some aliases for Emacs:
-
-#+BEGIN_SRC sh
-alias e='emacsclient -t -a=""'
-#+END_SRC
+#+end_src
 
 Some aliases for =git= and =hub=:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if type hub >/dev/null 2>&1; then
     alias git='hub'
 fi
@@ -522,84 +578,28 @@ alias gt='git tag'
 alias grc='git rebase --continue'
 alias gsl='git stash list'
 alias gss='git stash save'
-#+END_SRC
+#+end_src
 
-Some aliases for some common directories:
+***** Auto completion
 
-#+BEGIN_SRC sh
-if type brew >/dev/null 2>&1; then
-    alias cdcbrew='cd $(brew --repository homebrew/core)'
+Auto completion for things installed with Homebrew:
+
+#+begin_src sh
+if [ -d /usr/local/etc/bash_completion.d ]; then
+    for f in /usr/local/etc/bash_completion.d/*; do
+        . "${f}"
+    done
 fi
-alias cdpsite='cd ~/projects/website-src'
-alias cdtex='cd ~/Dropbox/TeXnology'
-alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
-alias cdconfig='cd ~/config-files'
-alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
-alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
-alias cdling='cd ~/Dropbox/linguistics'
-alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
-alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
-alias cdemacs='cd ~/config-files/emacs.d'
-#+END_SRC
-
-An alias for using CorpusSearch:
-
-#+BEGIN_SRC sh
-if [ -f "${HOME}/Applications/CS_2.003.04.jar" ]; then
-    alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
-csearch/CorpusSearch'
+if [ -d /opt/homebrew/etc/bash_completion.d ]; then
+    for f in /opt/homebrew/etc/bash_completion.d/*; do
+        . "${f}"
+    done
 fi
-#+END_SRC
-
-****** Auto completion
-
-Tab auto completion for =git= and =hub=:
-
-#+BEGIN_SRC sh
-if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
-    source /usr/local/etc/bash_completion.d/git-completion.bash
-fi
-
-if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
-    source /usr/local/etc/bash_completion.d/hub.bash_completion.sh
-fi
-#+END_SRC
-
-Tab auto completon for pandoc:
-
-#+BEGIN_SRC sh
-if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
-    source /usr/local/etc/bash_completion.d/pandoc
-fi
-#+END_SRC
-
-Tab auto completion for Django:
-
-#+BEGIN_SRC sh
-if [ -f /usr/local/etc/bash_completion.d/django ]; then
-    source /usr/local/etc/bash_completion.d/django
-fi
-#+END_SRC
-
-Tab auto completion for Homebrew:
-
-#+BEGIN_SRC sh
-if [ -f /usr/local/etc/bash_completion.d/brew ]; then
-    source /usr/local/etc/bash_completion.d/brew
-fi
-#+END_SRC
-
-Tab auto completion for =tmux=:
-
-#+BEGIN_SRC sh
-if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
-    source /usr/local/etc/bash_completion.d/tmux
-fi
-#+END_SRC
+#+end_src
 
 Tab auto completion for =pass=:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if [ -f /usr/local/etc/bash_completion.d/pass ]; then
     source /usr/local/etc/bash_completion.d/pass
 fi
@@ -622,13 +622,13 @@ _lb-pass(){
 }
 
 complete -o filenames -o nospace -F _lb-pass lb-pass
-#+END_SRC
+#+end_src
 
-****** Prompt
+***** Prompt
 
 First, let's set up some more useful ways to refer to colors:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 RED="\[\e[31m\]"
 LIGHT_RED="\[\e[91m\]"
 GREEN="\[\e[32m\]"
@@ -645,26 +645,26 @@ LIGHT_GREY="\[\e[37m\]"
 LIGHT_GRAY="\[\e[37m\]"
 WHITE="\[\e[97m\]"
 COLOR_RESET="\[\e[0m\]"
-#+END_SRC
+#+end_src
 
 Next, let's define a separator to separate information in the prompt:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 MY_PS1_SEP=" ${WHITE}█${COLOR_RESET} "
-#+END_SRC
+#+end_src
 
 Next, let's write a function to determine if the current directory is a
 =git= repo:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 function is_git_repository {
     git branch > /dev/null 2>&1
 }
-#+END_SRC
+#+end_src
 
 If it is, we'll want to determine some information about it:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 function set_git_branch {
     # Capture the output of the "git status" command.
     git_status="$(git status 2> /dev/null)"
@@ -707,27 +707,32 @@ function set_git_branch {
     # Set the final branch string.
     BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
 }
-#+END_SRC
+#+end_src
 
 Additionally, if this is also a Python virtual environment, we'll want
 to add some information about that to the prompt:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 function set_virtualenv () {
-    if test -z "$VIRTUAL_ENV"; then
+    if test -z "${VIRTUAL_ENV}" && test -z "${CONDA_DEFAULT_ENV}"; then
         MY_VENV=""
     else
-        MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+        if test -z "${VIRTUAL_ENV}"; then
+            MY_VENV="${LIGHT_GREY}[${CONDA_DEFAULT_ENV}]${COLOR_REST}\
 ${MY_PS1_SEP}"
+        else
+            MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+${MY_PS1_SEP}"
+        fi
     fi
 }
-#+END_SRC
+#+end_src
 
 We can also change the color of the prompt symbol, based on the exit
 code of the last command. Here's a function to get and set that
 information:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 function set_prompt_symbol () {
     if test $1 -eq 0 ; then
         PROMPT_SYMBOL="\$"
@@ -735,7 +740,7 @@ function set_prompt_symbol () {
         PROMPT_SYMBOL="${RED}\$${COLOR_RESET}"
     fi
 }
-#+END_SRC
+#+end_src
 
 I'd also like to shorten the path to the current working directory in
 the prompt if there isn't enough room to display it in the shell. In
@@ -743,7 +748,7 @@ order to do this, I need to first compute the prompt minus the working
 directory in order to determine the number of remaining columns that I
 have left to work with:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 strip_color () {
     COLOR_REGEX='s/\\\[\\e\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]\\\]//g'
     if [[ $OSTYPE == darwin* ]]; then
@@ -760,12 +765,12 @@ get_ps1_less_pwd () {
                           "$(strip_color "${MY_PS1_SEP}")" \
                           "$(strip_color "${BRANCH}")")
 }
-#+END_SRC
+#+end_src
 
 Now I can finally declare the function to actually compute and calculate
 the bash prompt:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 function set_bash_prompt () {
     # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
     # return value of the last command.
@@ -804,29 +809,29 @@ ${LIGHT_CYAN}${MY_PWD}${COLOR_RESET}\
 ${BRANCH}
 ${PROMPT_SYMBOL} "
 }
-#+END_SRC
+#+end_src
 
 And, finally, we can actually call the function to set the prompt:
 
-#+BEGIN_SRC sh
+#+begin_src sh
 PROMPT_COMMAND=set_bash_prompt
-#+END_SRC
+#+end_src
 
-****** Colors
+***** Colors
 
 See [[https://apple.stackexchange.com/q/33677/85567][How can I configure Mac Terminal to have color ls output?]]
 
-#+BEGIN_SRC sh
+#+begin_src sh
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
-#+END_SRC
+#+end_src
 
-****** Some Python stuff
+***** Some Python stuff
 
 Note that ~eval "$(pyenv virtualenv-init -)"~ needs to come after
 setting ~PROMPT_COMMAND~ in order to work correctly.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
@@ -846,34 +851,45 @@ gpip3(){
 gpip(){
     PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
-#+END_SRC
+#+end_src
 
 Finally, =~/.bashrc= can be symlinked into the appropriate location,
 after it is tangled:
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-ln -sf "${HOME}/config-files/bash/bashrc" "${HOME}/.bashrc"
-#+END_SRC
+#+begin_src sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/bash/bashrc" "${HOME}/.bashrc"
+#+end_src
 
-****** Some Ruby stuff
+***** Some Ruby stuff
 
-#+BEGIN_SRC sh
+#+begin_src sh
 if command -v rbenv 1>/dev/null 2>&1; then
     eval "$(rbenv init -)"
 fi
-#+END_SRC
+#+end_src
 
-***** =~/.profile=
-      :PROPERTIES:
-      :header-args:sh: :eval no :exports code :tangle ~/config-files/bash/profile :mkdirp yes :padline no
-      :END:
+***** Symlinking into place
+
+Finally, =~/.bashrc= can be symlinked into the appropriate location,
+after it is tangled:
+
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/bash/bashrc" "${HOME}/.bashrc"
+#+end_src
+
+**** =~/.profile=
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle ~/conf/bash/profile :mkdirp yes :padline no
+:END:
 
 =~/.profile= is where stuff that is not bash-specifc goes, such as
 environment variables.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
-
+if [[ $OSTYPE == darwin* ]] && [[ $(uname -m) == arm64 ]]; then
+    eval $(/opt/homebrew/bin/brew shellenv)
+fi
 if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
     export PATH="${HOME}/bin:${PATH}"
 fi
@@ -881,83 +897,125 @@ fi
 # ----------------------------------------------------------------------
 # EDITOR
 # ----------------------------------------------------------------------
-export EDITOR=/usr/local/bin/ec
+if [ -f "${HOME}/bin/ec" ]; then
+    export EDITOR=ec
+else
+    if [ -f /usr/local/bin/emacs ]; then
+        export EDITOR=/usr/local/bin/emacs
+    elif [ -f /opt/homebrew/bin/emacs ]; then
+         export EDITOR=/opt/homebrew/bin/emacs
+    else
+        export EDITOR=emacs
+    fi
+fi
 export ALTERNATE_EDITOR=""
 
 # ----------------------------------------------------------------------
 # Python stuff
 # ----------------------------------------------------------------------
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-export PIP_REQUIRE_VIRTUALENV=true
+if command -v pyenv 1>/dev/null 2>&1; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
+    export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1
+fi
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1
-#+END_SRC
+#+end_src
 
 Finally, =~/.profile= can be symlinked into the appropriate location,
 after it is tangled:
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-ln -sf "${HOME}/config-files/bash/profile" "${HOME}/.profile"
-#+END_SRC
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/bash/profile" "${HOME}/.profile"
+#+end_src
 
-*** curl
+** cmake
 
-**** Installation
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
+CMake is needed in order to compile =vterm= for use inside Emacs.
 
-~curl~ is installed by default on macOS but not on Linux:
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-#+BEGIN_SRC sh
-if [[ $BASH_OS_TYPE == Linux ]]; then
-    sudo apt-get install -y curl
-fi
-#+END_SRC
+#+begin_src sh
+brew install cmake
+#+end_src
 
-*** git
+** coreutils
 
-**** Installation
+*** Installation
 
-=git= is already installed earlier in the bootstrapping process.
+=coreutils= is already installed in the bootstrapping process as an
+optional dependency for Doom Emacs.
 
-**** Configuration
+** editorconfig
 
-***** =~/.gitconfig=
-      :PROPERTIES:
-      :header-args:sh: :eval no :exports code :tangle "~/config-files/git/gitconfig" :mkdirp yes :padline no
-      :END:
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-****** =[user]=
+#+begin_src sh
+brew install editorconfig
+#+end_src
+
+** fd
+
+*** Installation
+
+=fd= is already installed in the bootstrapping process as an optional
+dependency for Doom Emacs.
+
+** git
+
+*** Installation
+
+=git= is already installed in the bootstrapping process as a dependency
+for Doom Emacs.
+
+*** Configuration
+
+**** =~/.gitconfig=
+:PROPERTIES:
+:header-args:gitconfig: :eval no :exports code :tangle "~/conf/git/gitconfig" :mkdirp yes :padline no
+:END:
+
+***** =[init]=
+
+#+begin_src gitconfig
+# -*- mode: gitconfig; coding: utf-8 -*-
+[init]
+    defaultBranch = main
+#+end_src
+
+***** =[user]=
 
 =git= needs to know who I am.
 
-#+BEGIN_SRC sh
-# -*- coding: utf-8; mode: conf; fill-column: 72; -*-
+#+begin_src gitconfig
 [user]
     name = Adam Liter
     email = io@adamliter.org
     signkey = 0x98723A2089026CD6
-#+END_SRC
+#+end_src
 
-****** =[core]=
+***** =[core]=
 
 Set up my editor for =git= and a global ignore file.
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [core]
     editor = "emacsclient -t -a=''"
     excludesfile = ~/.gitignore_global
     attributesfile = ~/.gitattributes_global
-#+END_SRC
+#+end_src
 
-****** =[color]=
+***** =[color]=
 
 This sets up some defaults for displaying color with =git=.
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [color]
     diff = auto
     status = auto
@@ -965,42 +1023,42 @@ This sets up some defaults for displaying color with =git=.
     interactive = auto
     ui = true
     pager = true
-#+END_SRC
+#+end_src
 
-****** =[alias]=
+***** =[alias]=
 
 This sets up an alias for automatically pushing submodules.
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [alias]
     pushall = push --recurse-submodule=on-demand
-#+END_SRC
+#+end_src
 
-****** <<git-config-diff>> =[diff]=
+***** =[diff]=
 
 The following sets up a =diff= driver called =pandoc= for diffing Word
 documents that =git= is tracking. For reference, see /e.g./,
 [[http://blog.martinfenner.org/2014/08/25/using-microsoft-word-with-git/][Using Microsoft Word with git]].
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [diff "pandoc"]
     textconv=pandoc --to=markdown
     prompt = false
-#+END_SRC
+#+end_src
 
-****** =[filter]=
+***** =[filter]=
 
 The following sets up a =filter= driver called =lfs= for using [[https://git-lfs.github.com/][Git LFS]].
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
-#+END_SRC
+#+end_src
 
-****** =[push]=
+***** =[push]=
 
 The following sets the default behavior of ~git push~ such that it only
 pushes the current branch to the remote repo. For further discussion,
@@ -1009,12 +1067,12 @@ see either of the following questions on Stack Overflow:
 - [[https://stackoverflow.com/q/23918062/2571049]["simple" vs "current" push.default in git for decentralized workflow]]
 - [[https://stackoverflow.com/q/13148066/2571049][Warning: push.default is unset; its implicit value is changing in Git 2.0]]
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [push]
     default = simple
-#+END_SRC
+#+end_src
 
-****** =[pull]=
+***** =[pull]=
 
 ~git pull~ should rebase by default. In versions of =git= older than
 1.8.5, this can be achieved by setting the configuration option
@@ -1029,54 +1087,54 @@ changes from the upstream master branch before being able to push, the
 just did, whereas ~git pull --preserve-merges~ will preserve that merge
 commit.
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [pull]
     rebase = preserve
-#+END_SRC
+#+end_src
 
-****** =[gpg]=
+***** =[gpg]=
 
 For =gpg= stuff with =git=, we want to use =gpg2=, which is now just
 =gpg=, at least if installed with Homebrew.
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [gpg]
     program = gpg
-#+END_SRC
+#+end_src
 
-****** Configuration for [[https://github.com/magit/forge][=forge=]]
+***** Configuration for [[https://github.com/magit/forge][=forge=]]
 
 This sets up my user names on the git forges, GitHub and GitLab, for use
 with [[https://github.com/magit/forge][=forge=]].
 
-#+BEGIN_SRC sh
+#+begin_src gitconfig
 [gitlab]
     user = adamliter
 [github]
     user = adamliter
-#+END_SRC
+#+end_src
 
-****** Symlink into place
+***** Symlink into place
 
 Finally, the =gitconfig= file needs to be symlinked into the proper
 location.
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-ln -sf "${HOME}/config-files/git/gitconfig" "${HOME}/.gitconfig"
-#+END_SRC
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/git/gitconfig" "${HOME}/.gitconfig"
+#+end_src
 
-***** =~/.gitignore_global=
-      :PROPERTIES:
-      :header-args:sh: :eval no :exports code :tangle ~/config-files/git/gitignore_global :mkdirp yes :padline no
-      :END:
+**** =~/.gitignore_global=
+:PROPERTIES:
+:header-args:gitignore: :eval no :exports code :tangle ~/conf/git/gitignore_global :mkdirp yes :padline no
+:END:
 
 A good reference for all sorts of patterns that =git= ought to ignore is
-[[gh-gitignore][=github/gitingore=]].
+[[https://github.com/github/gitignore][=github/gitingore=]].
 
 The following things are things that I have =git= ignore by default
 globally.
 
-****** macOS
+***** macOS
 
 Some stuff to ignore on macOS, taken from [[gh-gitignore-mac][=github/gitignore=]]. However, I
 haven't added the Icon ignore pattern because [[https://superuser.com/a/298798/756208][it needs to end with a
@@ -1087,8 +1145,8 @@ largely only occurs in the top-level directories of the folders
 associated with services like Dropbox or Google Drive (I don't generally
 change/set a directory's icon).
 
-#+BEGIN_SRC sh
-# -*- coding: utf-8; fill-column: 72; mode: conf; -*-
+#+begin_src gitignore
+# -*- mode: gitignore; coding: utf-8 -*-
 ,*.DS_Store
 .AppleDouble
 .LSOverride
@@ -1111,14 +1169,14 @@ change/set a directory's icon).
 Network Trash Folder
 Temporary Items
 .apdisk
-#+END_SRC
+#+end_src
 
-****** Linux
+***** Linux
 
 The following is stuff to ignore on Linux, taken from
 [[gh-gitignore-linux][=github/gitignore=]].
 
-#+BEGIN_SRC sh
+#+begin_src gitignore
 # temporary files which can be created if a
 # process still has a handle open of a deleted file
 .fuse_hidden*
@@ -1132,14 +1190,14 @@ The following is stuff to ignore on Linux, taken from
 # .nfs files are created when an open file
 # is removed but is still being accessed
 .nfs*
-#+END_SRC
+#+end_src
 
-****** Windows
+***** Windows
 
 The following is stuff to ignore in Windows, taken from
 [[gh-gitignore-windows][=github/gitingore=]].
 
-#+BEGIN_SRC sh
+#+begin_src gitignore
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -1161,13 +1219,13 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 ,*.lnk
-#+END_SRC
+#+end_src
 
-****** Emacs
+***** Emacs
 
 The following is Emacs stuff to ignore, taken from [[gh-gitignore-emacs][=github/gitignore=]].
 
-#+BEGIN_SRC sh
+#+begin_src gitignore
 ,*~
 \#*\#
 /.emacs.desktop
@@ -1212,14 +1270,14 @@ flycheck_*.el
 
 # directory configuration
 .dir-locals.el
-#+END_SRC
+#+end_src
 
-****** TeX
+***** TeX
 
 The following is stuff to ignore for (La)TeX, taken from
 [[gh-gitignore-tex][=github/gitignore=]].
 
-#+BEGIN_SRC sh
+#+begin_src gitignore
 ## Core latex/pdflatex auxiliary files:
 ,*.aux
 ,*.lof
@@ -1437,14 +1495,14 @@ TSWLatexianTemp*
 
 # auto folder when using emacs and auctex
 /auto/*
-#+END_SRC
+#+end_src
 
-****** Python
+***** Python
 
 The following is stuff to ignore for Python, taken from
 [[gh-gitignore-python][=github/gitignore=]].
 
-#+BEGIN_SRC sh
+#+begin_src gitignore
 # Byte-compiled / optimized / DLL files
 __pycache__/
 ,*.py[cod]
@@ -1543,13 +1601,13 @@ ENV/
 
 # mypy
 .mypy_cache/
-#+END_SRC
+#+end_src
 
-****** R
+***** R
 
 The following is stuff to ignore for R, taken from [[gh-gitignore-r][=github/gitignore=]].
 
-#+BEGIN_SRC sh
+#+begin_src gitignore
 # History files
 .Rhistory
 .Rapp.history
@@ -1583,118 +1641,244 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 ,*.utf8.md
 ,*.knit.md
-#+END_SRC
+#+end_src
 
-****** Symlink into place
+***** Symlink into place
 
 Finally, the =gitignore_global= file needs to be symlinked into the
 proper location.
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-ln -sf "${HOME}/config-files/git/gitignore_global" "${HOME}/.gitignore_global"
-#+END_SRC
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/git/gitignore_global" "${HOME}/.gitignore_global"
+#+end_src
 
-***** =~/.gitattributes_global=
-      :PROPERTIES:
-      :header-args:sh: :eval no :exports code :tangle ~/config-files/git/gitattributes_global :mkdirp yes :padline no
-      :END:
+**** =~/.gitattributes_global=
+:PROPERTIES:
+:header-args:gitattributes: :eval no :exports code :tangle ~/conf/git/gitattributes_global :mkdirp yes :padline no
+:END:
 
 This sets attribtues globally for Word documents so that I can diff Word
 documents using the =pandoc= driver. See the [[git-config-diff][=diff= section above]].
 
-#+BEGIN_SRC sh
+#+begin_src gitattributes
+# -*- mode: gitattributes; coding: utf-8 -*-
 ,*.docx diff=pandoc
 ,*.doc  diff=pandoc
-#+END_SRC
+#+end_src
 
 Finally, the =gitattributes_global= file needs to be symlinked into the
 proper location.
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-ln -sf "${HOME}/config-files/git/gitattributes_global" "${HOME}/.gitattributes_global"
-#+END_SRC
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/git/gitattributes_global" "${HOME}/.gitattributes_global"
+#+end_src
 
-*** gpg
+** git-lfs
 
-*** htop
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-**** Installation
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
+#+begin_src sh
+brew install git-lfs
+#+end_src
 
-#+BEGIN_SRC sh
-if [[ $BASH_OS_TYPE == macOS ]]; then
-    brew install htop
-elif [[ $BASH_OS_TYPE == Linux ]]; then
-    sudo apt-get install -y htop
-fi
-#+END_SRC
+** gpg
 
-**** Configuration
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle "~/config-files/htop/htoprc" :mkdirp yes :padline no
-     :END:
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
+#+begin_src sh
+brew install gnupg
+#+end_src
 
-I don't have any special configuration for =htop=. If I did, it would go
-in =$HOME/.config/htop/htoprc=:
+*** Configuration
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-#ln -sf "${HOME}/config-files/htop/htoprc" "${HOME}/.config/htop/htoprc"
-#+END_SRC
+Some useful resources:
 
-*** hub
+- [[https://www.void.gr/kargig/blog/2013/12/02/creating-a-new-gpg-key-with-subkeys/][Creating a new GPG key with subkeys]]
+- [[https://alexcabal.com/creating-the-perfect-gpg-keypair][Creating the Perfect GPG Keypair]]
+- [[https://davesteele.github.io/gpg/2014/09/20/anatomy-of-a-gpg-key/][Anatomy of a GPG Key]]
 
-*** pandoc
+# TODO: set up gpg configuration, including pinentry-program /usr/local/bin/pinentry-mac
 
-**** Installation
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
+** htop
 
-#+BEGIN_SRC sh
-if [[ $BASH_OS_TYPE == macOS ]]; then
-    brew install pandoc
-elif [[ $BASH_OS_TYPE == Linux ]]; then
-    sudo apt-get install -y pandoc
-fi
-#+END_SRC
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-**** Configuration
+#+begin_src sh
+brew install htop
+#+end_src
+
+*** Configuration
+:PROPERTIES:
+:header-args:conf-unix: :eval no :exports code :tangle "~/conf/htop/htoprc" :mkdirp yes :padline no
+:END:
+
+Nothing for now.
+
+#+begin_src conf-unix
+# -*- mode: conf-unix; coding: utf-8; -*-
+#+end_src
+
+Symlink it into place:
+
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+mkdir -p ~/.config/htop
+ln -sf "${HOME}/conf/htop/htoprc" "${HOME}/.config/htop/htoprc"
+#+end_src
+
+** hub
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install hub
+#+end_src
+
+*** Configuration
+
+** lab
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install lab
+#+end_src
+
+*** Configuration
+:PROPERTIES:
+:header-args:conf-toml: :eval no :exports code :tangle "~/conf/lab/lab.toml" :mkdirp yes :padline no
+:END:
+
+#+begin_src conf-toml
+# -*- mode: conf-toml; coding: utf-8; -*-
+[core]
+  host = "https://gitlab.com"
+  load_token = # TODO: set up load_token with pass
+  user = "adam.liter"
+#+end_src
+
+Symlink it into place:
+
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+mkdir -p ~/.config/lab
+ln -sf "${HOME}/conf/lab/lab.toml" "${HOME}/.config/lab/lab.toml"
+#+end_src
+
+** pandoc
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install pandoc
+#+end_src
+
+*** Configuration
 
 There is no configuration setup for =pandoc=.
 
-*** password-store
+** pass
 
-*** pdf-tools
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-This is for viewing PDFs in Emacs buffers.
+#+begin_src sh
+brew install pass
+#+end_src
 
-**** Installation
+*** Config
 
-#+BEGIN_SRC sh
-if [[ $BASH_OS_TYPE == macOS ]]; then
-    brew tap dunn/emacs
-    brew install pdf-tools
-fi
-#+END_SRC
+No current configuration for pass.
 
-**** Configuration
+** pinentry-mac
 
-There is no configuration setup for =pdf-tools=.
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-*** ssh
+#+begin_src sh
+brew install pinentry-mac
+#+end_src
 
-**** Installation
+Let's set it up so that the password is not saved in the macOS Keychain
+(and so that this option isn't even displayed).
+
+#+begin_src sh
+defaults write org.gpgtools.common UseKeychain NO
+defaults write org.gpgtools.common DisableKeychain -bool yes
+#+end_src
+
+*** Configuration
+
+To use =pinentry-mac=, the following line needs to be set in the file
+=~/.gnupg/gpg-agent.conf=:
+
+=pinentry-program $HOMEBREW_PREFIX/bin/pinentry-mac=
+
+This is done above in the section for configuring =gpg=.
+
+** reattach-to-user-namespace
+
+This allows for accessing the clipboard from inside of =tmux= sessions
+on macOS. See the [[https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard][GitHub repository for more info]].
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install reattach-to-user-namespace
+#+end_src
+
+** ripgrep
+
+*** Installation
+
+=ripgrep= is installed in the bootstrapping process as a dependency for
+Doom Emacs.
+
+** The Silver Searcher
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install ag
+#+end_src
+
+** ssh
+
+*** Installation
 
 =ssh= is already installed on both macOS and Linux, by default.
 
-**** Configuration
-     :PROPERTIES:
-     :header-args:emacs-lisp: :eval yes :exports code :results output silent
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
+*** Configuration
+:PROPERTIES:
+:header-args:emacs-lisp: :eval yes :exports code :results output silent
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
 My SSH configuration is kept in a submodule hosted by my private =git=
 server so as to keep the details of my SSH configuration private. The
@@ -1702,258 +1886,343 @@ following code, which is executed when this file is tangled, will create
 my SSH config and then symlink it into the appropriate location.
 
 #+NAME: ssh-config
-#+BEGIN_SRC emacs-lisp
-(org-babel-tangle-file "~/config-files/ssh/README.org")
-#+END_SRC
+#+begin_src emacs-lisp
+(org-babel-tangle-file "~/conf/ssh/README.org")
+#+end_src
 
-#+BEGIN_SRC sh
-ln -sf "${HOME}/config-files/ssh/config" "${HOME}/.ssh/config"
-#+END_SRC
+#+begin_src sh
+ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"
+#+end_src
 
-*** tmux
+** tmux
 
-**** Installation
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
 Install =tmux=:
 
-#+BEGIN_SRC sh
-if [[ $BASH_OS_TYPE == macOS ]]; then
-    brew install tmux
-elif [[ $BASH_OS_TYPE == Linux ]]; then
-    sudo apt-get install -y tmux
-fi
-#+END_SRC
+#+begin_src sh
+brew install tmux
+#+end_src
 
-On Ubuntu, when installing with =apt-get=, the bash completion script is
-installed to =/usr/share/doc/tmux/examples/bash_completion_tmux.sh=
-instead of installed in the standard bash completion directory of
-=/etc/bash_completion.d/=. So, let's symlink it there:
-
-#+BEGIN_SRC sh
-if [[ BASH_OS_TYPE == Linux ]]; then
-    if [ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]; then
-        echo "Symlinking tmux bash completion into place ..."
-        ln -sf "/usr/share/doc/tmux/examples/bash_completion_tmux.sh" "/etc/bash_completion.d/tmux"
-    else
-        echo "Could not find tmux bash completion file ..."
-    fi
-fi
-#+END_SRC
-
-**** Configuration
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle ~/config-files/tmux/tmux.conf :mkdirp yes :padline no
-     :END:
+*** Configuration
+:PROPERTIES:
+:header-args:conf-unix: :eval no :exports code :tangle ~/conf/tmux/tmux.conf :mkdirp yes :padline no
+:END:
 
 To ensure that colors work properly, I've followed the suggestion in
 [[https://stackoverflow.com/a/22481496/2571049][this answer]] on Stack Overflow.
 
-#+BEGIN_SRC sh
-# -*- coding: utf-8; mode: conf; fill-column: 72 -*-
+#+begin_src conf-unix
+# -*- coding: utf-8; mode: conf-unix; fill-column: 72 -*-
 set-option -g default-terminal "xterm-256color"
-#+END_SRC
+#+end_src
 
 The following ensures that the macOS pasteboard is available in =tmux=
 sessions. See [[tmux-macos-pasteboard][the Github repository]] for more information.
 
-#+BEGIN_SRC sh :tangle (when (eq system-type 'darwin) "~/config-files/tmux/tmux.conf")
+#+begin_src conf-unix :tangle (when (eq system-type 'darwin) "~/conf/tmux/tmux.conf")
 set-option -g default-command "reattach-to-user-namespace -l $SHELL"
-#+END_SRC
+#+end_src
 
 The following allows the =tmux= configuration file to be reloaded.
 
-#+BEGIN_SRC sh
+#+begin_src conf-unix
 bind-key r source-file ~/.tmux.conf
-#+END_SRC
+#+end_src
 
 The following are some key bindings for opening new SSH sessions in
 either a new windows, a vertically split window, or a horizontally split
 window.
 
-#+BEGIN_SRC sh
+#+begin_src conf-unix
 bind-key S   command-prompt -p "host" "new-window -n %1 'ssh %1'"
 bind-key C-S command-prompt -p "host" "split-window -v 'ssh %1'"
 bind-key M-S command-prompt -p "host" "split-window -h 'ssh %1'"
-#+END_SRC
+#+end_src
 
 The following are some key bindings for opening Emacs in either a new
 window, a vertically split window, or a horizontally split window.
 
-#+BEGIN_SRC sh
+#+begin_src conf-unix
 bind-key y   new-window -n "emacs"  "emacsclient -nw"
 bind-key C-y split-window -v "emacsclient -nw"
 bind-key M-y split-window -h "emacsclient -nw"
-#+END_SRC
+#+end_src
 
 The following defines some more intuitive key bindings for splitting a
 window and undefines the default key bindings for this.
 
-#+BEGIN_SRC sh
+#+begin_src conf-unix
 bind-key | split-window -h
 bind-key - split-window -v
 unbind '"'
 unbind %
-#+END_SRC
+#+end_src
 
 The following allows for switching between =tmux= panes using just
 M-<arrow>, without the =tmux= prefix key.
 
-#+BEGIN_SRC sh
+#+begin_src conf-unix
 bind-key -n M-Left select-pane -L
 bind-key -n M-Right select-pane -R
 bind-key -n M-Up select-pane -U
 bind-key -n M-Down select-pane -D
-#+END_SRC
+#+end_src
 
 And, finally, the following symlinks the configuration file into the
 appropriate location.
 
-#+BEGIN_SRC sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-ln -sf "${HOME}/config-files/tmux/tmux.conf" "${HOME}/.tmux.conf"
-#+END_SRC
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/tmux/tmux.conf" "${HOME}/.tmux.conf"
+#+end_src
 
-*** tree
+** wget
 
-This should be installed when =password-store= is installed.
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-*** wget
+=wget= is not installed by default on macOS:
 
-**** Installation
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
-
-~wget~ is installed by default on Linux but not on macOS:
-
-#+BEGIN_SRC sh
-if [[ $BASH_OS_TYPE == Linux ]]; then
-    sudo apt-get install -y wget
-fi
-#+END_SRC
-
-*** xclip
-
-** macOS only
-
-*** reattach-to-user-namespace
-
-This allows for accessing the clipboard from inside of =tmux= sessions
-on macOS. See the [[tmux-macos-pasteboard][GitHub repository for more info]].
-
-**** Installation
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
-
-#+BEGIN_SRC sh
-if [[ $BASH_OS_TYPE == macOS ]]; then
-    brew install reattach-to-user-namespace
-fi
-#+END_SRC
-
-** Linux only
-
-There are currently no programs that I use on Linux only.
+#+begin_src sh
+brew install wget
+#+end_src
 
 * Programming languages
 
-** All OSes
+** NodeJS
 
-*** Python
+*** node
 
-*** R
+**** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-*** TeX
+#+begin_src sh
+brew install node
+#+end_src
 
-** macOS only
+**** Configuration
+:PROPERTIES:
+:header-args:conf-unix: :eval no :exports code :tangle ~/conf/npm/npmrc :mkdirp yes :padline no
+:END:
 
-** Linux only
+Nothing for now.
 
-* Applications and GUIs
+#+begin_src conf-unix
+# -*- mode: conf-unix; coding: utf-8; -*-
+#+end_src
 
-** All OSes
+Symlink it into place:
 
-*** Dropbox
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/npm/npmrc" "${HOME}/.npmrc"
+#+end_src
 
-*** Emacs
+*** nodenv
 
-Emacs itself is already installed in the bootstrapping process; however,
-there are several further things that remain to be configured that also
-fall a bit outside the scope of configuaring my Emacs
-initialization. Because of this, these things are configured here,
-rather than in my [[emacs-d][=emacs.d= repository]].
+**** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-**** =org=
-     :PROPERTIES:
-     :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-     :END:
+#+begin_src sh
+brew install nodenv
+#+end_src
+
+*** node packages
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+I use [[https://github.com/microsoft/pyright][pyright]] as an LSP server for Python development in Emacs.
+
+#+begin_src sh
+echo "Installing node package pyright globally ..."
+npm install -g pyright
+#+end_src
+
+** org
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
 My default directory for =org= files is a submodule of this repository
 and thus needs to be symlinked into the location of ~org-directory~,
-whose value I've set to =~/org= in my =init.el= file. The submodule
-lives on my private git repository so as to keep these files private.
+whose value I've set to =~/org= in =.doom.d/config.el=.
 
-#+BEGIN_SRC sh
+#+begin_src sh
 rm -rf "${HOME}/org"
-ln -sn "${HOME}/config-files/org" "${HOME}/org"
-#+END_SRC
+ln -sn "${HOME}/conf/org" "${HOME}/org"
+#+end_src
 
-*** Firefox
+** Python
 
-*** Google Chrome
+*** conda
 
-*** Google Drive
+**** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-*** Handbrake
+# TODO: figure out bootstrapping conda installation
 
-*** Inkscape
+**** Configuration
+:PROPERTIES:
+:header-args:yaml: :eval no :exports code :tangle ~/conf/conda/condarc :mkdirp yes :padline no
+:END:
 
-*** LibreOffice
+[[https://stackoverflow.com/a/58045893][This answer]] to [[https://stackoverflow.com/q/58044214][Installing anaconda with pyenv, unable to configure
+  virtual environment]] is helpful for installing conda alongside pyenv.
 
-*** MakeMKV
+#+begin_src yaml
+# -*- mode: yaml; coding: utf-8; -*-
+auto_activate_base: false
+channels:
+  - defaults
+#+end_src
 
-*** ownCloud
+Symlink the configuration file into the appropriate location:
 
-*** Plex
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/conda/condarc" "${HOME}/.condarc"
+#+end_src
 
-*** Praat
+*** pyenv
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
 
-*** PsychoPy
+**** Installation
 
-*** RStudio
+#+begin_src sh
+brew install pyenv pyenv-virtualenv
+pyenv install 3:latest
+#+end_src
 
-*** Skype
+**** Configuration
 
-*** Spotify
+Nothing at the moment.
 
-*** VirtualBox
+** R
 
-*** VLC
+# TODO: figure out bootstrapping R installation
 
-** macOS only
+** Ruby
 
-*** Alfred
+# TODO: figure out bootstrapping Ruby installation
 
-*** Flux
+** TeX
 
-*** iTerm2
+# TODO: figure out bootstrapping TeX installation
 
-*** MailMate
+* =${HOME}/bin=
 
-*** Skim
+#+begin_src sh :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+if [ -d "${HOME}/bin" ]; then
+    echo "~/bin already exists; backing it up to ~/bin.bkp ..."
+    cp -r "${HOME}/bin" "${HOME}/bin.bkp"
+fi
+rm -rf ${HOME}/bin
+ln -sn "${HOME}/conf/bin" "${HOME}/bin"
+#+end_src
 
-*** TextWrangler
+# TODO: migrate stuff from https://github.com/adamliter/bin
 
-*** UnicodeChecker
+** =ec=
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle ~/conf/bin/ec :mkdirp yes :shebang "#!/bin/sh" :padline no
+:END:
 
-** Linux only
+#+begin_src sh
+emacsclient -t -a="" "$@"
+#+end_src
 
-# Local Variables:
-# mode: org
-# coding: utf-8
-# fill-column: 72
-# indent-tabs-mode: nil
-# End:
+* Applications and GUIs
+
+# TODO: flesh out this section, and figure out Alfred and iterm2 configs
+
+** Alfred
+
+** Amphetamine
+
+** Bartender
+
+** Cardhop
+
+** Contexts
+
+** Discord
+
+** Dropbox
+
+** Fantastical
+
+** Final Cut Pro
+
+** Firefox
+
+** Flux
+
+** Google Chrome
+
+** Google Drive
+
+** Handbrake
+
+** Inkscape
+
+** iTerm2
+
+** LibreOffice
+
+** Maestral
+
+** Magnet
+
+** MailMate
+
+** MakeMKV
+
+** ownCloud
+
+** Peek
+
+** Plex
+
+** Praat
+
+** PsychoPy
+
+** RStudio
+
+** Signal
+
+** Skim
+
+** Slack
+
+** Spotify
+
+** Sublime Text
+
+** Tor
+
+** Transmission
+
+** UnicodeChecker
+
+** VLC
+
+** Xcode
+
+** Zoom
+
+* Fonts
+
+# TODO: figure out bootstrapping font installation

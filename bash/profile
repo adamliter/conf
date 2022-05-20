@@ -1,5 +1,7 @@
 # -*- mode: sh; fill-column: 72; coding: utf-8 -*-
-
+if [[ $OSTYPE == darwin* ]] && [[ $(uname -m) == arm64 ]]; then
+    eval $(/opt/homebrew/bin/brew shellenv)
+fi
 if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
     export PATH="${HOME}/bin:${PATH}"
 fi
@@ -7,15 +9,26 @@ fi
 # ----------------------------------------------------------------------
 # EDITOR
 # ----------------------------------------------------------------------
-export EDITOR=/usr/local/bin/ec
+if [ -f "${HOME}/bin/ec" ]; then
+    export EDITOR=ec
+else
+    if [ -f /usr/local/bin/emacs ]; then
+        export EDITOR=/usr/local/bin/emacs
+    elif [ -f /opt/homebrew/bin/emacs ]; then
+         export EDITOR=/opt/homebrew/bin/emacs
+    else
+        export EDITOR=emacs
+    fi
+fi
 export ALTERNATE_EDITOR=""
 
 # ----------------------------------------------------------------------
 # Python stuff
 # ----------------------------------------------------------------------
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-export PIP_REQUIRE_VIRTUALENV=true
+if command -v pyenv 1>/dev/null 2>&1; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
+    export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1
+fi
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=1

@@ -23,20 +23,11 @@ alias ll='ls -alF'
 alias l.='ls -dF .*'
 alias ll.'=ls -ldF .*'
 alias tmux='tmux -2'
-alias gpgusb='gpg --home=/Volumes/adamliter/.gnupg'
 if [[ $OSTYPE == darwin* ]]; then
-    alias tw='open -a "TextWrangler"'
     alias showFiles='defaults write com.apple.finder AppleShowAllFiles \
 YES; killall Finder'
     alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; \
 killall Finder'
-fi
-if type brew >/dev/null 2>&1; then
-    alias bud='brew update -v'
-    alias bug='brew upgrade  -v'
-    alias brc='brew cleanup -v'
-    alias brp='brew prune -v'
-    alias bra='bud && bug && brc && brp'
 fi
 alias sshid='ssh-add ~/.ssh/id_rsa'
 alias ppass='PASSWORD_STORE_DIR=~/.password-store/personal/ pass'
@@ -55,7 +46,6 @@ alias delta='pp -c travel/delta'
 alias fmail='pp -c email/fastmail/password'
 alias kb='pp -c keybase/passphrase'
 alias msufcu='pp -c finances/msufcu'
-alias e='emacsclient -t -a=""'
 if type hub >/dev/null 2>&1; then
     alias git='hub'
 fi
@@ -79,41 +69,15 @@ alias gt='git tag'
 alias grc='git rebase --continue'
 alias gsl='git stash list'
 alias gss='git stash save'
-if type brew >/dev/null 2>&1; then
-    alias cdcbrew='cd $(brew --repository homebrew/core)'
+if [ -d /usr/local/etc/bash_completion.d ]; then
+    for f in /usr/local/etc/bash_completion.d/*; do
+        . "${f}"
+    done
 fi
-alias cdpsite='cd ~/projects/website-src'
-alias cdtex='cd ~/Dropbox/TeXnology'
-alias cdlingsem='cd ~/Dropbox/TeXnology/lingsem'
-alias cdconfig='cd ~/config-files'
-alias cdcv='cd ~/Dropbox/SillyCareerStuff/adamlitercv'
-alias cdresume='cd ~/Dropbox/SillyCareerStuff/adamliterresume'
-alias cdling='cd ~/Dropbox/linguistics'
-alias cdugradthesis='cd ~/Dropbox/linguistics/undergrad-thesis'
-alias cdmastersthesis='cd ~/Dropbox/linguistics/masters-thesis'
-alias cdemacs='cd ~/config-files/emacs.d'
-if [ -f "${HOME}/Applications/CS_2.003.04.jar" ]; then
-    alias CS='java -classpath ~/Applications/CS_2.003.04.jar \
-csearch/CorpusSearch'
-fi
-if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
-    source /usr/local/etc/bash_completion.d/git-completion.bash
-fi
-
-if [ -f /usr/local/etc/bash_completion.d/hub.bash_completion.sh ]; then
-    source /usr/local/etc/bash_completion.d/hub.bash_completion.sh
-fi
-if [ -f /usr/local/etc/bash_completion.d/pandoc ]; then
-    source /usr/local/etc/bash_completion.d/pandoc
-fi
-if [ -f /usr/local/etc/bash_completion.d/django ]; then
-    source /usr/local/etc/bash_completion.d/django
-fi
-if [ -f /usr/local/etc/bash_completion.d/brew ]; then
-    source /usr/local/etc/bash_completion.d/brew
-fi
-if [ -f /usr/local/etc/bash_completion.d/tmux ]; then
-    source /usr/local/etc/bash_completion.d/tmux
+if [ -d /opt/homebrew/etc/bash_completion.d ]; then
+    for f in /opt/homebrew/etc/bash_completion.d/*; do
+        . "${f}"
+    done
 fi
 if [ -f /usr/local/etc/bash_completion.d/pass ]; then
     source /usr/local/etc/bash_completion.d/pass
@@ -200,11 +164,16 @@ function set_git_branch {
     BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
 }
 function set_virtualenv () {
-    if test -z "$VIRTUAL_ENV"; then
+    if test -z "${VIRTUAL_ENV}" && test -z "${CONDA_DEFAULT_ENV}"; then
         MY_VENV=""
     else
-        MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+        if test -z "${VIRTUAL_ENV}"; then
+            MY_VENV="${LIGHT_GREY}[${CONDA_DEFAULT_ENV}]${COLOR_REST}\
 ${MY_PS1_SEP}"
+        else
+            MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
+${MY_PS1_SEP}"
+        fi
     fi
 }
 function set_prompt_symbol () {
