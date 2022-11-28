@@ -29,7 +29,7 @@
 [push]
     default = simple
 [pull]
-    rebase = preserve
+    rebase = merges
 [gpg]
     program = gpg
 [gitlab]

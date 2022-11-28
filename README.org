@@ -1087,9 +1087,15 @@ changes from the upstream master branch before being able to push, the
 just did, whereas ~git pull --preserve-merges~ will preserve that merge
 commit.
 
+However, in =git= 2.22.0, the option of setting [[https://github.com/git/git/blob/master/Documentation/RelNotes/2.22.0.txt#L46][=pull.rebase= to
+=preserve= was deprecated]] in favor of setting =pull.rebase= to
+=merges= in order to preserve merge commits. This runs ~git rebase
+--rebase-merges~ behind the scenes.
+
+
 #+begin_src gitconfig
 [pull]
-    rebase = preserve
+    rebase = merges
 #+end_src
 
 ***** =[gpg]=
