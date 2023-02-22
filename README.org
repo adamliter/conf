@@ -580,6 +580,12 @@ alias gsl='git stash list'
 alias gss='git stash save'
 #+end_src
 
+And an alias for =kubectl=:
+
+#+begin_src sh
+alias k='kubectl'
+#+end_src
+
 ***** Auto completion
 
 Auto completion for things installed with Homebrew:
@@ -622,6 +628,14 @@ _lb-pass(){
 }
 
 complete -o filenames -o nospace -F _lb-pass lb-pass
+#+end_src
+
+Auto completion for =kubectl= and alias.
+
+#+begin_src sh
+# Only needed if autcompletion isn't already in Hombrew bash completion dir
+#source <(kubectl completion bash)
+complete -o default -F __start_kubectl k
 #+end_src
 
 ***** Prompt

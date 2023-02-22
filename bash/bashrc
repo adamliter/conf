@@ -69,6 +69,7 @@ alias gt='git tag'
 alias grc='git rebase --continue'
 alias gsl='git stash list'
 alias gss='git stash save'
+alias k='kubectl'
 if [ -d /usr/local/etc/bash_completion.d ]; then
     for f in /usr/local/etc/bash_completion.d/*; do
         . "${f}"
@@ -101,6 +102,9 @@ _lb-pass(){
 }
 
 complete -o filenames -o nospace -F _lb-pass lb-pass
+# Only needed if autcompletion isn't already in Hombrew bash completion dir
+#source <(kubectl completion bash)
+complete -o default -F __start_kubectl k
 RED="\[\e[31m\]"
 LIGHT_RED="\[\e[91m\]"
 GREEN="\[\e[32m\]"
