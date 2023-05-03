@@ -74,6 +74,7 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
 (setq +latex-viewers '(pdf-tools skim evince sumatrapdf zathura okular))
 (setq projectile-project-search-path '("~/git/"))
 (setq auth-sources '("~/.authinfo.gpg"))
