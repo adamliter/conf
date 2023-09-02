@@ -1,0 +1,25 @@
+extends:
+  - '@commitlint/config-conventional'
+rules:
+  body-max-line-length: [2, always, 80]
+  footer-max-line-length: [2, always, 80]
+  header-max-length: [1, always, 72]
+  type-enum:
+    - 2
+    - always
+    - - chore
+      - docs
+      - feat
+      - fix
+      - refactor
+      - revert
+      - style
+help: |
+  **Possible types**:
+  `chore`:           updates that don't impact configuration or installations
+  `docs`:            updates to documentation for config or installation
+  `feat`:            updates that modify config, installations, etc.
+  `fix`:             updates that fix config or installation of pre-existing tools/languages/etc.
+  `refactor`:        updates that refactor scripts, organization, etc.
+  `revert`:          changes that revert previous changes
+  `style`:           updates that improve formatting, white space, etc.

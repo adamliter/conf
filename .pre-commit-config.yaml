@@ -1,0 +1,16 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+- repo: local
+  hooks:
+  - id: commitlint
+    name: commitlint
+    language: system
+    stages: [commit-msg]
+    entry: commitlint --edit
+    pass_filenames: false
+    always_run: true
