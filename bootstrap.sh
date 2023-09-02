@@ -154,6 +154,7 @@ brew install pass
 brew install pinentry-mac
 defaults write org.gpgtools.common UseKeychain NO
 defaults write org.gpgtools.common DisableKeychain -bool yes
+brew install pre-commit
 brew install reattach-to-user-namespace
 brew install ag
 ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"

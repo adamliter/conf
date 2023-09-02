@@ -1861,6 +1861,17 @@ To use =pinentry-mac=, the following line needs to be set in the file
 
 This is done above in the section for configuring =gpg=.
 
+** pre-commit
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install pre-commit
+#+end_src
+
 ** reattach-to-user-namespace
 
 This allows for accessing the clipboard from inside of =tmux= sessions
