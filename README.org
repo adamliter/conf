@@ -1730,6 +1730,17 @@ Some useful resources:
 
 # TODO: set up gpg configuration, including pinentry-program /usr/local/bin/pinentry-mac
 
+** helm
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install helm
+#+end_src
+
 ** htop
 
 *** Installation
@@ -1772,6 +1783,17 @@ brew install hub
 
 *** Configuration
 
+** kubernetes-cli
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install kubernetes-cli
+#+end_src
+
 ** lab
 
 *** Installation
@@ -1801,6 +1823,17 @@ Symlink it into place:
 #+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
 mkdir -p ~/.config/lab
 ln -sf "${HOME}/conf/lab/lab.toml" "${HOME}/.config/lab/lab.toml"
+#+end_src
+
+** minikube
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install minikube
 #+end_src
 
 ** pandoc

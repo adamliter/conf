@@ -146,9 +146,12 @@ brew install cmake
 brew install editorconfig
 brew install git-lfs
 brew install gnupg
+brew install helm
 brew install htop
 brew install hub
+brew install kubernetes-cli
 brew install lab
+brew install minikube
 brew install pandoc
 brew install pass
 brew install pinentry-mac
