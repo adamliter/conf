@@ -163,6 +163,8 @@ brew install node
 brew install nodenv
 echo "Installing node package pyright globally ..."
 npm install -g pyright
+echo "Installing @commitlint/{cli,config-conventional} globally ..."
+npm install -g @commitlint/{cli,config-conventional}
 rm -rf "${HOME}/org"
 ln -sn "${HOME}/conf/org" "${HOME}/org"
 brew install pyenv pyenv-virtualenv

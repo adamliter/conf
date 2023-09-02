@@ -925,6 +925,11 @@ fi
 export ALTERNATE_EDITOR=""
 
 # ----------------------------------------------------------------------
+# Node stuff
+# ----------------------------------------------------------------------
+export NODE_PATH=$(npm root -g)
+
+# ----------------------------------------------------------------------
 # Python stuff
 # ----------------------------------------------------------------------
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -2065,6 +2070,14 @@ I use [[https://github.com/microsoft/pyright][pyright]] as an LSP server for Pyt
 #+begin_src sh
 echo "Installing node package pyright globally ..."
 npm install -g pyright
+#+end_src
+
+I also use =@commitlint/cli= and =@commitlint/config-conventional= for
+commit linting across a variety of projects.
+
+#+begin_src sh
+echo "Installing @commitlint/{cli,config-conventional} globally ..."
+npm install -g @commitlint/{cli,config-conventional}
 #+end_src
 
 ** org
