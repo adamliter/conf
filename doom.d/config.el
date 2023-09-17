@@ -7,7 +7,8 @@
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "Adam Liter"
-      user-mail-address "io@adamliter.org")
+      user-mail-address "io@adamliter.org"
+      adamliter/my-gpg-key "375B63141683A4D4669E121798723A2089026CD6")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -79,3 +80,13 @@
 (setq projectile-project-search-path '("~/git/"))
 (setq auth-sources '("~/.authinfo.gpg"))
 (setq doom-scratch-initial-major-mode 'org-mode)
+
+(setq adamliter/my-gpg-key-sign-git-arg (format "--gpg-sign=%s" adamliter/my-gpg-key)
+      transient-values
+      `(
+        (magit-commit ,adamliter/my-gpg-key-sign-git-arg)
+        (magit-fetch "--prune")
+        (magit-pull "--rebase" "--autostash")
+        (magit-merge ,adamliter/my-gpg-key-sign-git-arg)
+        (magit-rebase "--autostash" ,adamliter/my-gpg-key-sign-git-arg)
+        (magit-revert "--edit" "--autostash" ,adamliter/my-gpg-key-sign-git-arg)))
