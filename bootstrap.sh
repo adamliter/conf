@@ -173,6 +173,9 @@ rm -rf "${HOME}/org"
 ln -sn "${HOME}/conf/org" "${HOME}/org"
 brew install pyenv pyenv-virtualenv
 pyenv install 3:latest
+brew install rustup
+# Make sure rust-analyzer is installed for LSP
+rustup component add rust-analyzer
 if [ -d "${HOME}/bin" ]; then
     echo "~/bin already exists; backing it up to ~/bin.bkp ..."
     cp -r "${HOME}/bin" "${HOME}/bin.bkp"
