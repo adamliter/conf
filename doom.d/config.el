@@ -53,6 +53,9 @@
       citar-org-roam-subdir "references/notes/"
       citar-notes-paths (list (concat org-directory citar-org-roam-subdir)))
 
+(after! org
+  (setq org-startup-folded 'show3levels
+        org-ellipsis " [...] "))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
