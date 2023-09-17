@@ -78,3 +78,4 @@
 (setq +latex-viewers '(pdf-tools skim evince sumatrapdf zathura okular))
 (setq projectile-project-search-path '("~/git/"))
 (setq auth-sources '("~/.authinfo.gpg"))
+(setq doom-scratch-initial-major-mode 'org-mode)
