@@ -103,3 +103,7 @@
         (magit-merge ,adamliter/my-gpg-key-sign-git-arg)
         (magit-rebase "--autostash" ,adamliter/my-gpg-key-sign-git-arg)
         (magit-revert "--edit" "--autostash" ,adamliter/my-gpg-key-sign-git-arg)))
+
+(after! emojify
+  (setq emojify-inhibit-major-modes
+        (append emojify-inhibit-major-modes '(rustic-mode))))
