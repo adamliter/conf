@@ -941,6 +941,13 @@ if [ -d "$HOME/.pyenv" ]; then
     fi
 fi
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# ----------------------------------------------------------------------
+# Rust stuff
+# ----------------------------------------------------------------------
+if [ -f "${HOME}/.cargo/env" ]; then
+    source "${HOME}/.cargo/env"
+fi
 #+end_src
 
 Finally, =~/.profile= can be symlinked into the appropriate location,
@@ -2185,6 +2192,22 @@ pyenv install 3:latest
 #+end_src
 
 **** Configuration
+
+Nothing at the moment.
+
+** Rust
+
+*** Installation
+
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install rustup
+#+end_src
+
+***  Configuration
 
 Nothing at the moment.
 
