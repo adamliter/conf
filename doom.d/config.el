@@ -44,7 +44,14 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/org/"
+      org-roam-directory org-directory
+      org-roam-db-location (concat org-directory ".org-roam.db"))
+
+(setq citar-bibliography (list (concat org-directory "references/main.bib"))
+      citar-library-paths (list (concat org-directory "references/pdfs/"))
+      citar-org-roam-subdir "references/notes/"
+      citar-notes-paths (list (concat org-directory citar-org-roam-subdir)))
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
