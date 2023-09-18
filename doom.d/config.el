@@ -94,6 +94,8 @@
 (setq auth-sources '("~/.authinfo.gpg"))
 (setq doom-scratch-initial-major-mode 'org-mode)
 
+(setq lsp-pyright-multi-root nil)
+
 (setq adamliter/my-gpg-key-sign-git-arg (format "--gpg-sign=%s" adamliter/my-gpg-key)
       transient-values
       `(
