@@ -583,7 +583,9 @@ alias gss='git stash save'
 And an alias for =kubectl=:
 
 #+begin_src sh
-alias k='kubectl'
+if command -v kubectl 1>/dev/null 2>&1; then
+    alias k='kubectl'
+fi
 #+end_src
 
 ***** Auto completion
@@ -633,9 +635,11 @@ complete -o filenames -o nospace -F _lb-pass lb-pass
 Auto completion for =kubectl= and alias.
 
 #+begin_src sh
-# Only needed if autcompletion isn't already in Hombrew bash completion dir
-#source <(kubectl completion bash)
-complete -o default -F __start_kubectl k
+if command -v pyenv 1>/dev/null 2>&1; then
+    # Only needed if autcompletion isn't already in Hombrew bash completion dir
+    #source <(kubectl completion bash)
+    complete -o default -F __start_kubectl k
+fi
 #+end_src
 
 ***** Prompt
