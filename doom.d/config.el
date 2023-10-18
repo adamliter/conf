@@ -109,3 +109,6 @@
 (after! emojify
   (setq emojify-inhibit-major-modes
         (append emojify-inhibit-major-modes '(rustic-mode))))
+
+(after! magit
+  (magit-delta-mode +1))
