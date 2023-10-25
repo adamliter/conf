@@ -84,7 +84,8 @@ if [[ $BASH_OS_TYPE == macOS ]]; then
     else
         echo "Installing Emacs ..."
         brew install emacs-mac  --with-emacs-big-sur-icon --with-imagemagick \
-            --with-natural-title-bar --with-native-comp --with-mac-metal
+            --with-natural-title-bar --with-native-compilation \
+            --with-mac-metal --with-unlimited-select --with-tree-sitter
     fi
 fi
 rm -rf "${HOME}/.doom.d"
