@@ -112,3 +112,7 @@
 
 (after! magit
   (magit-delta-mode +1))
+
+(setq
+ fancy-splash-image (file-name-concat doom-user-dir "assets/doom-emacs-dark.svg")
+ +doom-dashboard-functions '(doom-dashboard-widget-banner))
