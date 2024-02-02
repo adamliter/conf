@@ -112,6 +112,9 @@
 
 (after! magit
   (magit-delta-mode +1))
+(after! magit-delta
+  (setq magit-delta-delta-args
+        `(,@magit-delta-delta-args "--features" "magit-delta")))
 
 (setq
  fancy-splash-image (file-name-concat doom-user-dir "assets/doom-emacs-dark.svg")

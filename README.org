@@ -1066,31 +1066,33 @@ Set up my editor for =git= and a global ignore file.
     editor = "emacsclient -t -a=''"
     excludesfile = ~/.gitignore_global
     attributesfile = ~/.gitattributes_global
-	pager = delta
+    pager = delta
 #+end_src
 
 ***** =[interactive]=
 
 #+begin_src gitconfig
 [interactive]
-	diffFilter = delta --color-only
+    diffFilter = delta --color-only
 #+end_src
 
 ***** =[delta]=
 
 #+begin_src gitconfig
 [delta]
-	navigate = true
+    navigate = true
     light = true
-	line-numbers = true
-	side-by-side = false
+    features = line-numbers
+    side-by-side = false
+[delta "magit-delta"]
+    line-numbers = false
 #+end_src
 
 ***** =[merge]=
 
 #+begin_src gitconfig
 [merge]
-	conflictstyle = diff3
+    conflictstyle = diff3
 #+end_src
 
 ***** =[color]=
@@ -1124,8 +1126,7 @@ documents that =git= is tracking. For reference, see /e.g./,
 
 #+begin_src gitconfig
 [diff]
-	colorMoved = default
-
+    colorMoved = default
 [diff "pandoc"]
     textconv=pandoc --to=markdown
     prompt = false
@@ -1763,7 +1764,6 @@ proper location.
 #+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
 ln -sf "${HOME}/conf/git/gitattributes_global" "${HOME}/.gitattributes_global"
 #+end_src
-
 
 ** git-delta
 

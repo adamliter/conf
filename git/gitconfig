@@ -9,16 +9,18 @@
     editor = "emacsclient -t -a=''"
     excludesfile = ~/.gitignore_global
     attributesfile = ~/.gitattributes_global
-	pager = delta
+    pager = delta
 [interactive]
-	diffFilter = delta --color-only
+    diffFilter = delta --color-only
 [delta]
-	navigate = true
+    navigate = true
     light = true
-	line-numbers = true
-	side-by-side = false
+    features = line-numbers
+    side-by-side = false
+[delta "magit-delta"]
+    line-numbers = false
 [merge]
-	conflictstyle = diff3
+    conflictstyle = diff3
 [color]
     diff = auto
     status = auto
@@ -29,8 +31,7 @@
 [alias]
     pushall = push --recurse-submodule=on-demand
 [diff]
-	colorMoved = default
-
+    colorMoved = default
 [diff "pandoc"]
     textconv=pandoc --to=markdown
     prompt = false
