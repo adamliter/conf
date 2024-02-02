@@ -248,6 +248,7 @@ ${PROMPT_SYMBOL} "
 PROMPT_COMMAND=set_bash_prompt
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+eval "$(direnv hook bash)"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi

@@ -144,6 +144,7 @@ if [[ $BASH_OS_TYPE == macOS ]]; then
 fi
 ln -sf "${HOME}/conf/bash/bashrc" "${HOME}/.bashrc"
 brew install cmake
+brew install direnv
 brew install editorconfig
 brew install git-delta
 brew install git-lfs

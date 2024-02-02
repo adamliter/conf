@@ -845,6 +845,12 @@ export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 #+end_src
 
+***** Direnv
+
+#+begin_src sh
+eval "$(direnv hook bash)"
+#+end_src
+
 ***** Some Python stuff
 
 Note that ~eval "$(pyenv virtualenv-init -)"~ needs to come after
@@ -983,6 +989,19 @@ brew install cmake
 
 =coreutils= is already installed in the bootstrapping process as an
 optional dependency for Doom Emacs.
+
+** direnv
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install direnv
+#+end_src
+
+*** Configuration
 
 ** editorconfig
 
