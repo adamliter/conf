@@ -918,6 +918,9 @@ fi
 if [[ ":${PATH}:" != *":${HOME}/bin:"* ]] && [ -d "${HOME}/bin" ]; then
     export PATH="${HOME}/bin:${PATH}"
 fi
+if [[ ":${PATH}:" != *":${HOME}/.emacs.d/bin:"* ]] && [ -d "${HOME}/.emacs.d/bin" ]; then
+    export PATH="${HOME}/.emacs.d/bin:${PATH}"
+fi
 
 # ----------------------------------------------------------------------
 # EDITOR
