@@ -120,6 +120,8 @@
  fancy-splash-image (file-name-concat doom-user-dir "assets/doom-emacs-dark.svg")
  +doom-dashboard-functions '(doom-dashboard-widget-banner))
 
+(add-hook 'doom-after-init-hook (lambda () (tool-bar-mode 1) (tool-bar-mode 0)))
+
 (map!
  :after casual-dired
  :map dired-mode-map
