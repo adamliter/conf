@@ -119,3 +119,9 @@
 (setq
  fancy-splash-image (file-name-concat doom-user-dir "assets/doom-emacs-dark.svg")
  +doom-dashboard-functions '(doom-dashboard-widget-banner))
+
+(map!
+ :after casual-dired
+ :map dired-mode-map
+ :desc "Toggle dired transient menu from casual-dired package."
+ "C-'" #'casual-dired-tmenu)
