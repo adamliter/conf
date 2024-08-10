@@ -149,6 +149,7 @@ brew install dvc
 brew install editorconfig
 brew install git-delta
 brew install git-lfs
+brew install glow
 brew install gnupg
 brew install helm
 brew install htop
