@@ -1,3 +1,5 @@
+# -*- mode: yaml; fill-column: 80; coding: utf-8; -*-
+---
 extends:
   - '@commitlint/config-conventional'
 rules:
