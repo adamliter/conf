@@ -104,7 +104,8 @@
         (magit-pull "--rebase" "--autostash")
         (magit-merge ,adamliter/my-gpg-key-sign-git-arg)
         (magit-rebase "--autostash" ,adamliter/my-gpg-key-sign-git-arg)
-        (magit-revert "--edit" "--autostash" ,adamliter/my-gpg-key-sign-git-arg)))
+        (magit-revert "--edit" "--autostash" ,adamliter/my-gpg-key-sign-git-arg)
+        (magit-cherry-apply ,adamliter/my-gpg-key-sign-git-arg)))
 
 (after! emojify
   (setq emojify-inhibit-major-modes
