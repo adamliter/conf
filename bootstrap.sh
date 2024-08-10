@@ -165,6 +165,7 @@ defaults write org.gpgtools.common UseKeychain NO
 defaults write org.gpgtools.common DisableKeychain -bool yes
 brew install pre-commit
 brew install reattach-to-user-namespace
+brew install ruff
 ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"
 brew install tmux
 brew install wget
