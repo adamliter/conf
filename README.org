@@ -2166,6 +2166,17 @@ appropriate location.
 ln -sf "${HOME}/conf/tmux/tmux.conf" "${HOME}/.tmux.conf"
 #+end_src
 
+** trivy
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install trivy
+#+end_src
+
 ** wget
 
 *** Installation
