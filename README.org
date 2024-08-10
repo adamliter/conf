@@ -1890,6 +1890,17 @@ brew install hub
 
 *** Configuration
 
+** jq
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install jq
+#+end_src
+
 ** kubernetes-cli
 
 *** Installation
@@ -2166,6 +2177,17 @@ ln -sf "${HOME}/conf/tmux/tmux.conf" "${HOME}/.tmux.conf"
 
 #+begin_src sh
 brew install wget
+#+end_src
+
+** yq
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install yq
 #+end_src
 
 * Programming languages

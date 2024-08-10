@@ -154,6 +154,7 @@ brew install gnupg
 brew install helm
 brew install htop
 brew install hub
+brew install jq
 brew install kubernetes-cli
 brew install lab
 brew install minikube
@@ -168,6 +169,7 @@ brew install ag
 ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"
 brew install tmux
 brew install wget
+brew install yq
 brew install node
 brew install nodenv
 echo "Installing node package pyright globally ..."
