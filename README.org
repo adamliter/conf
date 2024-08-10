@@ -2310,6 +2310,17 @@ Symlink the configuration file into the appropriate location:
 ln -sf "${HOME}/conf/conda/condarc" "${HOME}/.condarc"
 #+end_src
 
+*** pdm
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+**** Installation
+
+#+begin_src sh
+brew install pdm
+#+end_src
+
 *** pyenv
 :PROPERTIES:
 :header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no

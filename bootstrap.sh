@@ -179,6 +179,7 @@ echo "Installing @commitlint/{cli,config-conventional} globally ..."
 npm install -g @commitlint/{cli,config-conventional}
 rm -rf "${HOME}/org"
 ln -sn "${HOME}/conf/org" "${HOME}/org"
+brew install pdm
 brew install pyenv pyenv-virtualenv
 pyenv install 3:latest
 brew install rustup
