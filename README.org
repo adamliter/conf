@@ -2044,17 +2044,6 @@ brew install reattach-to-user-namespace
 =ripgrep= is installed in the bootstrapping process as a dependency for
 Doom Emacs.
 
-** The Silver Searcher
-
-*** Installation
-:PROPERTIES:
-:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
-:END:
-
-#+begin_src sh
-brew install ag
-#+end_src
-
 ** ssh
 
 *** Installation
