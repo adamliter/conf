@@ -6,7 +6,7 @@
     email = io@adamliter.org
     signkey = 0x98723A2089026CD6
 [core]
-    editor = "emacsclient -t -a=''"
+    editor = "TERM=xterm-emacs emacsclient -t -a=''"
     excludesfile = ~/.gitignore_global
     attributesfile = ~/.gitattributes_global
     pager = delta

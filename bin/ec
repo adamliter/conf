@@ -1,2 +1,2 @@
 #!/bin/sh
-emacsclient -t -a="" "$@"
+TERM=xterm-emacs emacsclient -t -a="" "$@"

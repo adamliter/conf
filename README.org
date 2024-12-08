@@ -1074,7 +1074,7 @@ Set up my editor for =git= and a global ignore file.
 
 #+begin_src gitconfig
 [core]
-    editor = "emacsclient -t -a=''"
+    editor = "TERM=xterm-emacs emacsclient -t -a=''"
     excludesfile = ~/.gitignore_global
     attributesfile = ~/.gitattributes_global
     pager = delta
@@ -2134,9 +2134,9 @@ The following are some key bindings for opening Emacs in either a new
 window, a vertically split window, or a horizontally split window.
 
 #+begin_src conf-unix
-bind-key y   new-window -n "emacs"  "emacsclient -nw"
-bind-key C-y split-window -v "emacsclient -nw"
-bind-key M-y split-window -h "emacsclient -nw"
+bind-key y   new-window -n "emacs"  "TERM=xterm-emacs emacsclient -nw"
+bind-key C-y split-window -v "TERM=xterm-emacs emacsclient -nw"
+bind-key M-y split-window -h "TERM=xterm-emacs emacsclient -nw"
 #+end_src
 
 The following defines some more intuitive key bindings for splitting a
@@ -2385,7 +2385,7 @@ ln -sn "${HOME}/conf/bin" "${HOME}/bin"
 :END:
 
 #+begin_src sh
-emacsclient -t -a="" "$@"
+TERM=xterm-emacs emacsclient -t -a="" "$@"
 #+end_src
 
 * Applications and GUIs
