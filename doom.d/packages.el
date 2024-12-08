@@ -49,4 +49,4 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 (package! magit-delta :recipe (:host github :repo "dandavison/magit-delta"))
-(package! casual-dired :recipe (:host github :repo "kickingvegas/casual-dired"))
+(package! casual)
