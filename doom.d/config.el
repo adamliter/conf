@@ -128,3 +128,16 @@
  :map dired-mode-map
  :desc "Toggle dired transient menu from casual-dired package."
  "C-'" #'casual-dired-tmenu)
+
+(add-to-list 'recentf-exclude "/private/var/folders/.*pass")
+(with-eval-after-load 'treemacs
+(after! recentf
+  (add-to-list 'recentf-exclude "/private/var/folders/.*pass"))
+(after! treemacs
+  ;; TODO: investigate why this doesn't seem to rule out things being added to the
+  ;;       treemacs-persist file (or isn't working)
+  (defun adamliter/ignore-filter-pass-buffers-from-treemacs (file _)
+        (string-match-p "/private/var/folders/.*/pass" file))
+  (push
+   #'adamliter/ignore-filter-pass-buffers-from-treemacs
+   treemacs-ignored-file-predicates))
