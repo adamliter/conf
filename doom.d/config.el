@@ -128,5 +128,7 @@
  :desc "Toggle dired transient menu from casual-dired package."
  "C-'" #'casual-dired-tmenu)
 
+(setq ispell-program-name "aspell")
+
 (after! recentf
   (add-to-list 'recentf-exclude "/private/var/folders/.*pass"))

@@ -115,6 +115,7 @@ emacs --batch \
   (org-babel-execute-buffer)
   (kill-buffer))"
 . "${HOME}/conf/symlink.sh"
+brew install aspell
 if [[ $BASH_OS_TYPE == macOS ]]; then
     brew install bash
     if ([[ $MAC_OS_TYPE == 'apple-silicon' ]] && ! grep -q "/opt/homebrew/bin/bash" /etc/shells) \
