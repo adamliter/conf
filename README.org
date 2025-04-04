@@ -2094,6 +2094,8 @@ my SSH config and then symlink it into the appropriate location.
 ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"
 #+end_src
 
+** terminfo
+
 ** tmux
 
 *** Installation
