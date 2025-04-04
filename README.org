@@ -2470,4 +2470,11 @@ TERM=xterm-emacs emacsclient -t -a="" "$@"
 
 * Fonts
 
-# TODO: figure out bootstrapping font installation
+** Monaspace
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install --cask font-monaspace
+#+end_src
