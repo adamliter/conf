@@ -129,8 +129,6 @@
  :desc "Toggle dired transient menu from casual-dired package."
  "C-'" #'casual-dired-tmenu)
 
-(add-to-list 'recentf-exclude "/private/var/folders/.*pass")
-(with-eval-after-load 'treemacs
 (after! recentf
   (add-to-list 'recentf-exclude "/private/var/folders/.*pass"))
 (after! treemacs
