@@ -132,6 +132,12 @@
  :desc "Toggle dired transient menu from casual-dired package."
  "C-'" #'casual-dired-tmenu)
 
+(require 'dap-python)
+(setq dap-python-debugger 'debugpy)
+(after! dap-mode
+  (defun dap-python--pyenv-executable-find (command)
+    (executable-find command)))
+
 (setq ispell-program-name "aspell")
 
 (after! recentf
