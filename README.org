@@ -658,195 +658,10 @@ fi
 
 ***** Prompt
 
-First, let's set up some more useful ways to refer to colors:
+Let's use [[https://starship.rs/][Starship]] for our prompt, mostly just with the default configuration.
 
 #+begin_src sh
-RED="\[\e[31m\]"
-LIGHT_RED="\[\e[91m\]"
-GREEN="\[\e[32m\]"
-LIGHT_GREEN="\[\e[92m\]"
-YELLOW="\[\e[33m\]"
-LIGHT_YELLOW="\[\e[93m\]"
-BLUE="\[\e[34m\]"
-LIGHT_BLUE="\[\e[94m\]"
-MAGENTA="\[\e[35m\]"
-LIGHT_MAGENTA="\[\e[95m\]"
-CYAN="\[\e[36m\]"
-LIGHT_CYAN="\[\e[96m\]"
-LIGHT_GREY="\[\e[37m\]"
-LIGHT_GRAY="\[\e[37m\]"
-WHITE="\[\e[97m\]"
-COLOR_RESET="\[\e[0m\]"
-#+end_src
-
-Next, let's define a separator to separate information in the prompt:
-
-#+begin_src sh
-MY_PS1_SEP=" ${WHITE}█${COLOR_RESET} "
-#+end_src
-
-Next, let's write a function to determine if the current directory is a
-=git= repo:
-
-#+begin_src sh
-function is_git_repository {
-    git branch > /dev/null 2>&1
-}
-#+end_src
-
-If it is, we'll want to determine some information about it:
-
-#+begin_src sh
-function set_git_branch {
-    # Capture the output of the "git status" command.
-    git_status="$(git status 2> /dev/null)"
-
-    # Set color based on clean/staged/dirty
-    clean_pattern="working (tree|directory) clean"
-    if [[ ${git_status} =~ ${clean_pattern} ]]; then
-        state="${LIGHT_GREEN}"
-    elif [[ ${git_status} =~ "Changes to be committed" ]]; then
-        state="${LIGHT_YELLOW}"
-    else
-        state="${RED}"
-    fi
-
-    # Set arrow icon based on status against remote.
-    remote_pattern="(# )?Your branch is (ahead of|behind)"
-    if [[ ${git_status} =~ ${remote_pattern} ]]; then
-        if [[ ${BASH_REMATCH[2]} == "ahead of" ]]; then
-            remote="↑"
-        else
-            remote="↓"
-        fi
-    else
-        remote=""
-    fi
-    diverge_pattern="(# )?Your branch and (.*) have diverged"
-    if [[ ${git_status} =~ ${diverge_pattern} ]]; then
-        remote="↕"
-    fi
-
-    # Get the name of the branch.
-    branch_pattern="^(# )?On branch ([^${IFS}]*)"
-    detached_head_pattern="HEAD detached from"
-    if [[ ${git_status} =~ ${branch_pattern} ]]; then
-        branch=${BASH_REMATCH[2]}
-    elif [[ ${git_status} =~ ${detached_head_pattern} ]]; then
-        branch="HEAD"
-    fi
-
-    # Set the final branch string.
-    BRANCH="${MY_PS1_SEP}${state}(${branch})${remote}${COLOR_RESET}"
-}
-#+end_src
-
-Additionally, if this is also a Python virtual environment, we'll want
-to add some information about that to the prompt:
-
-#+begin_src sh
-function set_virtualenv () {
-    if test -z "${VIRTUAL_ENV}" && test -z "${CONDA_DEFAULT_ENV}"; then
-        MY_VENV=""
-    else
-        if test -z "${VIRTUAL_ENV}"; then
-            MY_VENV="${LIGHT_GREY}[${CONDA_DEFAULT_ENV}]${COLOR_REST}\
-${MY_PS1_SEP}"
-        else
-            MY_VENV="${LIGHT_GREY}[${VIRTUAL_ENV##*/}]${COLOR_RESET}\
-${MY_PS1_SEP}"
-        fi
-    fi
-}
-#+end_src
-
-We can also change the color of the prompt symbol, based on the exit
-code of the last command. Here's a function to get and set that
-information:
-
-#+begin_src sh
-function set_prompt_symbol () {
-    if test $1 -eq 0 ; then
-        PROMPT_SYMBOL="\$"
-    else
-        PROMPT_SYMBOL="${RED}\$${COLOR_RESET}"
-    fi
-}
-#+end_src
-
-I'd also like to shorten the path to the current working directory in
-the prompt if there isn't enough room to display it in the shell. In
-order to do this, I need to first compute the prompt minus the working
-directory in order to determine the number of remaining columns that I
-have left to work with:
-
-#+begin_src sh
-strip_color () {
-    COLOR_REGEX='s/\\\[\\e\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]\\\]//g'
-    if [[ $OSTYPE == darwin* ]]; then
-        sed -Ee $COLOR_REGEX <<< """$1"""
-    else
-        sed -re $COLOR_REGEX <<< """$1"""
-    fi
-}
-
-get_ps1_less_pwd () {
-    PS1_LESS_PWD=$(printf "%s%s%s%s" \
-                          "$(strip_color "${MY_VENV}")" \
-                          "$(whoami)@$(hostname -s)" \
-                          "$(strip_color "${MY_PS1_SEP}")" \
-                          "$(strip_color "${BRANCH}")")
-}
-#+end_src
-
-Now I can finally declare the function to actually compute and calculate
-the bash prompt:
-
-#+begin_src sh
-function set_bash_prompt () {
-    # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the
-    # return value of the last command.
-    set_prompt_symbol $?
-
-    # Get virtualenv info
-    set_virtualenv
-
-    # Set the BRANCH variable.
-    if is_git_repository ; then
-        set_git_branch
-    else
-        BRANCH=''
-    fi
-
-    # get PS1_LESS_PWD to calculate length remaining
-    get_ps1_less_pwd
-
-    # get truncated PWD
-    # loosely based on http://stackoverflow.com/a/26555347/2571049
-    MY_PWD=$(pwd | awk -F/ -v "u=$PS1_LESS_PWD" -v "n=$(tput cols)" \
-                       -v "h=^$HOME" \
-                       '{sub(h,"~"); u=length(u); n=n-u-1; b=$1} \
-                       length($0)<=n || NF==2 {print; next;} \
-                       NF>2 {b=b"/.../"; e=$NF; n-=length(b $NF); \
-                       for (i=NF-1; i>2 && n>length(e $i)+1; i--) e=$i"/"e;} {print b e;}')
-
-    # Set the bash prompt variable.
-    PS1="
-${MY_VENV}\
-${WHITE}\u${COLOR_RESET}\
-${LIGHT_GREEN}@${COLOR_RESET}\
-${LIGHT_MAGENTA}\h${COLOR_RESET}\
-${MY_PS1_SEP}\
-${LIGHT_CYAN}${MY_PWD}${COLOR_RESET}\
-${BRANCH}
-${PROMPT_SYMBOL} "
-}
-#+end_src
-
-And, finally, we can actually call the function to set the prompt:
-
-#+begin_src sh
-PROMPT_COMMAND=set_bash_prompt
+eval "$(starship init bash)"
 #+end_src
 
 ***** Colors
@@ -2093,6 +1908,213 @@ my SSH config and then symlink it into the appropriate location.
 #+begin_src sh
 ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"
 #+end_src
+
+** starship
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install starship
+#+end_src
+
+*** Configuration
+:PROPERTIES:
+:header-args:conf-toml: :eval no :exports code :tangle ~/conf/starship/starship.toml :mkdirp yes :padline no
+:END:
+
+This is our configuration, taken from the [[https://starship.rs/presets/#nerd-font-symbols][Nerd Font Symbols preset]]. The
+only non-default thing here is setting =truncate_to_repo= to =false=
+underneath =directory=.
+
+#+begin_src conf-toml
+# -*- mode: conf-toml; coding: utf-8; -*-
+[aws]
+symbol = "  "
+
+[buf]
+symbol = " "
+
+[c]
+symbol = " "
+
+[cmake]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[crystal]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[directory]
+read_only = " 󰌾"
+truncate_to_repo = false
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[fennel]
+symbol = " "
+
+[fossil_branch]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[git_commit]
+tag_symbol = '  '
+
+[golang]
+symbol = " "
+
+[guix_shell]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[haxe]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[hostname]
+ssh_symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[kotlin]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[meson]
+symbol = "󰔷 "
+
+[nim]
+symbol = "󰆥 "
+
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[ocaml]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+
+[package]
+symbol = "󰏗 "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[pijul_channel]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rlang]
+symbol = "󰟔 "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+
+[scala]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[zig]
+symbol = " "
+
+[gradle]
+symbol = " "
+#+end_src
+
+And this symlinks the configuration file into the appropriate location.
+
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+ln -sf "${HOME}/conf/starship/starship.toml" "${HOME}/.config/starship.toml"
+#+end_src
+
 
 ** tmux
 

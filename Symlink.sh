@@ -9,6 +9,7 @@ mkdir -p ~/.config/htop
 ln -sf "${HOME}/conf/htop/htoprc" "${HOME}/.config/htop/htoprc"
 mkdir -p ~/.config/lab
 ln -sf "${HOME}/conf/lab/lab.toml" "${HOME}/.config/lab/lab.toml"
+ln -sf "${HOME}/conf/starship/starship.toml" "${HOME}/.config/starship.toml"
 ln -sf "${HOME}/conf/tmux/tmux.conf" "${HOME}/.tmux.conf"
 ln -sf "${HOME}/conf/npm/npmrc" "${HOME}/.npmrc"
 ln -sf "${HOME}/conf/conda/condarc" "${HOME}/.condarc"
