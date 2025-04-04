@@ -113,6 +113,7 @@
 (after! magit
   (magit-delta-mode +1))
 (after! magit-delta
+  ;; TODO: figure out how to make this resilient to hot reloading config
   (setq magit-delta-delta-args
         `(,@magit-delta-delta-args "--features" "magit-delta")))
 
