@@ -111,7 +111,8 @@
         (append emojify-inhibit-major-modes '(rustic-mode vterm-mode magit-mode))))
 
 (after! magit
-  (magit-delta-mode +1))
+  (magit-delta-mode +1)
+  (magit-todos-mode +1))
 (after! magit-delta
   ;; TODO: figure out how to make this resilient to hot reloading config
   (setq magit-delta-delta-args

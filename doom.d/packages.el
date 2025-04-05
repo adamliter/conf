@@ -50,3 +50,4 @@
 ;; (unpin! t)
 (package! magit-delta :recipe (:host github :repo "dandavison/magit-delta"))
 (package! casual)
+(package! magit-todos)
