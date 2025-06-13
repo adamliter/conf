@@ -1643,7 +1643,6 @@ brew install git-lfs
 brew install glow
 #+end_src
 
-
 ** gpg
 
 *** Installation
@@ -2114,7 +2113,6 @@ And this symlinks the configuration file into the appropriate location.
 #+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
 ln -sf "${HOME}/conf/starship/starship.toml" "${HOME}/.config/starship.toml"
 #+end_src
-
 
 ** tmux
 
