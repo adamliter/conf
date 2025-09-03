@@ -193,4 +193,4 @@ if [ -d "${HOME}/bin" ]; then
 fi
 rm -rf ${HOME}/bin
 ln -sn "${HOME}/conf/bin" "${HOME}/bin"
-brew install --cask font-monaspace
+brew install --cask font-monaspace font-monaspace-nf

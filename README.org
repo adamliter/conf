@@ -2509,5 +2509,5 @@ TERM=xterm-emacs emacsclient -t -a="" "$@"
 :END:
 
 #+begin_src sh
-brew install --cask font-monaspace
+brew install --cask font-monaspace font-monaspace-nf
 #+end_src
