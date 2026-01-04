@@ -137,3 +137,14 @@
   (set-formatter! 'ruff :modes '(python-mode python-ts-mode)))
 (after! lsp-mode
   (add-to-list 'lsp-disabled-clients 'ruff))
+
+(add-to-list 'auto-mode-alist '("\\.typ\\'" . typst-ts-mode))
+(after! lsp-mode
+  (add-to-list 'lsp-language-id-configuration '(typst-ts-mode . "typst"))
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection "tinymist")
+    :activation-fn (lsp-activate-on "typst")
+    :server-id 'typst-lsp))
+  (add-hook 'typst-ts-mode-hook 'lsp-deferred)
+)
