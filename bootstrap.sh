@@ -45,8 +45,8 @@ if [[ $BASH_OS_TYPE == macOS ]]; then
             echo "Temporarily adding Homebrew to PATH for Apple Silicon Mac ..."
             eval $(/opt/homebrew/bin/brew shellenv)
         fi
-        echo "Tapping ralwaycat/emacsport ..."
-        brew tap railwaycat/emacsmacport
+        echo "Tapping d12frosted/emacs-plus..."
+        brew tap d12frosted/emacs-plus
     fi
 fi
 if [ -f "${HOME}/.ssh/config" ]; then
@@ -80,12 +80,10 @@ fi
 if [[ $BASH_OS_TYPE == macOS ]]; then
     if ([[ $MAC_OS_TYPE == 'apple-silicon' ]] && [ -f /opt/homebrew/bin/emacs ]) \
         || ([[ $MAC_OS_TYPE == 'intel' ]] && [ -f /usr/local/bin/emacs ]); then
-       echo "Emacs was already installed with Homebrew ..."
+        echo "Emacs was already installed with Homebrew ..."
     else
         echo "Installing Emacs ..."
-        brew install emacs-mac  --with-emacs-big-sur-icon --with-imagemagick \
-            --with-natural-title-bar --with-native-compilation \
-            --with-mac-metal --with-unlimited-select --with-tree-sitter
+        brew install emacs-plus --with-xwidgets --with-imagemagick
     fi
 fi
 rm -rf "${HOME}/.doom.d"

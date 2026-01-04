@@ -178,8 +178,8 @@ if [[ $BASH_OS_TYPE == macOS ]]; then
             echo "Temporarily adding Homebrew to PATH for Apple Silicon Mac ..."
             eval $(/opt/homebrew/bin/brew shellenv)
         fi
-        echo "Tapping ralwaycat/emacsport ..."
-        brew tap railwaycat/emacsmacport
+        echo "Tapping d12frosted/emacs-plus..."
+        brew tap d12frosted/emacs-plus
     fi
 fi
 #+end_src
@@ -257,12 +257,10 @@ fi
 if [[ $BASH_OS_TYPE == macOS ]]; then
     if ([[ $MAC_OS_TYPE == 'apple-silicon' ]] && [ -f /opt/homebrew/bin/emacs ]) \
         || ([[ $MAC_OS_TYPE == 'intel' ]] && [ -f /usr/local/bin/emacs ]); then
-       echo "Emacs was already installed with Homebrew ..."
+        echo "Emacs was already installed with Homebrew ..."
     else
         echo "Installing Emacs ..."
-        brew install emacs-mac  --with-emacs-big-sur-icon --with-imagemagick \
-            --with-natural-title-bar --with-native-compilation \
-            --with-mac-metal --with-unlimited-select --with-tree-sitter
+        brew install emacs-plus --with-xwidgets --with-imagemagick
     fi
 fi
 #+end_src
@@ -855,6 +853,31 @@ brew install dvc
 #+begin_src sh
 brew install editorconfig
 #+end_src
+
+** emacs-plus
+
+*** Installation
+
+This is already installed up above for bootstrapping.
+
+*** Configuration
+:PROPERTIES:
+:header-args:yaml: :eval no :exports code :tangle "~/conf/emacs-plus/build.yml" :mkdirp yes :padline no
+:END:
+
+#+begin_src yaml
+# -*- mode: yaml; coding: utf-8; fill-column: 80 -*-
+---
+icon: liquid-glass
+#+end_src
+
+The following symlinks the configuration file into the appropriate location.
+
+#+begin_src sh :eval no :exports code :tangle symlink.sh :shebang "#!/usr/bin/env bash" :padline no
+mkdir -p "${HOME}/.config/emacs-plus"
+ln -sf "${HOME}/conf/emacs-plus/build.yml" "${HOME}/.config/emacs-plus/build.yml"
+#+end_src
+
 
 ** fd
 

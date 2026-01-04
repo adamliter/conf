@@ -2,6 +2,8 @@
 ln -sf "${HOME}/conf/bash/bash_profile" "${HOME}/.bash_profile"
 ln -sf "${HOME}/conf/bash/bashrc" "${HOME}/.bashrc"
 ln -sf "${HOME}/conf/bash/profile" "${HOME}/.profile"
+mkdir -p "${HOME}/.config/emacs-plus"
+ln -sf "${HOME}/conf/emacs-plus/build.yml" "${HOME}/.config/emacs-plus/build.yml"
 ln -sf "${HOME}/conf/git/gitconfig" "${HOME}/.gitconfig"
 ln -sf "${HOME}/conf/git/gitignore_global" "${HOME}/.gitignore_global"
 ln -sf "${HOME}/conf/git/gitattributes_global" "${HOME}/.gitattributes_global"
