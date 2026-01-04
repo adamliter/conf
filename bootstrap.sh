@@ -169,6 +169,7 @@ ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"
 brew install starship
 brew install tmux
 brew install trivy
+brew install ty
 brew install wget
 brew install yq
 brew install node
