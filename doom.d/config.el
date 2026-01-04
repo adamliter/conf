@@ -135,3 +135,5 @@
 
 (after! python
   (set-formatter! 'ruff :modes '(python-mode python-ts-mode)))
+(after! lsp-mode
+  (add-to-list 'lsp-disabled-clients 'ruff))
