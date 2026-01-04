@@ -132,3 +132,6 @@
 
 (after! recentf
   (add-to-list 'recentf-exclude "/private/var/folders/.*pass"))
+
+(after! python
+  (set-formatter! 'ruff :modes '(python-mode python-ts-mode)))
