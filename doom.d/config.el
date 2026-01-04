@@ -114,9 +114,8 @@
   (magit-delta-mode +1)
   (magit-todos-mode +1))
 (after! magit-delta
-  ;; TODO: figure out how to make this resilient to hot reloading config
-  (setq magit-delta-delta-args
-        `(,@magit-delta-delta-args "--features" "magit-delta")))
+  (add-to-list 'magit-delta-delta-args "magit-delta")
+  (add-to-list 'magit-delta-delta-args "--features"))
 
 (setq
  fancy-splash-image (file-name-concat doom-user-dir "assets/doom-emacs-dark.svg")
