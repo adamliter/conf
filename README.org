@@ -2137,6 +2137,17 @@ And this symlinks the configuration file into the appropriate location.
 ln -sf "${HOME}/conf/starship/starship.toml" "${HOME}/.config/starship.toml"
 #+end_src
 
+** tinymist
+
+*** Installation
+:PROPERTIES:
+:header-args:sh: :eval no :exports code :tangle bootstrap.sh :shebang "#!/usr/bin/env bash" :padline no
+:END:
+
+#+begin_src sh
+brew install tinymist
+#+end_src
+
 ** tmux
 
 *** Installation

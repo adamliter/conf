@@ -167,6 +167,7 @@ brew install reattach-to-user-namespace
 brew install ruff
 ln -sf "${HOME}/conf/ssh/config" "${HOME}/.ssh/config"
 brew install starship
+brew install tinymist
 brew install tmux
 brew install trivy
 brew install ty
